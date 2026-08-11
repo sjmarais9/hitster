@@ -124,24 +124,75 @@ h1 {
   -webkit-backface-visibility: hidden;
 }
 
-/* Nobody should ever have to wonder whether they are looking at a spoiler.
-   The hidden face says so in as many ways as it reasonably can. */
+/* The face-down side: a turning record with a question mark on its label.
+   The dashed edge keeps it reading as a card that has not been turned over. */
 .card-back {
+  place-items: center;
   border: 2px dashed #2c3242;
 }
 
-.card-mark {
-  font-size: 5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--muted);
+/* Both children share one grid cell so the mark sits on the label while the
+   record turns underneath it. */
+.card-back > * {
+  grid-area: 1 / 1;
 }
 
-.card-label {
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--muted);
+.vinyl {
+  position: relative;
+  width: 13rem;
+  height: 13rem;
+  max-width: 60vw;
+  max-height: 60vw;
+  border-radius: 50%;
+  /* Grooves. Concentric rings a couple of pixels apart read as vinyl at any
+     size without needing an image. */
+  background:
+    repeating-radial-gradient(circle at 50% 50%, #191c25 0 2px, #101219 2px 4px);
+  box-shadow:
+    inset 0 0 0 1px #2c3242,
+    0 0.5rem 1.5rem rgb(0 0 0 / 0.45);
+  animation: spin 3.6s linear infinite;
+}
+
+/* A single sweep of light, so the rotation is legible even though the grooves
+   are radially symmetric and would otherwise look motionless. */
+.vinyl::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg,
+    transparent 38%,
+    rgb(255 255 255 / 0.07) 47%,
+    transparent 56%);
+}
+
+.vinyl-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6rem;
+  height: 6rem;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.card.paused .vinyl {
+  animation-play-state: paused;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card-mark {
+  position: relative;
+  z-index: 1;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #06210f;
 }
 
 .card-front {

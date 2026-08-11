@@ -30,8 +30,10 @@
       <div id="card" class="card">
         <div class="card-inner">
           <div class="card-face card-back">
+            <!-- The record stops turning when playback is paused, so the card
+                 doubles as the playing indicator. -->
+            <div class="vinyl" aria-hidden="true"><span class="vinyl-label"></span></div>
             <span class="card-mark" aria-hidden="true">?</span>
-            <span class="card-label">Hidden</span>
           </div>
           <!-- Left empty until Reveal. The details are injected at that moment
                and cleared on the next draw, so there is never a spoiler sitting
@@ -45,7 +47,7 @@
       </div>
 
       <button id="action" class="button" type="button">Draw</button>
-      <p id="remaining" class="status"></p>
+      <button id="toggle" class="button secondary hidden" type="button">Pause</button>
     </section>
 
     <p id="notice" class="status hidden"></p>

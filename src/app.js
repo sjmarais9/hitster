@@ -1,18 +1,20 @@
 import { beginLogin, isLoggedIn, logout } from './auth.js';
 import { connect } from './player.js';
-import { loadPool, draw, remaining, resetSession } from './game.js';
+import { loadPool, draw, resetSession } from './game.js';
 
 const el = (id) => document.getElementById(id);
 const screens = { signedOut: el('signed-out'), start: el('start'), table: el('table') };
 
 const card = el('card');
 const action = el('action');
+const toggle = el('toggle');
 const notice = el('notice');
 
 let route = null;      // set once a playback route is connected
 let pool = [];
 let current = null;    // the song on the table, hidden until revealed
 let phase = 'idle';    // idle | hidden | revealed | empty
+let paused = false;
 
 function show(screen) {
   for (const [name, node] of Object.entries(screens)) {
@@ -38,7 +40,26 @@ function renderTable() {
   const labels = { idle: 'Draw', hidden: 'Reveal', revealed: 'Next', empty: 'Start over' };
   action.textContent = labels[phase];
   action.disabled = false;
-  el('remaining').textContent = phase === 'empty' ? '' : `${remaining(pool)} left in the deck`;
+
+  // Pause is only meaningful once something is playing.
+  const hasTrack = phase === 'hidden' || phase === 'revealed';
+  toggle.classList.toggle('hidden', !hasTrack);
+  toggle.textContent = paused ? 'Resume' : 'Pause';
+  toggle.disabled = false;
+
+  card.classList.toggle('paused', paused);
+}
+
+async function onToggle() {
+  toggle.disabled = true;
+  say('');
+  try {
+    await (paused ? route.resume() : route.pause());
+    paused = !paused;
+  } catch (err) {
+    say(err.message, true);
+  }
+  renderTable();
 }
 
 async function onAction() {
@@ -63,6 +84,7 @@ async function onAction() {
       } else {
         current = song;
         await route.play(song.spotify_uri);
+        paused = false;
         phase = 'hidden';
       }
     }
@@ -123,5 +145,6 @@ el('login').addEventListener('click', () => beginLogin().catch((err) => say(err.
 el('logout').addEventListener('click', () => { logout(); location.reload(); });
 el('begin').addEventListener('click', onBegin);
 action.addEventListener('click', onAction);
+toggle.addEventListener('click', onToggle);
 
 boot();

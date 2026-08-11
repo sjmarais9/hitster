@@ -71,6 +71,7 @@ async function connectSdk() {
     // this inside the first tap buys permission for every later play.
     activate: () => player.activateElement(),
     pause: () => player.pause(),
+    resume: () => player.resume(),
   };
 }
 
@@ -98,7 +99,10 @@ function remoteControl() {
       return device.id;
     },
     activate: () => {},
-    pause: () => api('me/player/pause', { method: 'PUT' }).catch(() => {}),
+    // No device_id needed: the transfer above made this the active device, and
+    // resume without a body picks up the current track where it stopped.
+    pause: () => api('me/player/pause', { method: 'PUT' }),
+    resume: () => api('me/player/play', { method: 'PUT' }),
   };
 }
 
@@ -119,6 +123,7 @@ export async function connect({ onFallback }) {
     get mode() { return route.mode; },
     activate: () => route.activate(),
     pause: () => route.pause(),
+    resume: () => route.resume(),
 
     async play(uri) {
       const deviceId = route.deviceId ?? await route.deviceIdFor();

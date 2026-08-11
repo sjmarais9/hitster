@@ -36,11 +36,6 @@ export function resetSession() {
   sessionStorage.removeItem(PLAYED_KEY);
 }
 
-export function remaining(pool) {
-  const seen = played();
-  return pool.filter((song) => !seen.has(song.spotify_uri)).length;
-}
-
 /**
  * Draws a song not yet played this session, and records it.
  * Returns null when the deck is exhausted.
