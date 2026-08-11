@@ -11,6 +11,10 @@ import { spawn } from 'node:child_process';
 import { CLIENT_ID, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT } from '../../src/config.js';
 import { createVerifier, createState, challengeFor } from '../../src/pkce.js';
 
+// Beyond this, a 429 is a quota rather than a short throttle and is not worth
+// sleeping through. Spotify has returned Retry-After values of over 20 hours.
+const MAX_RETRY_WAIT_S = 120;
+
 const DONE_PAGE = `<!doctype html><meta charset="utf-8">
 <title>Done</title>
 <body style="background:#0d0f14;color:#f2f4f8;font:1.25rem system-ui;display:grid;place-items:center;height:100vh;margin:0">
@@ -153,6 +157,22 @@ export async function authorise({ port = 3000 } = {}) {
 
       if (response.status === 429) {
         const wait = Number(response.headers.get('retry-after') || 2);
+
+        // Spotify uses 429 for two very different things. A short throttle is
+        // worth sleeping through. A quota exhaustion comes back with a
+        // Retry-After measured in hours, and sleeping through that means the
+        // process sits there until tomorrow - which is exactly what it did.
+        if (wait > MAX_RETRY_WAIT_S) {
+          const hours = (wait / 3600).toFixed(1);
+          const err = new Error(
+            `Rate limited for ${wait}s (${hours} hours). That is a daily quota, not a throttle, ` +
+            `so there is nothing to wait for. Try again once it resets.`,
+          );
+          err.rateLimited = true;
+          err.retryAfter = wait;
+          throw err;
+        }
+
         console.log(`  rate limited, waiting ${wait}s`);
         await new Promise((r) => setTimeout(r, (wait + 1) * 1000));
         continue;

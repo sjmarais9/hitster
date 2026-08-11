@@ -165,6 +165,42 @@ async function main() {
   const review = [];
   const yearSuspects = [];
   let matched = 0;
+  let aborted = null;
+
+  // Correcting a song's year changes its identity key, which would otherwise
+  // leave the old entry behind as a duplicate pointing at the same track.
+  // Dedupe on URI, preferring whichever entry the current batch still refers to.
+  const batchKeys = new Set(batch.map(keyOf));
+  function buildPool() {
+    const byUri = new Map();
+    for (const song of resolved.values()) {
+      if (!song.spotify_uri) continue;
+      if (!byUri.has(song.spotify_uri) || batchKeys.has(keyOf(song))) {
+        byUri.set(song.spotify_uri, song);
+      }
+    }
+    return [...byUri.values()];
+  }
+
+  async function savePool() {
+    if (opts.dryRun) return;
+    const pool = buildPool();
+    await writeJson(opts.out, {
+      meta: {
+        count: pool.length,
+        market: MARKET,
+        generated: new Date().toISOString().slice(0, 10),
+        note: 'Playable pool. year is our value and is the original release year, never Spotify\'s.',
+      },
+      songs: pool,
+    });
+  }
+
+  // A long run must never be able to lose everything. Five hundred songs is
+  // twenty minutes of API calls, and a rate limit, a dropped connection or a
+  // stray Ctrl-C at minute nineteen used to discard all of it.
+  const CHECKPOINT_EVERY = 25;
+  let sinceCheckpoint = 0;
 
   for (const [index, song] of queue.entries()) {
     const label = `${song.artist} - ${song.title} (${song.year})`;
@@ -174,6 +210,13 @@ async function main() {
     try {
       best = pickBest(song, await findCandidates(spotify, song));
     } catch (err) {
+      // A quota is not this song's fault, and every remaining song would fail
+      // the same way. Stop, keep what was resolved, and say so.
+      if (err.rateLimited) {
+        console.log('rate limited');
+        aborted = err;
+        break;
+      }
       console.log(`error`);
       review.push({ ...song, problem: `lookup failed: ${err.message}`, candidates: [] });
       continue;
@@ -227,20 +270,17 @@ async function main() {
         })),
       });
     }
-  }
 
-  // Correcting a song's year changes its identity key, which would otherwise
-  // leave the old entry behind as a duplicate pointing at the same track.
-  // Dedupe on URI, preferring whichever entry the current batch still refers to.
-  const batchKeys = new Set(batch.map(keyOf));
-  const byUri = new Map();
-  for (const song of resolved.values()) {
-    if (!song.spotify_uri) continue;
-    if (!byUri.has(song.spotify_uri) || batchKeys.has(keyOf(song))) {
-      byUri.set(song.spotify_uri, song);
+    // Counted separately from `matched`, so a run of review entries after a
+    // checkpoint cannot retrigger it on every iteration.
+    if (++sinceCheckpoint >= CHECKPOINT_EVERY) {
+      sinceCheckpoint = 0;
+      await savePool();
+      process.stdout.write(`  ... checkpointed, ${buildPool().length} in the pool\n`);
     }
   }
-  const pool = [...byUri.values()];
+
+  const pool = buildPool();
 
   console.log(`\n${matched} matched, ${review.length} need review, pool is now ${pool.length} songs`);
 
@@ -249,15 +289,7 @@ async function main() {
     return;
   }
 
-  await writeJson(opts.out, {
-    meta: {
-      count: pool.length,
-      market: MARKET,
-      generated: new Date().toISOString().slice(0, 10),
-      note: 'Playable pool. year is our value and is the original release year, never Spotify\'s.',
-    },
-    songs: pool,
-  });
+  await savePool();
   console.log(`Wrote ${opts.out}`);
 
   if (yearSuspects.length > 0) {
@@ -265,6 +297,11 @@ async function main() {
     for (const s of yearSuspects) {
       console.log(`  ${s.artist} - ${s.title}: ours ${s.our_year}, Spotify ${s.spotify_earliest_year}`);
     }
+  }
+
+  if (aborted) {
+    console.log(`\nSTOPPED EARLY: ${aborted.message}`);
+    console.log(`Everything resolved so far has been saved. Re-run the same command to continue.`);
   }
 
   if (review.length > 0 || yearSuspects.length > 0) {
@@ -284,3 +321,7 @@ main().catch((err) => {
   console.error(`\n${err.message}`);
   process.exit(1);
 });
+
+// Note on resuming: a run that stops early has still written every song it
+// resolved, and the next run skips anything already in the pool. Re-running the
+// same command picks up where it left off.
