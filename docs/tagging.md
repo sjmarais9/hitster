@@ -69,6 +69,30 @@ Added to as the owner corrects tagging. Each of these overrides intuition.
    Freshlyground and comparable local staples: tag them higher than a global
    view would.
 
+2. **`even` is rarer than it looks. This house is more generationally siloed
+   than it appears.** In the batch 002 review, half of every `even` tag put in
+   front of the owner came back corrected, almost always to `adults`. Do not
+   reach for `even` as a default. Reserve it for songs with real evidence of
+   crossing, and pick a side otherwise.
+
+3. **A pre-1990 song being famous does not mean the children know it.** Three
+   Little Birds, Don't Stop Believin' and Never Gonna Give You Up were all
+   tagged `standard` / `even` and all came back skewed to `adults`. Fame within
+   the parents' generation is not reach across generations. Rickrolling, Glee
+   and advert placement are weaker signals than they look.
+
+4. **Recent chart pop is less familiar here than its streaming numbers
+   suggest.** Levitating and Kill Bill both came down from `familiar` to `deep`,
+   and Heat Waves from `standard` to `familiar`. A song being enormous on
+   streaming says little about whether this particular family can place it. Tag
+   recent pop conservatively.
+
+5. **Genre is not a shortcut.** A tempting reading of the early corrections was
+   that rock runs higher in this house and should be tagged up. It did not hold:
+   in the same review Metallica's "One" came *down* to `deep` while Nine Inch
+   Nails' "Closer" went *up* to `familiar`. Judge each song, do not apply a
+   genre-wide adjustment.
+
 ## Traps
 
 - **Spotify `popularity` is not familiarity.** It measures current streaming.
@@ -113,3 +137,10 @@ Per batch, approximately:
 Roughly 45% rock and alternative, the rest spread across pop, hip hop, soul and
 funk, electronic, metal and country. South African content **at most 5%**,
 spread through the decades rather than clustered.
+
+Batch 002 came out at 58% rock and alternative. That batch stands, but later
+batches must pull back toward 45% — the other genres need the room.
+
+Batch 002 also came out with only 8% `skew: kids` against 57% `adults`, which
+would have the children losing most rounds. Later batches need materially more
+`kids` material, including `deep` + `kids`.
