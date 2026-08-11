@@ -19,9 +19,18 @@ const DONE_PAGE = `<!doctype html><meta charset="utf-8">
 function openBrowser(url) {
   try {
     if (process.platform === 'win32') {
-      // The empty string is the window title; start treats the first quoted
-      // argument as one, and eats the URL without it.
-      spawn('cmd', ['/c', 'start', '', url], { stdio: 'ignore', detached: true }).unref();
+      // cmd.exe re-parses its command line and treats a bare & as a command
+      // separator, which silently truncates the URL at the first query
+      // parameter. Spotify then reports "response_type must be code", because
+      // client_id really is all it received. The URL has to reach cmd already
+      // quoted, which means bypassing Node's own argument escaping.
+      // The empty "" is start's window-title argument; without it start
+      // consumes the URL as the title and opens nothing.
+      spawn('cmd', ['/c', 'start', '""', `"${url}"`], {
+        stdio: 'ignore',
+        detached: true,
+        windowsVerbatimArguments: true,
+      }).unref();
     } else if (process.platform === 'darwin') {
       spawn('open', [url], { stdio: 'ignore', detached: true }).unref();
     } else {
@@ -108,7 +117,8 @@ export async function authorise({ port = 3000 } = {}) {
   const pending = awaitCallback(port, state);
 
   console.log(`\nAuthorising via ${redirectUri}`);
-  console.log(`If a browser does not open, visit:\n${authUrl}\n`);
+  console.log(`Opening a browser. If nothing opens, or the page reports an`);
+  console.log(`error, paste this URL in yourself:\n\n${authUrl}\n`);
   openBrowser(authUrl);
 
   const code = await pending;
