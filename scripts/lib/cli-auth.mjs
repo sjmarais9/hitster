@@ -159,7 +159,12 @@ export async function authorise({ port = 3000 } = {}) {
       }
 
       if (!response.ok) {
-        throw new Error(`GET ${path} failed: ${response.status} ${response.statusText}`);
+        // Spotify puts the actual reason in the body. Without it a 403 is
+        // indistinguishable from any other 403, which is not much to go on.
+        const body = await response.json().catch(() => null);
+        const reason = body?.error?.message ?? body?.error ?? response.statusText;
+        const shortPath = path.length > 80 ? `${path.slice(0, 80)}...` : path;
+        throw new Error(`GET ${shortPath} failed: ${response.status} ${reason}`);
       }
       return response.json();
     }

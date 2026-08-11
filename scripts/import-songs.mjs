@@ -101,18 +101,33 @@ async function fillPopularity(spotify, uris, popularity) {
   const missing = uris.filter((uri) => typeof popularity.get(uri) !== 'number');
   if (missing.length === 0) return 0;
 
+  const CHUNK = 20;
   let filled = 0;
-  for (let i = 0; i < missing.length; i += 50) {
-    const chunk = missing.slice(i, i + 50);
+
+  for (let i = 0; i < missing.length; i += CHUNK) {
+    const chunk = missing.slice(i, i + CHUNK);
     const ids = chunk.map((uri) => uri.slice('spotify:track:'.length)).join(',');
-    const { tracks } = await spotify(`tracks?ids=${ids}&market=${MARKET}`);
+
+    let tracks;
+    try {
+      // No market filter here. We only want the score, and passing a market has
+      // been the difference between this working and a 403 on some accounts.
+      ({ tracks } = await spotify(`tracks?ids=${ids}`));
+    } catch (err) {
+      // Advisory data must never be able to fail an import. Losing a whole run
+      // of resolved songs to a missing popularity score is a bad trade.
+      console.log(`\n  popularity unavailable, continuing without it: ${err.message}`);
+      return filled;
+    }
+
     for (const track of tracks ?? []) {
       if (!track) continue;
       popularity.set(track.uri, track.popularity ?? null);
       if (typeof track.popularity === 'number') filled++;
     }
-    process.stdout.write(`\r  popularity: ${Math.min(i + 50, missing.length)}/${missing.length}`);
+    process.stdout.write(`\r  popularity: ${Math.min(i + CHUNK, missing.length)}/${missing.length}`);
   }
+
   process.stdout.write('\n');
   return filled;
 }
@@ -164,13 +179,16 @@ async function main() {
   }
   if (refreshed > 0) console.log(`Refreshed our fields on ${refreshed} already-resolved song(s)`);
 
-  const queue = batch
-    .filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri)
-    .slice(0, opts.limit);
+  // Count what is outstanding before --limit truncates it, or the summary
+  // reports everything as already done whenever a limit is in play.
+  const outstanding = batch.filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
+  const queue = outstanding.slice(0, opts.limit);
 
-  const alreadyDone = batch.length - queue.length;
+  const alreadyDone = batch.length - outstanding.length;
+  const deferred = outstanding.length - queue.length;
   console.log(`${batch.length} songs in ${opts.in}`);
   if (alreadyDone > 0) console.log(`${alreadyDone} already resolved, skipping (use --recheck to redo)`);
+  if (deferred > 0) console.log(`${deferred} outstanding but held back by --limit`);
   if (queue.length === 0) console.log('Nothing new to resolve.');
   else console.log(`Resolving ${queue.length}...`);
 
@@ -264,8 +282,14 @@ async function main() {
   // Advisory only, and deliberately kept out of the pool so it can never be
   // mistaken for one of our values. Only possible when authorised.
   if (spotify) {
-    const filled = await fillPopularity(spotify, pool.map((s) => s.spotify_uri), popularity);
-    if (filled > 0) console.log(`Fetched ${filled} popularity score(s)`);
+    try {
+      const filled = await fillPopularity(spotify, pool.map((s) => s.spotify_uri), popularity);
+      if (filled > 0) console.log(`Fetched ${filled} popularity score(s)`);
+    } catch (err) {
+      // Belt and braces. Nothing about an advisory score justifies discarding
+      // a run's worth of resolved songs.
+      console.log(`  popularity step failed, continuing: ${err.message}`);
+    }
   }
 
   console.log(`\n${matched} matched, ${review.length} need review, pool is now ${pool.length} songs`);
