@@ -75,3 +75,31 @@ Songs are generated collaboratively into a seed batch, then run through the impo
 `scripts/`, which resolves each track to a Spotify URI and verifies availability in the `ZA`
 market. Anything it cannot match confidently goes to a review file for manual resolution. **A
 song without a verified URI does not enter the playable pool.**
+
+### Running the import
+
+```sh
+node scripts/import-songs.mjs --in data/songs.seed.json --port 3001
+```
+
+It opens a browser for a one-off authorisation, resolves each song, then writes:
+
+- `data/songs.json` — the playable pool, confident matches only
+- `data/review.json` — everything else, with candidates listed for a human to settle
+
+The port must be registered as a redirect URI in the Spotify dashboard, same as for the app.
+`--dry-run` reports without writing, `--limit 5` trials a handful, and `--recheck` re-resolves
+songs that already have a URI. Re-running is safe: already-resolved songs are skipped and the
+existing pool is merged rather than replaced.
+
+The script authenticates with PKCE over a loopback server rather than Client Credentials,
+specifically so that no client secret has to exist anywhere in this project.
+
+### Tests
+
+```sh
+npm test
+```
+
+Covers the matcher — the logic that decides whether a search result really is the song we asked
+for. It has no dependencies and needs no network.
