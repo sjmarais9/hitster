@@ -10,18 +10,45 @@
 </head>
 <body class="centred">
   <main class="panel">
+
     <section id="signed-out">
       <h1>Hitster</h1>
       <p class="lede">Connect your Spotify Premium account to start a game.</p>
       <button id="login" class="button" type="button">Log in with Spotify</button>
-      <p id="auth-error" class="status error hidden"></p>
     </section>
 
-    <section id="signed-in" class="hidden">
-      <h1>Ready</h1>
-      <p class="lede">Playback is not wired up yet.</p>
+    <section id="start" class="hidden">
+      <h1>Hitster</h1>
+      <p class="lede">Turn the volume up before you start.</p>
+      <!-- This tap is load-bearing: it is the user gesture that buys permission
+           to play audio for the rest of the session. -->
+      <button id="begin" class="button" type="button" disabled>Preparing…</button>
       <button id="logout" class="button secondary" type="button">Log out</button>
     </section>
+
+    <section id="table" class="hidden">
+      <div id="card" class="card">
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <span class="card-mark" aria-hidden="true">?</span>
+            <span class="card-label">Hidden</span>
+          </div>
+          <!-- Left empty until Reveal. The details are injected at that moment
+               and cleared on the next draw, so there is never a spoiler sitting
+               in the DOM waiting to be found. -->
+          <div class="card-face card-front" aria-live="polite">
+            <p id="card-artist" class="card-artist"></p>
+            <h2 id="card-title" class="card-title"></h2>
+            <p id="card-year" class="card-year"></p>
+          </div>
+        </div>
+      </div>
+
+      <button id="action" class="button" type="button">Draw</button>
+      <p id="remaining" class="status"></p>
+    </section>
+
+    <p id="notice" class="status hidden"></p>
   </main>
 
   <script type="module" src="src/app.js"></script>

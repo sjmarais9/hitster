@@ -87,6 +87,86 @@ h1 {
   transform: scale(0.985);
 }
 
+.panel > section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* The card. Reveal is meant to feel like turning a card over, so it flips
+   rather than swapping text. Reduced-motion users get the same result
+   instantly, via the global rule at the bottom of this file. */
+.card {
+  perspective: 1200px;
+}
+
+.card-inner {
+  position: relative;
+  height: 18rem;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card.revealed .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Nobody should ever have to wonder whether they are looking at a spoiler.
+   The hidden face says so in as many ways as it reasonably can. */
+.card-back {
+  border: 2px dashed #2c3242;
+}
+
+.card-mark {
+  font-size: 5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.card-label {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.card-front {
+  transform: rotateY(180deg);
+}
+
+.card-artist {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.card-year {
+  margin: 0;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+
 .status {
   margin: 0;
   color: var(--muted);
