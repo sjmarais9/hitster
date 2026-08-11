@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0f14">
+  <!-- The tab title never changes. It must never leak the drawn song. -->
+  <title>Hitster</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="centred">
+  <main class="panel">
+    <section id="signed-out">
+      <h1>Hitster</h1>
+      <p class="lede">Connect your Spotify Premium account to start a game.</p>
+      <button id="login" class="button" type="button">Log in with Spotify</button>
+      <p id="auth-error" class="status error hidden"></p>
+    </section>
+
+    <section id="signed-in" class="hidden">
+      <h1>Ready</h1>
+      <p class="lede">Playback is not wired up yet.</p>
+      <button id="logout" class="button secondary" type="button">Log out</button>
+    </section>
+  </main>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
