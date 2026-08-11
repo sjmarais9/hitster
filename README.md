@@ -12,22 +12,29 @@ Requires a **Spotify Premium** account — the Web Playback SDK will not stream 
 
 ## Local development
 
-Spotify no longer accepts `localhost` as a redirect host. The dev server must be reachable at
-**`127.0.0.1:3000` exactly** or the login will fail with `INVALID_CLIENT: Invalid redirect URI`.
-Not `localhost:3000`, not port 8000.
+Spotify no longer accepts `localhost` as a redirect host. The dev server must be reachable on
+**`127.0.0.1`** — not `localhost` — or the login fails with
+`INVALID_CLIENT: Invalid redirect URI`.
+
+The port must be one that is registered in the Spotify dashboard. Two are: **3000** and **3001**.
+Use either. 3001 exists because port 3000 is often already taken on this machine.
 
 From the repo root:
 
 ```sh
-python -m http.server 3000 --bind 127.0.0.1
+python -m http.server 3001 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:3000/>. Anything that serves the directory statically on that exact
-host and port works just as well, for example:
+Then open <http://127.0.0.1:3001/>. Anything that serves the directory statically on that host
+and a registered port works just as well, for example:
 
 ```sh
-npx serve -l tcp://127.0.0.1:3000
+npx serve -l tcp://127.0.0.1:3001
 ```
+
+The app reads its redirect URI from `location.origin`, so switching between registered ports
+needs no code change. Using an *unregistered* port is the failure mode to watch for — it fails at
+the consent screen, before any of our code runs.
 
 ### Why the callback is a directory
 

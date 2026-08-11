@@ -26,11 +26,14 @@ replaces it with a song pool that can grow indefinitely and be filtered to suit 
   public clients and needs no secret. Never introduce one.
 - Registered redirect URIs:
   - `http://127.0.0.1:3000/callback` for local development
+  - `http://127.0.0.1:3001/callback` for local development, when 3000 is occupied
   - `https://sjmarais9.github.io/hitster/callback` for production
+  - `https://sjmarais9.github.io/hitster/callback/` for production, trailing-slash form
 - Enabled APIs: Web API, Web Playback SDK
 
 Note that Spotify no longer accepts `localhost` as a redirect host. Local development must run on
-`127.0.0.1:3000` exactly, or auth will fail.
+`127.0.0.1` and on a registered port, or auth will fail. The host is the hard constraint; the
+port is only constrained by what is registered above.
 
 ## Architecture
 
