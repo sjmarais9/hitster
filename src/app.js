@@ -7,6 +7,8 @@ const el = (id) => document.getElementById(id);
 const screens = { signedOut: el('signed-out'), start: el('start'), table: el('table') };
 
 const card = el('card');
+const reveal = el('reveal');
+const mark = el('card-mark');
 const action = el('action');
 const toggle = el('toggle');
 const replay = el('replay');
@@ -40,8 +42,15 @@ function setCard(song) {
 }
 
 function render() {
-  action.textContent = { ready: 'Reveal', revealed: 'Next', empty: 'Start over' }[phase];
+  action.textContent = phase === 'empty' ? 'Start over' : 'Next';
   action.disabled = false;
+
+  // The card can only be turned over once the song has actually been heard.
+  // Until then it stays a question mark and does not respond to a tap.
+  const revealable = phase === 'ready' && started;
+  card.classList.toggle('revealable', revealable);
+  reveal.disabled = !revealable;
+  mark.textContent = revealable ? 'Reveal' : '?';
 
   toggle.classList.toggle('playing', playing);
   toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
@@ -75,20 +84,23 @@ async function deal() {
   phase = 'ready';
 }
 
+function onReveal() {
+  // Guarded here as well as by the disabled attribute, since this is the one
+  // action in the game that cannot be undone.
+  if (phase !== 'ready' || !started) return;
+
+  setCard(current);
+  phase = 'revealed';
+  render();
+}
+
 async function onAction() {
   action.disabled = true;
   say('');
 
   try {
-    if (phase === 'ready') {
-      setCard(current);
-      phase = 'revealed';
-    } else if (phase === 'revealed') {
-      await deal();
-    } else {
-      resetSession();
-      await deal();
-    }
+    if (phase === 'empty') resetSession();
+    await deal();
   } catch (err) {
     say(err.message, true);
   }
@@ -185,6 +197,7 @@ async function boot() {
 el('login').addEventListener('click', () => beginLogin().catch((err) => say(err.message, true)));
 el('logout').addEventListener('click', () => { logout(); location.reload(); });
 el('begin').addEventListener('click', onBegin);
+reveal.addEventListener('click', onReveal);
 action.addEventListener('click', onAction);
 toggle.addEventListener('click', onToggle);
 replay.addEventListener('click', onReplay);

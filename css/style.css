@@ -129,6 +129,23 @@ h1 {
 .card-back {
   place-items: center;
   border: 2px dashed #2c3242;
+  /* It is a button now, so undo what a button brings with it. */
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.card-back:disabled {
+  cursor: default;
+}
+
+/* No transform here: the faces sit inside a 3D transform for the flip, and
+   nudging one would fight it. Brightness reads just as well. */
+.card-back:not(:disabled):active {
+  filter: brightness(1.15);
 }
 
 /* Both children share one grid cell so the mark sits on the label while the
@@ -175,6 +192,13 @@ h1 {
   height: 6rem;
   transform: translate(-50%, -50%);
   border-radius: 50%;
+  /* Grey until the song has been heard. The label lighting up is the signal
+     that the card can now be turned over. */
+  background: #2c3242;
+  transition: background-color 0.3s ease;
+}
+
+.card.revealable .vinyl-label {
   background: var(--accent);
 }
 
@@ -186,12 +210,21 @@ h1 {
   to { transform: rotate(360deg); }
 }
 
+/* Before the song has played this is a question mark; once it has, the same
+   spot becomes the word to tap. */
 .card-mark {
   position: relative;
   z-index: 1;
   font-size: 3.5rem;
   font-weight: 700;
   line-height: 1;
+  color: var(--muted);
+}
+
+.card.revealable .card-mark {
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: #06210f;
 }
 

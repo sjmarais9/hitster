@@ -32,12 +32,16 @@
     <section id="table" class="hidden">
       <div id="card" class="card">
         <div class="card-inner">
-          <div class="card-face card-back">
+          <!-- The face-down card is itself the reveal control. It stays
+               disabled until the song has actually been played, so the answer
+               cannot be given away before anyone has heard anything. -->
+          <button id="reveal" class="card-face card-back" type="button" disabled
+                  aria-label="Reveal the song">
             <!-- The record stops turning when playback is paused, so the card
                  doubles as the playing indicator. -->
             <div class="vinyl" aria-hidden="true"><span class="vinyl-label"></span></div>
-            <span class="card-mark" aria-hidden="true">?</span>
-          </div>
+            <span id="card-mark" class="card-mark">?</span>
+          </button>
           <!-- Left empty until Reveal. The details are injected at that moment
                and cleared on the next draw, so there is never a spoiler sitting
                in the DOM waiting to be found. -->
@@ -67,7 +71,7 @@
         </button>
       </div>
 
-      <button id="action" class="button" type="button">Reveal</button>
+      <button id="action" class="button" type="button">Next</button>
     </section>
 
     <p id="notice" class="status hidden"></p>
