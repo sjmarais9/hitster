@@ -14,6 +14,8 @@
       "genres": [
         "rock and roll"
       ],
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": "spotify:track:4gphxUgq0JSFv2BCLhNDiE",
       "market_checked": "ZA"
     },
@@ -26,6 +28,8 @@
         "soul",
         "r&b"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:2HoqbEOXgbDSLZ5XCePEXt",
       "market_checked": "ZA"
     },
@@ -38,6 +42,8 @@
         "pop",
         "psychedelic"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:6aU6a9tdn2vHhnPGlboFZX",
       "market_checked": "ZA"
     },
@@ -50,6 +56,8 @@
         "rock",
         "roots rock"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:20OFwXhEXf12DzwXmaV7fj",
       "market_checked": "ZA"
     },
@@ -61,6 +69,8 @@
       "genres": [
         "soul"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:3Um9toULmYFGCpvaIPFw7l",
       "market_checked": "ZA"
     },
@@ -73,6 +83,8 @@
         "funk",
         "soul"
       ],
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": "spotify:track:4N0TP4Rmj6QQezWV88ARNJ",
       "market_checked": "ZA"
     },
@@ -85,6 +97,8 @@
         "pop",
         "disco"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:0GjEhVFGZW8afUYGChu3Rr",
       "market_checked": "ZA"
     },
@@ -97,6 +111,8 @@
         "rock",
         "soft rock"
       ],
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": "spotify:track:07GvNcU1WdyZJq3XxP0kZa",
       "market_checked": "ZA"
     },
@@ -109,6 +125,8 @@
         "punk",
         "post-punk"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:124Y9LPRCAz3q2OP0iCvcJ",
       "market_checked": "ZA"
     },
@@ -121,6 +139,8 @@
         "new wave",
         "pop"
       ],
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": "spotify:track:7HKxTNVlkHsfMLhigmhC0I",
       "market_checked": "ZA"
     },
@@ -133,6 +153,8 @@
         "soft rock",
         "pop"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:2374M0fQpWi3dLnB54qaLX",
       "market_checked": "ZA"
     },
@@ -145,6 +167,8 @@
         "pop",
         "funk"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:7J1uxwnxfQLu4APicE5Rnj",
       "market_checked": "ZA"
     },
@@ -157,6 +181,8 @@
         "worldbeat",
         "afro-pop"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:6kDpN5vz6fLU60eJ1o5P4m",
       "market_checked": "ZA"
     },
@@ -168,6 +194,8 @@
       "genres": [
         "hard rock"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:7snQQk1zcKl8gZ92AnueZW",
       "market_checked": "ZA"
     },
@@ -180,6 +208,8 @@
         "grunge",
         "alternative rock"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:4CeeEOM32jQcH3eN9Q2dGj",
       "market_checked": "ZA"
     },
@@ -192,6 +222,8 @@
         "hip hop",
         "g-funk"
       ],
+      "familiarity": "deep",
+      "skew": "adults",
       "spotify_uri": "spotify:track:5Tbpp3OLLClPJF8t1DmrFD",
       "market_checked": "ZA"
     },
@@ -204,6 +236,8 @@
         "britpop",
         "rock"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:41tTCXOzxSWAoVrfeIIh8x",
       "market_checked": "ZA"
     },
@@ -215,6 +249,8 @@
       "genres": [
         "kwaito"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:2PGxiV2TSgVHd02eBd0Kz1",
       "market_checked": "ZA"
     },
@@ -227,6 +263,8 @@
         "alternative",
         "hip hop"
       ],
+      "familiarity": "familiar",
+      "skew": "even",
       "spotify_uri": "spotify:track:1RKUoGiLEbcXN4GY4spQDx",
       "market_checked": "ZA"
     },
@@ -239,6 +277,8 @@
         "hip hop",
         "funk"
       ],
+      "familiarity": "familiar",
+      "skew": "even",
       "spotify_uri": "spotify:track:2PpruBYCo4H7WOBJ7Q2EwM",
       "market_checked": "ZA"
     },
@@ -251,6 +291,8 @@
         "soul",
         "pop"
       ],
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": "spotify:track:1L5tZi0izXsi5Kk5OJf4W0",
       "market_checked": "ZA"
     },
@@ -263,6 +305,8 @@
         "rock",
         "indie rock"
       ],
+      "familiarity": "familiar",
+      "skew": "even",
       "spotify_uri": "spotify:track:0ntQJM78wzOLVeCUAW7Y45",
       "market_checked": "ZA"
     },
@@ -275,6 +319,8 @@
         "pop",
         "soul"
       ],
+      "familiarity": "familiar",
+      "skew": "even",
       "spotify_uri": "spotify:track:4OSBTYWVwsQhGLF9NHvIbR",
       "market_checked": "ZA"
     },
@@ -287,6 +333,8 @@
         "disco",
         "electronic"
       ],
+      "familiarity": "familiar",
+      "skew": "even",
       "spotify_uri": "spotify:track:69kOkLUCkxIZYexIgSG8rq",
       "market_checked": "ZA"
     },
@@ -299,6 +347,8 @@
         "funk",
         "pop"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:32OlwWuMpZ6b0aN2RZOeMS",
       "market_checked": "ZA"
     },
@@ -310,6 +360,8 @@
       "genres": [
         "hip hop"
       ],
+      "familiarity": "familiar",
+      "skew": "kids",
       "spotify_uri": "spotify:track:7KXjTSCq5nL1LoYtL7XAwS",
       "market_checked": "ZA"
     },
@@ -322,6 +374,8 @@
         "amapiano",
         "house"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:5ObhjYr8EYRm1XNi3kYo9Y",
       "market_checked": "ZA"
     },
@@ -334,6 +388,8 @@
         "synth-pop",
         "pop"
       ],
+      "familiarity": "standard",
+      "skew": "even",
       "spotify_uri": "spotify:track:0VjIjW4GlUZAMYd2vXMi3b",
       "market_checked": "ZA"
     },
@@ -346,6 +402,8 @@
         "pop",
         "synth-pop"
       ],
+      "familiarity": "familiar",
+      "skew": "kids",
       "spotify_uri": "spotify:track:4Dvkj6JhhA12EX05fT7y2e",
       "market_checked": "ZA"
     },
@@ -358,6 +416,8 @@
         "amapiano",
         "r&b"
       ],
+      "familiarity": "familiar",
+      "skew": "kids",
       "spotify_uri": "spotify:track:5aIVCx5tnk0ntmdiinnYvw",
       "market_checked": "ZA"
     }

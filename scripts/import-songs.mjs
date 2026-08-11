@@ -34,6 +34,7 @@ Resolve a batch of songs to Spotify track URIs.
   --in <file>       batch to import      (default data/songs.seed.json)
   --out <file>      playable pool        (default data/songs.json)
   --review <file>   needs manual work    (default data/review.json)
+  --popularity <f>  advisory scores      (default data/popularity.json)
   --port <number>   loopback port for auth; must be registered as a redirect
                     URI in the Spotify dashboard   (default 3000)
   --limit <number>  only process the first N songs, for a quick trial
@@ -47,6 +48,7 @@ function parseArgs(argv) {
     in: 'data/songs.seed.json',
     out: 'data/songs.json',
     review: 'data/review.json',
+    popularity: 'data/popularity.json',
     port: 3000,
     limit: Infinity,
     recheck: false,
@@ -58,6 +60,7 @@ function parseArgs(argv) {
     else if (arg === '--in') opts.in = argv[++i];
     else if (arg === '--out') opts.out = argv[++i];
     else if (arg === '--review') opts.review = argv[++i];
+    else if (arg === '--popularity') opts.popularity = argv[++i];
     else if (arg === '--port') opts.port = Number(argv[++i]);
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
     else if (arg === '--recheck') opts.recheck = true;
@@ -125,6 +128,10 @@ async function main() {
   const spotify = await authorise({ port: opts.port });
 
   const review = [];
+  const yearSuspects = [];
+  // Merged rather than replaced, so a partial run does not lose earlier scores.
+  const priorPopularity = await readJson(opts.popularity, { scores: {} });
+  const popularity = new Map(Object.entries(priorPopularity.scores ?? {}));
   let matched = 0;
 
   for (const [index, song] of queue.entries()) {
@@ -144,15 +151,37 @@ async function main() {
       matched++;
       console.log(`ok`);
       resolved.set(keyOf(song), {
-        // Our fields, verbatim. The year in particular is never Spotify's.
+        // Our fields, verbatim. year, familiarity and skew in particular are
+        // ours and are never taken from Spotify.
         artist: song.artist,
         title: song.title,
         year: song.year,
         decade: song.decade,
         genres: song.genres,
+        familiarity: song.familiarity ?? null,
+        skew: song.skew ?? null,
         spotify_uri: best.track.uri,
         market_checked: MARKET,
       });
+
+      // Advisory only, and kept out of the pool so it can never be mistaken for
+      // one of our values. Used by check-familiarity.mjs to flag disagreements.
+      popularity.set(best.track.uri, best.track.popularity ?? null);
+
+      // Our years are written from memory and will occasionally be wrong.
+      // Spotify's date is later than ours all the time - that is just a
+      // remaster or reissue - but *earlier* than ours should not happen for an
+      // original release, so it is worth a human look.
+      const spotifyYear = releaseYear(best.track);
+      if (spotifyYear && spotifyYear < song.year - 1) {
+        yearSuspects.push({
+          artist: song.artist,
+          title: song.title,
+          our_year: song.year,
+          spotify_earliest_year: spotifyYear,
+          note: 'Spotify dates this earlier than we do. Our year may be wrong.',
+        });
+      }
     } else {
       console.log(best ? `review (${best.reason})` : 'review (no results)');
       review.push({
@@ -192,15 +221,32 @@ async function main() {
   });
   console.log(`Wrote ${opts.out}`);
 
-  if (review.length > 0) {
+  await writeJson(opts.popularity, {
+    meta: {
+      count: popularity.size,
+      note: 'Spotify popularity, 0-100. ADVISORY ONLY. It measures current streaming, not how well this crowd knows a song, and it drifts over time. Never copy it into the pool and never let it set familiarity. Used by check-familiarity.mjs to flag disagreements worth a human look.',
+    },
+    scores: Object.fromEntries(popularity),
+  });
+  console.log(`Wrote ${opts.popularity}`);
+
+  if (yearSuspects.length > 0) {
+    console.log(`\n${yearSuspects.length} song(s) where Spotify dates the track earlier than we do:`);
+    for (const s of yearSuspects) {
+      console.log(`  ${s.artist} - ${s.title}: ours ${s.our_year}, Spotify ${s.spotify_earliest_year}`);
+    }
+  }
+
+  if (review.length > 0 || yearSuspects.length > 0) {
     await writeJson(opts.review, {
       meta: {
         count: review.length,
         note: 'Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year.',
       },
       songs: review,
+      year_suspects: yearSuspects,
     });
-    console.log(`Wrote ${opts.review} - ${review.length} to resolve by hand`);
+    console.log(`Wrote ${opts.review} - ${review.length} unmatched, ${yearSuspects.length} year(s) to check`);
   }
 }
 
