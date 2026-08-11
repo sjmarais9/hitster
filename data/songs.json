@@ -1,6 +1,6 @@
 {
   "meta": {
-    "count": 30,
+    "count": 290,
     "market": "ZA",
     "generated": "2026-08-11",
     "note": "Playable pool. year is our value and is the original release year, never Spotify's."
@@ -419,6 +419,3490 @@
       "familiarity": "familiar",
       "skew": "kids",
       "spotify_uri": "spotify:track:5aIVCx5tnk0ntmdiinnYvw",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Chuck Berry",
+      "title": "Johnny B. Goode",
+      "year": 1958,
+      "decade": "1950s",
+      "genres": [
+        "rock and roll"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2QfiRTz5Yc8DdShCxG1tB2",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Ben E. King",
+      "title": "Stand by Me",
+      "year": 1961,
+      "decade": "1960s",
+      "genres": [
+        "soul",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6OzAkuRDmEpd52RF1g1WvU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Beatles",
+      "title": "Twist and Shout",
+      "year": 1963,
+      "decade": "1960s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5ZBeML7Lf3FMEVviTyvi8l",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Kinks",
+      "title": "You Really Got Me",
+      "year": 1964,
+      "decade": "1960s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6tZdL3Zp8JgrfDbsSeSV1S",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Rolling Stones",
+      "title": "(I Can't Get No) Satisfaction",
+      "year": 1965,
+      "decade": "1960s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2PzU4IB8Dr6mxV3lHuaG34",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Who",
+      "title": "My Generation",
+      "year": 1965,
+      "decade": "1960s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2EMmHEhCZSMMEM85HTFJvj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Doors",
+      "title": "Light My Fire",
+      "year": 1967,
+      "decade": "1960s",
+      "genres": [
+        "psychedelic rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5uvosCdMlFdTXhoazkTI5R",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Aretha Franklin",
+      "title": "Respect",
+      "year": 1967,
+      "decade": "1960s",
+      "genres": [
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7s25THrKz86DM225dOYwnr",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Otis Redding",
+      "title": "(Sittin' On) The Dock of the Bay",
+      "year": 1968,
+      "decade": "1960s",
+      "genres": [
+        "soul"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3zBhihYUHBmGd2bcQIobrF",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Beatles",
+      "title": "Hey Jude",
+      "year": 1968,
+      "decade": "1960s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1eT2CjXwFXNx6oY5ydvzKU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Led Zeppelin",
+      "title": "Whole Lotta Love",
+      "year": 1969,
+      "decade": "1960s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0hCB0YR03f6AmQaHbwWDe8",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Black Sabbath",
+      "title": "Paranoid",
+      "year": 1970,
+      "decade": "1970s",
+      "genres": [
+        "heavy metal"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3hwuHzRicnu6Ji9i1JLzor",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Rod Stewart",
+      "title": "Maggie May",
+      "year": 1971,
+      "decade": "1970s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6rovOdp3HgK1DeAMYDzoA7",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Led Zeppelin",
+      "title": "Stairway to Heaven",
+      "year": 1971,
+      "decade": "1970s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5CQ30WqJwcep0pYcV4AMNc",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "David Bowie",
+      "title": "Life on Mars?",
+      "year": 1971,
+      "decade": "1970s",
+      "genres": [
+        "art rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3ZE3wv8V3w2T2f7nOCjV0N",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Deep Purple",
+      "title": "Smoke on the Water",
+      "year": 1972,
+      "decade": "1970s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5MMnwYs0hIxkENRsbkWJ2G",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Elton John",
+      "title": "Rocket Man",
+      "year": 1972,
+      "decade": "1970s",
+      "genres": [
+        "pop rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3gdewACMIVMEWVbyb8O9sY",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Steely Dan",
+      "title": "Reelin' In the Years",
+      "year": 1972,
+      "decade": "1970s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1x1XQqhBViz4opcpwc7FVs",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Pink Floyd",
+      "title": "Money",
+      "year": 1973,
+      "decade": "1970s",
+      "genres": [
+        "progressive rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0vFOzaXqZHahrZp6enQwQb",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lynyrd Skynyrd",
+      "title": "Free Bird",
+      "year": 1973,
+      "decade": "1970s",
+      "genres": [
+        "southern rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5EWPGh7jbTNO2wakv8LjUI",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Marvin Gaye",
+      "title": "Let's Get It On",
+      "year": 1973,
+      "decade": "1970s",
+      "genres": [
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5yr8pi3uCjTYOnTqstBBdm",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Doobie Brothers",
+      "title": "Long Train Runnin'",
+      "year": 1973,
+      "decade": "1970s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4nXkbcTj3nyww1cHkw5RAP",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Queen",
+      "title": "Bohemian Rhapsody",
+      "year": 1975,
+      "decade": "1970s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2JiDi0qAXsPwhPqA2qaKGt",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bruce Springsteen",
+      "title": "Born to Run",
+      "year": 1975,
+      "decade": "1970s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6hTcuIQa0sxrrByu9wTD7s",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eagles",
+      "title": "Hotel California",
+      "year": 1976,
+      "decade": "1970s",
+      "genres": [
+        "rock",
+        "soft rock"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:40riOy7x9W7GXjyGp4pjAv",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Ramones",
+      "title": "Blitzkrieg Bop",
+      "year": 1976,
+      "decade": "1970s",
+      "genres": [
+        "punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4KcH1ZRV2W1q7Flq0QqC76",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sex Pistols",
+      "title": "Anarchy in the U.K.",
+      "year": 1976,
+      "decade": "1970s",
+      "genres": [
+        "punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6Pf27pvR17uqb0SFbsAAJj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Stevie Wonder",
+      "title": "Sir Duke",
+      "year": 1976,
+      "decade": "1970s",
+      "genres": [
+        "funk",
+        "soul"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4pNiE4LCVV74vfIBaUHm1b",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bee Gees",
+      "title": "Stayin' Alive",
+      "year": 1977,
+      "decade": "1970s",
+      "genres": [
+        "disco"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5ubvP9oKmxLUVq506fgLhk",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Fleetwood Mac",
+      "title": "Dreams",
+      "year": 1977,
+      "decade": "1970s",
+      "genres": [
+        "soft rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0ofHAoxe9vBkTCp2UQIavz",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Talking Heads",
+      "title": "Psycho Killer",
+      "year": 1977,
+      "decade": "1970s",
+      "genres": [
+        "new wave"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7dSCxR4LqkmxoBrq9MzVSD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bob Marley and The Wailers",
+      "title": "Three Little Birds",
+      "year": 1977,
+      "decade": "1970s",
+      "genres": [
+        "reggae"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7vggqxNKwd6xdRoYS0pQtM",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Blondie",
+      "title": "Heart of Glass",
+      "year": 1978,
+      "decade": "1970s",
+      "genres": [
+        "new wave",
+        "disco"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:41AE8ODX2JETBCa6muhSLY",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Van Halen",
+      "title": "Runnin' with the Devil",
+      "year": 1978,
+      "decade": "1970s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3KhF2YiNpJvGpfiCW45R6D",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Chic",
+      "title": "Le Freak",
+      "year": 1978,
+      "decade": "1970s",
+      "genres": [
+        "disco",
+        "funk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4qL9VYPB4XwJKAOq4xn2Mh",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kate Bush",
+      "title": "Wuthering Heights",
+      "year": 1978,
+      "decade": "1970s",
+      "genres": [
+        "art pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5YSI1311X8t31PBjkBG4CZ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Pink Floyd",
+      "title": "Another Brick in the Wall, Part 2",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "progressive rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5XTLMydD8xxGabWEKrX87i",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "AC/DC",
+      "title": "Highway to Hell",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2zYzyRzz6pRmhPzyfMEC8s",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Michael Jackson",
+      "title": "Don't Stop 'Til You Get Enough",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "disco",
+        "funk"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:46eu3SBuFCXWsPT39Yg3tJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Donna Summer",
+      "title": "Hot Stuff",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "disco"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2zMJN9JvDlvGP4jB03l1Bz",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Clash",
+      "title": "Train in Vain",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "punk",
+        "post-punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6ITuEsxEy2qPhqMowdDAeI",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "AC/DC",
+      "title": "Back in Black",
+      "year": 1980,
+      "decade": "1980s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:08mG3Y1vljYA6bvDt4Wqkj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Joy Division",
+      "title": "Love Will Tear Us Apart",
+      "year": 1980,
+      "decade": "1980s",
+      "genres": [
+        "post-punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2JO3HwMRPeya8bXbtbyPcf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Police",
+      "title": "Don't Stand So Close to Me",
+      "year": 1980,
+      "decade": "1980s",
+      "genres": [
+        "new wave"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5veJDT0MLsLbhYsx42GXUD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Queen",
+      "title": "Under Pressure",
+      "year": 1981,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2nrG5UtAcqXbYttu7MXP1p",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Human League",
+      "title": "Don't You Want Me",
+      "year": 1981,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3L7RtEcu1Hw3OXrpnthngx",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Journey",
+      "title": "Don't Stop Believin'",
+      "year": 1981,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:77NNZQSqzLNqh2A9JhLRkg",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Survivor",
+      "title": "Eye of the Tiger",
+      "year": 1982,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2HHtWyy5CgaQbC7XSoOb0e",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Duran Duran",
+      "title": "Hungry Like the Wolf",
+      "year": 1982,
+      "decade": "1980s",
+      "genres": [
+        "new wave"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:39lSeqnyjZJejRuaREfyLL",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Dexys Midnight Runners",
+      "title": "Come On Eileen",
+      "year": 1982,
+      "decade": "1980s",
+      "genres": [
+        "pop",
+        "new wave"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3MrWxJaD2AT0W9DjWF64Vm",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Police",
+      "title": "Every Breath You Take",
+      "year": 1983,
+      "decade": "1980s",
+      "genres": [
+        "new wave"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1JSTJqkT5qHq8MDJnJbRE1",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Cyndi Lauper",
+      "title": "Girls Just Want to Have Fun",
+      "year": 1983,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4y1LsJpmMti1PfRQV9AWWe",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eurythmics",
+      "title": "Sweet Dreams (Are Made of This)",
+      "year": 1983,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1TfqLAPs4K3s2rJMoCokcS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bonnie Tyler",
+      "title": "Total Eclipse of the Heart",
+      "year": 1983,
+      "decade": "1980s",
+      "genres": [
+        "rock",
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7wuJGgpTNzbUyn26IOY6rj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Prince",
+      "title": "When Doves Cry",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "pop",
+        "funk"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6sby78fghipoXHQLeeZFFH",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Van Halen",
+      "title": "Jump",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6Fba9RZtC6vTY814JToDtP",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tina Turner",
+      "title": "What's Love Got to Do with It",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4kOfxxnW1ukZdsNbCKY9br",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Wham!",
+      "title": "Wake Me Up Before You Go-Go",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0ikz6tENMONtK6qGkOrU3c",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bruce Springsteen",
+      "title": "Dancing in the Dark",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7FwBtcecmlpc1sLySPXeGE",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "a-ha",
+      "title": "Take On Me",
+      "year": 1985,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2WfaOiMkCvy7F5fcp2zZ8L",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Dire Straits",
+      "title": "Money for Nothing",
+      "year": 1985,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4nFNJmjfgBF7jwv2oBC45b",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tears for Fears",
+      "title": "Everybody Wants to Rule the World",
+      "year": 1985,
+      "decade": "1980s",
+      "genres": [
+        "new wave",
+        "synth-pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4RvWPyQ5RL0ao9LPZeSouE",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bon Jovi",
+      "title": "Livin' on a Prayer",
+      "year": 1986,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:37ZJ0p5Jm13JPevGcx4SkF",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Europe",
+      "title": "The Final Countdown",
+      "year": 1986,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3MrRksHupTVEQ7YbA0FsZK",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Peter Gabriel",
+      "title": "Sledgehammer",
+      "year": 1986,
+      "decade": "1980s",
+      "genres": [
+        "pop rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:029NqmIySn1kOY305AAhxT",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Beastie Boys",
+      "title": "(You Gotta) Fight for Your Right (To Party!)",
+      "year": 1986,
+      "decade": "1980s",
+      "genres": [
+        "hip hop",
+        "rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2QvIOJ4EIz4MIwWRpKG4mi",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Metallica",
+      "title": "Master of Puppets",
+      "year": 1986,
+      "decade": "1980s",
+      "genres": [
+        "heavy metal",
+        "thrash metal"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2MuWTIM3b0YEAskbeeFE1i",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Rick Astley",
+      "title": "Never Gonna Give You Up",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4PTG3Z6ehGkBFwjybzWkR8",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "U2",
+      "title": "With or Without You",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6ADSaE87h8Y3lccZlBJdXH",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Whitney Houston",
+      "title": "I Wanna Dance with Somebody",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2tUBqZG2AbRi7Q0BIrVrEj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Def Leppard",
+      "title": "Pour Some Sugar on Me",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1aZLIbKEdsyqxyD6iNcrbA",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "INXS",
+      "title": "Need You Tonight",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "rock",
+        "new wave"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3h04eZTnmFLRMjZajbrp2R",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Los Lobos",
+      "title": "La Bamba",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "rock and roll"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6uU5OBhGUE1ngSKDj4wtoq",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Johnny Clegg and Savuka",
+      "title": "Asimbonanga",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "worldbeat",
+        "afro-pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0qI0td4ukULnSNFRl3SKBe",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bobby McFerrin",
+      "title": "Don't Worry Be Happy",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5YbgcwHjQhdT1BYQ4rxWlD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Guns N' Roses",
+      "title": "Paradise City",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6eN1f9KNmiWEhpE2RhQqB5",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Metallica",
+      "title": "One",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "heavy metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:02xhLoVqpGmOqvolgrwM8w",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Beach Boys",
+      "title": "Kokomo",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5qHYXcVvc9xsFB2uH7GpMN",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Pixies",
+      "title": "Where Is My Mind?",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0KzAbK6nItSqNh8q70tb0K",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Roxette",
+      "title": "The Look",
+      "year": 1988,
+      "decade": "1980s",
+      "genres": [
+        "pop rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4Ln6CP07DElm8ay1RxyYa9",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Cure",
+      "title": "Lovesong",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:49edirvFZwWjxAMZJRg1hN",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tom Petty",
+      "title": "Free Fallin'",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5tVA6TkbaAH9QMITTQRrNv",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The B-52's",
+      "title": "Love Shack",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "new wave"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4W4wYHtsrgDiivRASVOINL",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Billy Joel",
+      "title": "We Didn't Start the Fire",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3Cx4yrFaX8CeHwBMReOWXI",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Depeche Mode",
+      "title": "Personal Jesus",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2wUlYDGGXlSvm2NkGj0Qio",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Soul II Soul",
+      "title": "Back to Life (However Do You Want Me)",
+      "year": 1989,
+      "decade": "1980s",
+      "genres": [
+        "r&b",
+        "soul"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7ELuWpsuVCRBnOR9ZAZKDp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "New Order",
+      "title": "Blue Monday",
+      "year": 1983,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop",
+        "post-punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6hHc7Pks7wtBIW8Z6A0iFq",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Talk Talk",
+      "title": "It's My Life",
+      "year": 1984,
+      "decade": "1980s",
+      "genres": [
+        "synth-pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4jhsuQCUCJKA5f0bXb6XdJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Simple Minds",
+      "title": "Don't You (Forget About Me)",
+      "year": 1985,
+      "decade": "1980s",
+      "genres": [
+        "new wave",
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5Y8Rj0s6wuM5DlQdllYiWl",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sinead O'Connor",
+      "title": "Nothing Compares 2 U",
+      "year": 1990,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5GHY1DFWKz3Prg2V0Iodqo",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Deee-Lite",
+      "title": "Groove Is in the Heart",
+      "year": 1990,
+      "decade": "1990s",
+      "genres": [
+        "dance",
+        "funk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2He3NOyqtLNE3RQPpeDdSb",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Mango Groove",
+      "title": "Special Star",
+      "year": 1990,
+      "decade": "1990s",
+      "genres": [
+        "afro-pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5mxIhvGxDJ56wxOQnDNHnt",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "R.E.M.",
+      "title": "Losing My Religion",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:31AOj9sFz2gM0O3hMARRBx",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Metallica",
+      "title": "Enter Sandman",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "heavy metal"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3DwQ7AH3xGD9h65ezslm6q",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Red Hot Chili Peppers",
+      "title": "Under the Bridge",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock",
+        "funk rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3d9DChrdc6BOeFsbrZ3Is0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Pearl Jam",
+      "title": "Alive",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "grunge"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1L94M3KIu7QluZe63g64rv",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "U2",
+      "title": "One",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3G69vJMWsX6ZohTykad2AU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Guns N' Roses",
+      "title": "November Rain",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3YRCqOhFifThpSRFJ1VWFM",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Nirvana",
+      "title": "Come as You Are",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "grunge"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2RsAajgo0g7bMCHxwH3Sk0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "House of Pain",
+      "title": "Jump Around",
+      "year": 1992,
+      "decade": "1990s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6JymsaWDHk2Yj4e0yNBIFH",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Rage Against the Machine",
+      "title": "Killing in the Name",
+      "year": 1992,
+      "decade": "1990s",
+      "genres": [
+        "rap metal",
+        "alternative metal"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:59WN2psjkt1tyaxjspN8fp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Alice in Chains",
+      "title": "Would?",
+      "year": 1992,
+      "decade": "1990s",
+      "genres": [
+        "grunge"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5sFDReWLrZHLFZFjHsjUTS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Whitney Houston",
+      "title": "I Will Always Love You",
+      "year": 1992,
+      "decade": "1990s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4eHbdreAnSOrDDsFfc4Fpm",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Snoop Dogg",
+      "title": "Gin and Juice",
+      "year": 1993,
+      "decade": "1990s",
+      "genres": [
+        "hip hop",
+        "g-funk"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:39QBkWKnap8wRSW4WB9OK0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Counting Crows",
+      "title": "Mr. Jones",
+      "year": 1993,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:775moiHFrYKJf6QathlMAR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Cranberries",
+      "title": "Zombie",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1aZfq7TK3tNl9XJLkOpwKw",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Green Day",
+      "title": "Basket Case",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "punk rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:6L89mwZXSOwYl76YXfX13s",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Oasis",
+      "title": "Live Forever",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "britpop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1KgfeuVn5OlsBEtoEmBa1t",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Weezer",
+      "title": "Buddy Holly",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3mwvKOyMmG77zZRunnxp9E",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Beastie Boys",
+      "title": "Sabotage",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "alternative hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0Puj4YlTm6xNzDDADXHMI9",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Soundgarden",
+      "title": "Black Hole Sun",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "grunge"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2EoOZnxNgtmZaD8uUmz2nD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Nine Inch Nails",
+      "title": "Closer",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "industrial rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5mc6EyF1OIEOhAkD0Gg9Lc",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Portishead",
+      "title": "Glory Box",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "trip hop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3Ty7OTBNSigGEpeW2PqcsC",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "TLC",
+      "title": "Waterfalls",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6qspW4YKycviDFjHBOaqUY",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sheryl Crow",
+      "title": "All I Wanna Do",
+      "year": 1994,
+      "decade": "1990s",
+      "genres": [
+        "rock",
+        "pop rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3ZpQiJ78LKINrW9SQTgbXd",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Radiohead",
+      "title": "Fake Plastic Trees",
+      "year": 1995,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:73CKjW3vsUXRpy3NnX4H7F",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Alanis Morissette",
+      "title": "You Oughta Know",
+      "year": 1995,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:17ZAZ24Eyh5fKqQ06u4R3d",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Garbage",
+      "title": "Only Happy When It Rains",
+      "year": 1995,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:23Llyuevgg4Dt5vNdZcEEf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Prodigy",
+      "title": "Firestarter",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "big beat",
+        "electronic"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:79CUrU5o2KAVDTNm4x3eGU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "No Doubt",
+      "title": "Don't Speak",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "rock",
+        "pop rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6urCAbunOQI4bLhmGpX7iS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Fugees",
+      "title": "Killing Me Softly With His Song",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "hip hop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0Q0IVlqMV64kNLlwjPj0Hl",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Spice Girls",
+      "title": "Wannabe",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7qpvLstF3L1UgyEDBV4pjx",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Marilyn Manson",
+      "title": "The Beautiful People",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "industrial metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2aIB1CdRRG7YLBu9hNw9nR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Springbok Nude Girls",
+      "title": "Blue Eyes",
+      "year": 1996,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7DirY6NZx5zbsNChNHUZNb",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Blur",
+      "title": "Song 2",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "britpop",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3GfOAdcoc3X5GPiiXmpBjK",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Foo Fighters",
+      "title": "Everlong",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5UWwZ5lm5PKu6eKsHAGxOk",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Verve",
+      "title": "Bitter Sweet Symphony",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "britpop",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:57iDDD9N9tTWe75x6qhStw",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Radiohead",
+      "title": "Karma Police",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:63OQupATfueTdZMWTxW03A",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Chumbawamba",
+      "title": "Tubthumping",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:22HYEJveCvykVDHDiEEmjZ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Aqua",
+      "title": "Barbie Girl",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "eurodance",
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:74foxvWgi7qNU5h7RVcsw1",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Hanson",
+      "title": "MMMBop",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0lnxrQAd9ZxbhBBe7d8FO8",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Savage Garden",
+      "title": "Truly Madly Deeply",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:013AWvizllIUEC2FOBzOnh",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Backstreet Boys",
+      "title": "Everybody (Backstreet's Back)",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3tH03v5SIWaglfE3rzXzeB",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Cher",
+      "title": "Believe",
+      "year": 1998,
+      "decade": "1990s",
+      "genres": [
+        "dance pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2goLsvvODILDzeeiT4dAoR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Fatboy Slim",
+      "title": "Praise You",
+      "year": 1998,
+      "decade": "1990s",
+      "genres": [
+        "big beat",
+        "electronic"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1FS21kclHQ2vVi3U1ZxETc",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Massive Attack",
+      "title": "Teardrop",
+      "year": 1998,
+      "decade": "1990s",
+      "genres": [
+        "trip hop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:67Hna13dNDkZvBpTXRIaOJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Britney Spears",
+      "title": "...Baby One More Time",
+      "year": 1998,
+      "decade": "1990s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3MjUtNVVq3C8Fn0MP3zhXa",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Korn",
+      "title": "Freak on a Leash",
+      "year": 1998,
+      "decade": "1990s",
+      "genres": [
+        "nu metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6W21LNLz9Sw7sUSNWMSHRu",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eminem",
+      "title": "My Name Is",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:75IN3CtuZwTHTnZvYM4qnJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Red Hot Chili Peppers",
+      "title": "Scar Tissue",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1G391cbiT3v3Cywg8T7DM1",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "blink-182",
+      "title": "What's My Age Again?",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "punk rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4LJhJ6DQS7NwE7UKtvcM52",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Santana",
+      "title": "Smooth",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "rock",
+        "latin rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0n2SEXB2qoRQg171q7XqeW",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sixpence None the Richer",
+      "title": "Kiss Me",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "pop rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:754kgU5rWscRTfvlsuEwFp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lou Bega",
+      "title": "Mambo No. 5 (A Little Bit of...)",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "pop",
+        "latin"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6x4tKaOzfNJpEJHySoiJcs",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Destiny's Child",
+      "title": "Say My Name",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7H6ev70Weq6DdpZyyTmUXk",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Slipknot",
+      "title": "Wait and Bleed",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "nu metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2gscB6kDOmrv1P6qs2KXE3",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Limp Bizkit",
+      "title": "Nookie",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "nu metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1TEZWG1FdjzDdercCguTwj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Moby",
+      "title": "Porcelain",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "electronic",
+        "downtempo"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6EXi6ZqTITKGtVBKqbphjL",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Basement Jaxx",
+      "title": "Red Alert",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "house"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1lLacHBitnE9H4bdN3CefH",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Travis",
+      "title": "Why Does It Always Rain on Me?",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock",
+        "britpop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5MmWgG5KgiqSxkOZdVXRQA",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bloodhound Gang",
+      "title": "The Bad Touch",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "rock",
+        "rap rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5EYdTPdJD74r9EVZBztqGG",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Smash Mouth",
+      "title": "All Star",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock",
+        "pop rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3cfOd4CMv2snFaKAnMdnvK",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Len",
+      "title": "Steal My Sunshine",
+      "year": 1999,
+      "decade": "1990s",
+      "genres": [
+        "alternative rock",
+        "pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4agp6oHofabdUedr0B1krj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Coldplay",
+      "title": "Yellow",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:58MrV6J9oS46ViY1N6gTJX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eminem",
+      "title": "Stan",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3UmaczJpikHgJFyBTAJVoz",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Linkin Park",
+      "title": "In the End",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "nu metal",
+        "alternative rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:6zyrb7dW1IR4Hrc8nXJsln",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Daft Punk",
+      "title": "One More Time",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "house",
+        "electronic"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0DiWol3AO6WpXZgp0goxAV",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Modjo",
+      "title": "Lady (Hear Me Tonight)",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "house"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:49X0LAl6faAusYq02PRAY6",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "OutKast",
+      "title": "Ms. Jackson",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0I3q5fE6wg7LIfHGngUTnV",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Nelly Furtado",
+      "title": "I'm Like a Bird",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2aGw77pZqli064JiPuXYRi",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Strokes",
+      "title": "Last Nite",
+      "year": 2001,
+      "decade": "2000s",
+      "genres": [
+        "indie rock",
+        "garage rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7kzKAuUzOITUauHAhoMoxA",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kylie Minogue",
+      "title": "Can't Get You Out of My Head",
+      "year": 2001,
+      "decade": "2000s",
+      "genres": [
+        "dance pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3E7ZwUMJFqpsDOJzEkBrQ7",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Alicia Keys",
+      "title": "Fallin'",
+      "year": 2001,
+      "decade": "2000s",
+      "genres": [
+        "r&b",
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0KQx6HOpJueiSkztcS0r7D",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Nickelback",
+      "title": "How You Remind Me",
+      "year": 2001,
+      "decade": "2000s",
+      "genres": [
+        "post-grunge"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0gmbgwZ8iqyMPmXefof8Yf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Prime Circle",
+      "title": "Hello",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "rock",
+        "post-grunge"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:79EZCPwVxh2E6NFBMJt90c",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Seether",
+      "title": "Fine Again",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "post-grunge",
+        "alternative metal"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:2TpBi6e9YZwx6WhOMoodQ6",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Coldplay",
+      "title": "Clocks",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2Ygs64z9ywJGakuKU8tr6o",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eminem",
+      "title": "Lose Yourself",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5Z01UMMf7V1o0MzF86s6WJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Queens of the Stone Age",
+      "title": "No One Knows",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock",
+        "stoner rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6y20BV5L33R8YXM0YuI38N",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Red Hot Chili Peppers",
+      "title": "Can't Stop",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "funk rock",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:4BcS4LomxUnQpzx4hCaJTs",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Justin Timberlake",
+      "title": "Cry Me a River",
+      "year": 2002,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7Lf7oSEVdzZqTA0kEDSlS5",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The White Stripes",
+      "title": "Seven Nation Army",
+      "year": 2003,
+      "decade": "2000s",
+      "genres": [
+        "garage rock",
+        "alternative rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3dPQuX8Gs42Y7b454ybpMR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Evanescence",
+      "title": "Bring Me to Life",
+      "year": 2003,
+      "decade": "2000s",
+      "genres": [
+        "nu metal",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0COqiPhxzoWICwFCS4eZcp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Beyonce",
+      "title": "Crazy in Love",
+      "year": 2003,
+      "decade": "2000s",
+      "genres": [
+        "r&b",
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5IVuqXILoxVWvWEPm82Jxr",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kanye West",
+      "title": "Through the Wire",
+      "year": 2003,
+      "decade": "2000s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4mmkhcEm1Ljy1U9nwtsxUo",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Killers",
+      "title": "Mr. Brightside",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "indie rock",
+        "alternative rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3n3Ppam7vgaVa1iaRUc9Lp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Green Day",
+      "title": "American Idiot",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "punk rock"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:6nTiIhLmQ3FWhvrGafw2zj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Franz Ferdinand",
+      "title": "Take Me Out",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "indie rock",
+        "post-punk revival"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:20I8RduZC2PWMWTDCZuuAN",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Snow Patrol",
+      "title": "Run",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:6kesIBNAY17BoAz28pnWMC",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Usher",
+      "title": "Yeah!",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "r&b",
+        "crunk"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:5rb9QrpfcKFHM1EUbSIurX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Freshlyground",
+      "title": "Doo Be Doo",
+      "year": 2004,
+      "decade": "2000s",
+      "genres": [
+        "afro-pop"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1MzgAa6fUqeUuLipCnTyak",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Gorillaz",
+      "title": "Feel Good Inc.",
+      "year": 2005,
+      "decade": "2000s",
+      "genres": [
+        "alternative",
+        "trip hop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0d28khcov6AiegSCpG5TuT",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Arctic Monkeys",
+      "title": "I Bet You Look Good on the Dancefloor",
+      "year": 2005,
+      "decade": "2000s",
+      "genres": [
+        "indie rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3DQVgcqaP3iSMbaKsd57l5",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kanye West",
+      "title": "Gold Digger",
+      "year": 2005,
+      "decade": "2000s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1PS1QMdUqOal0ai3Gt7sDQ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Coldplay",
+      "title": "Fix You",
+      "year": 2005,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:6L0uCWhXyBNncoDgfEvK1R",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "James Blunt",
+      "title": "You're Beautiful",
+      "year": 2005,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "folk rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0vg4WnUWvze6pBOJDTq99k",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Gnarls Barkley",
+      "title": "Crazy",
+      "year": 2006,
+      "decade": "2000s",
+      "genres": [
+        "soul",
+        "alternative"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1vxw6aYJls2oq3gW0DujAo",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Killers",
+      "title": "When You Were Young",
+      "year": 2006,
+      "decade": "2000s",
+      "genres": [
+        "indie rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:70wYA8oYHoMzhRRkARoMhU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Muse",
+      "title": "Knights of Cydonia",
+      "year": 2006,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock",
+        "progressive rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7ouMYWpwJ422jRcDASZB7P",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Justin Timberlake",
+      "title": "SexyBack",
+      "year": 2006,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "dance"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0O45fw2L5vsWpdsOdXwNAR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Rihanna",
+      "title": "Umbrella",
+      "year": 2007,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:49FYlytm3dAAraYgpoJZux",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Foo Fighters",
+      "title": "The Pretender",
+      "year": 2007,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7x8dCjCr0x6x2lXKujYD34",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kanye West",
+      "title": "Stronger",
+      "year": 2007,
+      "decade": "2000s",
+      "genres": [
+        "hip hop",
+        "electronic"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0j2T0R9dR9qdJYsB7ciXhf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Radiohead",
+      "title": "Nude",
+      "year": 2007,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:35YyxFpE0ZTOoqFx5bADW8",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "MGMT",
+      "title": "Kids",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "indie pop",
+        "psychedelic pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1jJci4qxiYcOHhQR247rEU",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lady Gaga",
+      "title": "Poker Face",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "dance pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1QV6tiMFM6fSOKOGLMHYYg",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Katy Perry",
+      "title": "I Kissed a Girl",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1pXrR5Y9OgcIV2JEAl2lCB",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Coldplay",
+      "title": "Viva la Vida",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "alternative rock",
+        "baroque pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1mea3bSkSGXuIRvnydlB5b",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Empire of the Sun",
+      "title": "Walking on a Dream",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "electronic",
+        "indie pop"
+      ],
+      "familiarity": "deep",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5r5cp9IpziiIsR6b93vcnQ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Black Eyed Peas",
+      "title": "I Gotta Feeling",
+      "year": 2009,
+      "decade": "2000s",
+      "genres": [
+        "pop",
+        "dance"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:4kLLWz7srcuLKA7Et40PQR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kings of Leon",
+      "title": "Use Somebody",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "rock",
+        "indie rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5VGlqQANWDKJFl0MBG3sg2",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Arcade Fire",
+      "title": "Ready to Start",
+      "year": 2010,
+      "decade": "2010s",
+      "genres": [
+        "indie rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:33X9miK4Xz7pNeVrc9RITG",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Eminem",
+      "title": "Love the Way You Lie",
+      "year": 2010,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:15JINEqzVMv3SvJTAXAKED",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Foster the People",
+      "title": "Pumped Up Kicks",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "indie pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:7w87IxuO7BDcJ3YUqCyMTT",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Gotye",
+      "title": "Somebody That I Used to Know",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "indie pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1qDrWA6lyx8cLECdZE7TV7",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "LMFAO",
+      "title": "Party Rock Anthem",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "dance pop",
+        "electro"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3ta8klMHWPnWuHt7jDMSn5",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lana Del Rey",
+      "title": "Video Games",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "indie pop",
+        "baroque pop"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0fBSs3fRoh1yJcne77fdu9",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "fun.",
+      "title": "We Are Young",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "indie pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5rgy6ghBq1eRApCkeUdJXf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Of Monsters and Men",
+      "title": "Little Talks",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "indie folk"
+      ],
+      "familiarity": "deep",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2ihCaVdNZmnHZWt0fvAM7B",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Black Coffee",
+      "title": "Superman",
+      "year": 2011,
+      "decade": "2010s",
+      "genres": [
+        "house",
+        "afro house"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:752l1xT5G1OHzg71ZBnTyZ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "PSY",
+      "title": "Gangnam Style",
+      "year": 2012,
+      "decade": "2010s",
+      "genres": [
+        "k-pop",
+        "dance"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:03UrZgTINDqvnUMbbIMhql",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Macklemore and Ryan Lewis",
+      "title": "Thrift Shop",
+      "year": 2012,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:7bYZBVrnRfqeaPbhRyEvK3",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Imagine Dragons",
+      "title": "Radioactive",
+      "year": 2012,
+      "decade": "2010s",
+      "genres": [
+        "rock",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:62yJjFtgkhUrXktIoSjgP2",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Lumineers",
+      "title": "Ho Hey",
+      "year": 2012,
+      "decade": "2010s",
+      "genres": [
+        "indie folk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0DwClY2t9YAWHBROMIgrXb",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Avicii",
+      "title": "Wake Me Up",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "edm",
+        "folktronica"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0nrRP2bk19rLc0orkWPQk2",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lorde",
+      "title": "Royals",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "electropop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:4SDWMFvYJKtK1QPhIOeZhd",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Arctic Monkeys",
+      "title": "Do I Wanna Know?",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "indie rock",
+        "alternative rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:5FVd6KXrgO9B3JPmC8OPst",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Pharrell Williams",
+      "title": "Happy",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:60nZcImufyMA1MKQY3dcCH",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Hozier",
+      "title": "Take Me to Church",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "indie rock",
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3dYD57lRAUcMHufyqn9GcI",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Taylor Swift",
+      "title": "Shake It Off",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0cqRj7pUJDkTCEsJkx8snD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sia",
+      "title": "Chandelier",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "electropop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:4VrWlk8IQxevMvERoX08iC",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Ed Sheeran",
+      "title": "Thinking Out Loud",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:34gCuhDGsG4bRPIf9bb02f",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Royal Blood",
+      "title": "Figure It Out",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "rock",
+        "hard rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:3MjrueDQKVr6xDDseZwhEd",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Glass Animals",
+      "title": "Gooey",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "indie pop",
+        "psychedelic pop"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:1gk3FhAV07q9Jg77UxnVjX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Catfish and the Bottlemen",
+      "title": "Kathleen",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "indie rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:1MHYAqWWdDRePmnqORynrq",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kendrick Lamar",
+      "title": "Alright",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3iVcZ5G6tvkXZkZKlMpIUs",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Weeknd",
+      "title": "Can't Feel My Face",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:22VdIZQfgXJea34mQxlt81",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Adele",
+      "title": "Hello",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:1Yk0cQdMLx5RzzFTYwmuld",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Drake",
+      "title": "Hotline Bling",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "hip hop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0wwPcA6wtMf6HUMpIRdeP7",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Twenty One Pilots",
+      "title": "Stressed Out",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "alternative",
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3CRDbSIZ4r5MsZ0YwxuEkn",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tame Impala",
+      "title": "The Less I Know the Better",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "psychedelic pop",
+        "indie rock"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:6K4t31amVTZDgR3sKmwUJJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Highly Suspect",
+      "title": "Lydia",
+      "year": 2015,
+      "decade": "2010s",
+      "genres": [
+        "rock",
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7yoBjKO6cCnK3zV8gr1k4e",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Rihanna",
+      "title": "Work",
+      "year": 2016,
+      "decade": "2010s",
+      "genres": [
+        "r&b",
+        "dancehall"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:72TFWvU3wUYdUuxejTTIzt",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Ed Sheeran",
+      "title": "Shape of You",
+      "year": 2017,
+      "decade": "2010s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:7qiZfU4dY1lWllzX7mPBI3",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Post Malone",
+      "title": "rockstar",
+      "year": 2017,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0e7ipj03S05BNilyu5bRzt",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Childish Gambino",
+      "title": "This Is America",
+      "year": 2018,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0b9oOr2ZgvyQu88wzixux9",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Billie Eilish",
+      "title": "bad guy",
+      "year": 2019,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "electropop"
+      ],
+      "familiarity": "standard",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:2Fxmhks0bxGSBdJ92vM42m",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lil Nas X",
+      "title": "Old Town Road",
+      "year": 2019,
+      "decade": "2010s",
+      "genres": [
+        "country rap"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2YpeDb67231RjR0MgVLzsG",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tones and I",
+      "title": "Dance Monkey",
+      "year": 2019,
+      "decade": "2010s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "standard",
+      "skew": "even",
+      "spotify_uri": "spotify:track:2XU0oxnq2qxCpomAAuJY8K",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Glass Animals",
+      "title": "Heat Waves",
+      "year": 2020,
+      "decade": "2020s",
+      "genres": [
+        "indie pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3USxtqRwSYz57Ewm6wWRMp",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Weeknd",
+      "title": "Save Your Tears",
+      "year": 2020,
+      "decade": "2020s",
+      "genres": [
+        "synth-pop",
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:5QO79kh1waicV47BqGRL3g",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Dua Lipa",
+      "title": "Levitating",
+      "year": 2020,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "disco"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:39LLxExYz6ewLAcYrzQQyP",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Olivia Rodrigo",
+      "title": "drivers license",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:7lPN2DXiMsVn7XUKtOW1CS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Olivia Rodrigo",
+      "title": "good 4 u",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "pop punk",
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:4ZtFanR9U6ndgddUvNcjcG",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Lil Nas X",
+      "title": "MONTERO (Call Me By Your Name)",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "pop rap"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:67BtfxlNbhBmCDR2L2l8qd",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Doja Cat",
+      "title": "Kiss Me More",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "r&b"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3DarAbFujv6eYNliUTyqtz",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Adele",
+      "title": "Easy On Me",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:0gplL1WMoJ6iYaPgMCL0gX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Wet Leg",
+      "title": "Chaise Longue",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "indie rock",
+        "post-punk"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:7iqAuZe5yS0suLQcFfVK39",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Turnstile",
+      "title": "HOLIDAY",
+      "year": 2021,
+      "decade": "2020s",
+      "genres": [
+        "hardcore punk",
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:1dB0NylVkpjdOe8DiekIs7",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Taylor Swift",
+      "title": "Anti-Hero",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "synth-pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0V3wPSX9ygBnCm8psDIegu",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Sam Smith",
+      "title": "Unholy",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "dance"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3nqQXoyQOWXiESFLlDF1hG",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Steve Lacy",
+      "title": "Bad Habit",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "r&b",
+        "indie"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:4k6Uh1HXdhtusDW5y8Gbvy",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "SZA",
+      "title": "Kill Bill",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "r&b"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:3OHfY25tqY28d16oZczHc8",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Bad Bunny",
+      "title": "Tití Me Preguntó",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "reggaeton",
+        "latin trap"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:1IHWl5LamUGEuP4ozKQSXZ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Miley Cyrus",
+      "title": "Flowers",
+      "year": 2023,
+      "decade": "2020s",
+      "genres": [
+        "pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:7DSAEUvxU8FajXtRloy8M0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Fontaines D.C.",
+      "title": "Starburster",
+      "year": 2024,
+      "decade": "2020s",
+      "genres": [
+        "post-punk",
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:09ttHg3ZNVgDlYBZa1ZBw0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kendrick Lamar",
+      "title": "Not Like Us",
+      "year": 2024,
+      "decade": "2020s",
+      "genres": [
+        "hip hop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:6AI3ezQ4o3HUoP6Dhudph3",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Chappell Roan",
+      "title": "Good Luck, Babe!",
+      "year": 2024,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "synth-pop"
+      ],
+      "familiarity": "familiar",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:0WbMK4wrZ1wFSty9F7FCgu",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Hozier",
+      "title": "Too Sweet",
+      "year": 2024,
+      "decade": "2020s",
+      "genres": [
+        "rock",
+        "blues rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "even",
+      "spotify_uri": "spotify:track:3HMY0r2BAdpasXMY8rseR0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tyla",
+      "title": "Truth or Dare",
+      "year": 2024,
+      "decade": "2020s",
+      "genres": [
+        "amapiano",
+        "r&b"
+      ],
+      "familiarity": "deep",
+      "skew": "kids",
+      "spotify_uri": "spotify:track:1whAXVGN8AdfrnoXNIXfJf",
       "market_checked": "ZA"
     }
   ]

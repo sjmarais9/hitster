@@ -89,6 +89,34 @@ const songsOf = (doc) => (Array.isArray(doc) ? doc : doc.songs ?? []);
 /** Identity of a song, independent of whether it has been resolved yet. */
 const keyOf = (song) => `${song.artist}|${song.title}|${song.year}`.toLowerCase();
 
+/**
+ * Fills in missing popularity scores from the tracks endpoint.
+ *
+ * The search endpoint does not reliably carry `popularity` on the track objects
+ * it returns - reading it there produced 260 nulls - so it is fetched
+ * explicitly. 50 ids per request, which is the endpoint's limit, so a few
+ * hundred songs cost a handful of calls.
+ */
+async function fillPopularity(spotify, uris, popularity) {
+  const missing = uris.filter((uri) => typeof popularity.get(uri) !== 'number');
+  if (missing.length === 0) return 0;
+
+  let filled = 0;
+  for (let i = 0; i < missing.length; i += 50) {
+    const chunk = missing.slice(i, i + 50);
+    const ids = chunk.map((uri) => uri.slice('spotify:track:'.length)).join(',');
+    const { tracks } = await spotify(`tracks?ids=${ids}&market=${MARKET}`);
+    for (const track of tracks ?? []) {
+      if (!track) continue;
+      popularity.set(track.uri, track.popularity ?? null);
+      if (typeof track.popularity === 'number') filled++;
+    }
+    process.stdout.write(`\r  popularity: ${Math.min(i + 50, missing.length)}/${missing.length}`);
+  }
+  process.stdout.write('\n');
+  return filled;
+}
+
 /** Search, preferring field-filtered query, falling back to a loose one. */
 async function findCandidates(spotify, song) {
   const clean = (s) => s.replace(/"/g, ' ').trim();
@@ -115,6 +143,27 @@ async function main() {
   const existingPool = songsOf(await readJson(opts.out, { songs: [] }));
   const resolved = new Map(existingPool.map((s) => [keyOf(s), s]));
 
+  // Our fields belong to the batch file, not the pool. Re-tagging a song has to
+  // reach the pool without re-resolving its URI, which would mean another
+  // authorisation and another round of API calls for no new information.
+  let refreshed = 0;
+  for (const song of batch) {
+    const existing = resolved.get(keyOf(song));
+    if (!existing?.spotify_uri) continue;
+    const updated = {
+      ...existing,
+      decade: song.decade,
+      genres: song.genres,
+      familiarity: song.familiarity ?? null,
+      skew: song.skew ?? null,
+    };
+    if (JSON.stringify(updated) !== JSON.stringify(existing)) {
+      resolved.set(keyOf(song), updated);
+      refreshed++;
+    }
+  }
+  if (refreshed > 0) console.log(`Refreshed our fields on ${refreshed} already-resolved song(s)`);
+
   const queue = batch
     .filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri)
     .slice(0, opts.limit);
@@ -122,10 +171,12 @@ async function main() {
   const alreadyDone = batch.length - queue.length;
   console.log(`${batch.length} songs in ${opts.in}`);
   if (alreadyDone > 0) console.log(`${alreadyDone} already resolved, skipping (use --recheck to redo)`);
-  if (queue.length === 0) { console.log('Nothing to do.'); return; }
-  console.log(`Resolving ${queue.length}...`);
+  if (queue.length === 0) console.log('Nothing new to resolve.');
+  else console.log(`Resolving ${queue.length}...`);
 
-  const spotify = await authorise({ port: opts.port });
+  // Only ask for authorisation if there is actually something to look up. A
+  // re-tag with no new songs should not open a browser.
+  const spotify = queue.length > 0 ? await authorise({ port: opts.port }) : null;
 
   const review = [];
   const yearSuspects = [];
@@ -164,10 +215,6 @@ async function main() {
         market_checked: MARKET,
       });
 
-      // Advisory only, and kept out of the pool so it can never be mistaken for
-      // one of our values. Used by check-familiarity.mjs to flag disagreements.
-      popularity.set(best.track.uri, best.track.popularity ?? null);
-
       // Our years are written from memory and will occasionally be wrong.
       // Spotify's date is later than ours all the time - that is just a
       // remaster or reissue - but *earlier* than ours should not happen for an
@@ -201,7 +248,25 @@ async function main() {
     }
   }
 
-  const pool = [...resolved.values()].filter((s) => s.spotify_uri);
+  // Correcting a song's year changes its identity key, which would otherwise
+  // leave the old entry behind as a duplicate pointing at the same track.
+  // Dedupe on URI, preferring whichever entry the current batch still refers to.
+  const batchKeys = new Set(batch.map(keyOf));
+  const byUri = new Map();
+  for (const song of resolved.values()) {
+    if (!song.spotify_uri) continue;
+    if (!byUri.has(song.spotify_uri) || batchKeys.has(keyOf(song))) {
+      byUri.set(song.spotify_uri, song);
+    }
+  }
+  const pool = [...byUri.values()];
+
+  // Advisory only, and deliberately kept out of the pool so it can never be
+  // mistaken for one of our values. Only possible when authorised.
+  if (spotify) {
+    const filled = await fillPopularity(spotify, pool.map((s) => s.spotify_uri), popularity);
+    if (filled > 0) console.log(`Fetched ${filled} popularity score(s)`);
+  }
 
   console.log(`\n${matched} matched, ${review.length} need review, pool is now ${pool.length} songs`);
 

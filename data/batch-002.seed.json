@@ -29,7 +29,7 @@
         "r&b"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -99,7 +99,7 @@
       "market_checked": null
     },
     {
-      "artist": "The Jimi Hendrix Experience",
+      "artist": "Jimi Hendrix",
       "title": "Purple Haze",
       "year": 1967,
       "decade": "1960s",
@@ -147,7 +147,7 @@
         "rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -238,7 +238,7 @@
         "pop rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -343,7 +343,7 @@
         "soft rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -396,7 +396,7 @@
         "disco"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -502,7 +502,7 @@
         "progressive rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -515,7 +515,7 @@
         "hard rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -569,7 +569,7 @@
         "hard rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -608,7 +608,7 @@
         "rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -647,7 +647,7 @@
         "rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -687,7 +687,7 @@
         "new wave"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -700,7 +700,7 @@
         "pop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -713,7 +713,7 @@
         "synth-pop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -754,7 +754,7 @@
         "hard rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -781,7 +781,7 @@
         "pop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -834,7 +834,7 @@
         "synth-pop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -847,7 +847,7 @@
         "rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -860,7 +860,7 @@
         "rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -940,7 +940,7 @@
         "pop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -980,7 +980,7 @@
         "rock and roll"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1007,7 +1007,7 @@
         "pop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1020,7 +1020,7 @@
         "hard rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1311,7 +1311,7 @@
         "hard rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1337,7 +1337,7 @@
         "hip hop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1378,7 +1378,7 @@
         "soul"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1630,7 +1630,7 @@
         "pop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1670,7 +1670,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1781,8 +1781,8 @@
       "market_checked": null
     },
     {
-      "artist": "Just Jinjer",
-      "title": "Sugar Man",
+      "artist": "Just Jinger",
+      "title": "Sugarman",
       "year": 1997,
       "decade": "1990s",
       "genres": [
@@ -1843,7 +1843,7 @@
         "pop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1936,7 +1936,7 @@
         "latin"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -2823,8 +2823,8 @@
     {
       "artist": "Black Coffee",
       "title": "Superman",
-      "year": 2011,
-      "decade": "2010s",
+      "year": 2009,
+      "decade": "2000s",
       "genres": [
         "house",
         "afro house"
@@ -2967,7 +2967,7 @@
         "pop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "kids",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3063,7 +3063,7 @@
         "r&b"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "kids",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3200,7 +3200,7 @@
         "electropop"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "kids",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3253,7 +3253,7 @@
         "pop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "kids",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3376,8 +3376,8 @@
         "pop",
         "synth-pop"
       ],
-      "familiarity": "standard",
-      "skew": "even",
+      "familiarity": "familiar",
+      "skew": "kids",
       "spotify_uri": null,
       "market_checked": null
     },

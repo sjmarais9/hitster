@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "count": 2,
+    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
+  },
+  "songs": [
+    {
+      "artist": "The Jimi Hendrix Experience",
+      "title": "Purple Haze",
+      "year": 1967,
+      "problem": "partial match (title exact, artist loose)",
+      "candidates": [
+        {
+          "uri": "spotify:track:0wJoRiX5K5BxlqZTolB2LD",
+          "title": "Purple Haze",
+          "artists": [
+            "Jimi Hendrix"
+          ],
+          "album": "Are You Experienced",
+          "spotify_release_year": 1967,
+          "verdict": "probable"
+        }
+      ]
+    },
+    {
+      "artist": "Just Jinjer",
+      "title": "Sugar Man",
+      "year": 1997,
+      "problem": "title and artist do not match",
+      "candidates": [
+        {
+          "uri": "spotify:track:4MqxuYaCIuA1BFwsSInr0A",
+          "title": "Sugarman",
+          "artists": [
+            "Just Jinger"
+          ],
+          "album": "Greatest Hits",
+          "spotify_release_year": 2001,
+          "verdict": "reject"
+        }
+      ]
+    }
+  ],
+  "year_suspects": [
+    {
+      "artist": "Black Coffee",
+      "title": "Superman",
+      "our_year": 2011,
+      "spotify_earliest_year": 2009,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    }
+  ]
+}
