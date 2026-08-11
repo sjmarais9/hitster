@@ -34,7 +34,6 @@ Resolve a batch of songs to Spotify track URIs.
   --in <file>       batch to import      (default data/songs.seed.json)
   --out <file>      playable pool        (default data/songs.json)
   --review <file>   needs manual work    (default data/review.json)
-  --popularity <f>  advisory scores      (default data/popularity.json)
   --port <number>   loopback port for auth; must be registered as a redirect
                     URI in the Spotify dashboard   (default 3000)
   --limit <number>  only process the first N songs, for a quick trial
@@ -48,7 +47,6 @@ function parseArgs(argv) {
     in: 'data/songs.seed.json',
     out: 'data/songs.json',
     review: 'data/review.json',
-    popularity: 'data/popularity.json',
     port: 3000,
     limit: Infinity,
     recheck: false,
@@ -60,7 +58,6 @@ function parseArgs(argv) {
     else if (arg === '--in') opts.in = argv[++i];
     else if (arg === '--out') opts.out = argv[++i];
     else if (arg === '--review') opts.review = argv[++i];
-    else if (arg === '--popularity') opts.popularity = argv[++i];
     else if (arg === '--port') opts.port = Number(argv[++i]);
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
     else if (arg === '--recheck') opts.recheck = true;
@@ -89,48 +86,17 @@ const songsOf = (doc) => (Array.isArray(doc) ? doc : doc.songs ?? []);
 /** Identity of a song, independent of whether it has been resolved yet. */
 const keyOf = (song) => `${song.artist}|${song.title}|${song.year}`.toLowerCase();
 
-/**
- * Fills in missing popularity scores from the tracks endpoint.
- *
- * The search endpoint does not reliably carry `popularity` on the track objects
- * it returns - reading it there produced 260 nulls - so it is fetched
- * explicitly. 50 ids per request, which is the endpoint's limit, so a few
- * hundred songs cost a handful of calls.
- */
-async function fillPopularity(spotify, uris, popularity) {
-  const missing = uris.filter((uri) => typeof popularity.get(uri) !== 'number');
-  if (missing.length === 0) return 0;
-
-  const CHUNK = 20;
-  let filled = 0;
-
-  for (let i = 0; i < missing.length; i += CHUNK) {
-    const chunk = missing.slice(i, i + CHUNK);
-    const ids = chunk.map((uri) => uri.slice('spotify:track:'.length)).join(',');
-
-    let tracks;
-    try {
-      // No market filter here. We only want the score, and passing a market has
-      // been the difference between this working and a 403 on some accounts.
-      ({ tracks } = await spotify(`tracks?ids=${ids}`));
-    } catch (err) {
-      // Advisory data must never be able to fail an import. Losing a whole run
-      // of resolved songs to a missing popularity score is a bad trade.
-      console.log(`\n  popularity unavailable, continuing without it: ${err.message}`);
-      return filled;
-    }
-
-    for (const track of tracks ?? []) {
-      if (!track) continue;
-      popularity.set(track.uri, track.popularity ?? null);
-      if (typeof track.popularity === 'number') filled++;
-    }
-    process.stdout.write(`\r  popularity: ${Math.min(i + CHUNK, missing.length)}/${missing.length}`);
-  }
-
-  process.stdout.write('\n');
-  return filled;
-}
+// There is no popularity capture here, deliberately.
+//
+// Spotify does not return `popularity` to this app: the field is absent from
+// search results and from GET /tracks/{id}, and GET /tracks?ids= is 403 outright.
+// That is the post-2024 restriction on development-mode apps, not a bug we can
+// fix. Cross-checking our familiarity tags against streaming numbers is
+// therefore not available, and scripts/check-tags.mjs does what it can without
+// the network instead.
+//
+// If this app is ever granted extended quota mode, the field may come back and
+// this is where it would be fetched.
 
 /** Search, preferring field-filtered query, falling back to a loose one. */
 async function findCandidates(spotify, song) {
@@ -198,9 +164,6 @@ async function main() {
 
   const review = [];
   const yearSuspects = [];
-  // Merged rather than replaced, so a partial run does not lose earlier scores.
-  const priorPopularity = await readJson(opts.popularity, { scores: {} });
-  const popularity = new Map(Object.entries(priorPopularity.scores ?? {}));
   let matched = 0;
 
   for (const [index, song] of queue.entries()) {
@@ -279,19 +242,6 @@ async function main() {
   }
   const pool = [...byUri.values()];
 
-  // Advisory only, and deliberately kept out of the pool so it can never be
-  // mistaken for one of our values. Only possible when authorised.
-  if (spotify) {
-    try {
-      const filled = await fillPopularity(spotify, pool.map((s) => s.spotify_uri), popularity);
-      if (filled > 0) console.log(`Fetched ${filled} popularity score(s)`);
-    } catch (err) {
-      // Belt and braces. Nothing about an advisory score justifies discarding
-      // a run's worth of resolved songs.
-      console.log(`  popularity step failed, continuing: ${err.message}`);
-    }
-  }
-
   console.log(`\n${matched} matched, ${review.length} need review, pool is now ${pool.length} songs`);
 
   if (opts.dryRun) {
@@ -309,15 +259,6 @@ async function main() {
     songs: pool,
   });
   console.log(`Wrote ${opts.out}`);
-
-  await writeJson(opts.popularity, {
-    meta: {
-      count: popularity.size,
-      note: 'Spotify popularity, 0-100. ADVISORY ONLY. It measures current streaming, not how well this crowd knows a song, and it drifts over time. Never copy it into the pool and never let it set familiarity. Used by check-familiarity.mjs to flag disagreements worth a human look.',
-    },
-    scores: Object.fromEntries(popularity),
-  });
-  console.log(`Wrote ${opts.popularity}`);
 
   if (yearSuspects.length > 0) {
     console.log(`\n${yearSuspects.length} song(s) where Spotify dates the track earlier than we do:`);

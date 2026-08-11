@@ -95,10 +95,13 @@ Added to as the owner corrects tagging. Each of these overrides intuition.
 
 ## Traps
 
-- **Spotify `popularity` is not familiarity.** It measures current streaming.
-  It inflates meme revivals and deflates songs everyone knows but nobody
-  streams. It is recorded as advisory data only, in `data/popularity.json`,
-  never in the pool.
+- **Spotify `popularity` is not available, and would not have been trusted
+  anyway.** Spotify does not return the field to this app: it is absent from
+  search results and from `GET /tracks/{id}`, and `GET /tracks?ids=` is 403.
+  That is the post-2024 restriction on development-mode apps. Even with it, it
+  measures current streaming rather than familiarity - inflating meme revivals,
+  deflating songs everyone knows but nobody streams - so it was only ever
+  intended as a disagreement signal, never as an authority.
 - **TikTok revivals** genuinely do move older songs from `adults` to `even`.
   Check whether a song has had a second life before assuming the children have
   not heard it.
@@ -116,9 +119,34 @@ Added to as the owner corrects tagging. Each of these overrides intuition.
 - Every fifth batch, 20 songs from an earlier approved batch are re-tagged blind
   and compared against their approved values. A disagreement rate above roughly
   15% means the rules here need sharpening before more batches are generated.
-- `scripts/check-familiarity.mjs` cross-references the pool against Spotify
-  popularity and flags disagreements across the whole batch, catching individual
-  errors the 4% sample cannot.
+- `scripts/check-tags.mjs` reports distribution drift and flags songs that
+  contradict the rules above, artists tagged inconsistently across the pool, and
+  integrity problems. No network, no auth.
+
+### What the review can and cannot catch
+
+This matters for choosing a batch size, so it is stated plainly.
+
+The original plan had an automated cross-check against Spotify popularity
+catching the individual errors a small sample cannot reach. **That check does not
+exist** - see the trap above - and nothing else can replace it, because there is
+no external opinion on how well *this family* knows a song.
+
+What survives:
+
+- **Sampled review** catches systematic bias. A tendency to over-tag `even`, or
+  to overrate pre-1990 reach, shows up in any sample. This works.
+- **`check-tags.mjs`** catches self-contradiction: a tag that breaks a rule here,
+  an artist tagged three different ways, a decade that disagrees with its year.
+  It cannot tell a wrong tag from a right one.
+- **Blind drift audits** catch inconsistency over time.
+- **Actual games** catch everything else, slowly.
+
+What is genuinely uncaught: an individually wrong tag on a song that breaks no
+rule, sits consistently with its artist, and is not in the sample. At a 20-song
+sample of 500, that is most of the batch. The honest position is that individual
+tags are not verified, only the tagger's calibration is. Choose batch sizes with
+that in mind.
 
 ## Distribution targets
 

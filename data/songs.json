@@ -1,6 +1,6 @@
 {
   "meta": {
-    "count": 290,
+    "count": 292,
     "market": "ZA",
     "generated": "2026-08-11",
     "note": "Playable pool. year is our value and is the original release year, never Spotify's."
@@ -3210,8 +3210,8 @@
     {
       "artist": "Black Coffee",
       "title": "Superman",
-      "year": 2011,
-      "decade": "2010s",
+      "year": 2009,
+      "decade": "2000s",
       "genres": [
         "house",
         "afro house"
@@ -3903,6 +3903,34 @@
       "familiarity": "deep",
       "skew": "kids",
       "spotify_uri": "spotify:track:1whAXVGN8AdfrnoXNIXfJf",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Jimi Hendrix",
+      "title": "Purple Haze",
+      "year": 1967,
+      "decade": "1960s",
+      "genres": [
+        "psychedelic rock",
+        "hard rock"
+      ],
+      "familiarity": "familiar",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:0wJoRiX5K5BxlqZTolB2LD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Just Jinger",
+      "title": "Sugarman",
+      "year": 1997,
+      "decade": "1990s",
+      "genres": [
+        "rock",
+        "alternative rock"
+      ],
+      "familiarity": "deep",
+      "skew": "adults",
+      "spotify_uri": "spotify:track:4MqxuYaCIuA1BFwsSInr0A",
       "market_checked": "ZA"
     }
   ]
