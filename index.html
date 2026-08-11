@@ -6,6 +6,9 @@
   <meta name="theme-color" content="#0d0f14">
   <!-- The tab title never changes. It must never leak the drawn song. -->
   <title>Hitster</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="centred">
@@ -46,8 +49,25 @@
         </div>
       </div>
 
-      <button id="action" class="button" type="button">Draw</button>
-      <button id="toggle" class="button secondary hidden" type="button">Pause</button>
+      <!-- Transport sits above the primary action so the two are not confused
+           for one another in a dim room. -->
+      <div class="controls">
+        <button id="replay" class="icon-button" type="button" aria-label="Play from the start">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/>
+          </svg>
+        </button>
+        <button id="toggle" class="icon-button primary" type="button" aria-label="Play">
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
+          </svg>
+        </button>
+      </div>
+
+      <button id="action" class="button" type="button">Reveal</button>
     </section>
 
     <p id="notice" class="status hidden"></p>

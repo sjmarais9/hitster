@@ -1,6 +1,7 @@
 import { beginLogin, isLoggedIn, logout } from './auth.js';
 import { connect } from './player.js';
 import { loadPool, draw, resetSession } from './game.js';
+import { keepAwake } from './wakelock.js';
 
 const el = (id) => document.getElementById(id);
 const screens = { signedOut: el('signed-out'), start: el('start'), table: el('table') };
@@ -8,13 +9,15 @@ const screens = { signedOut: el('signed-out'), start: el('start'), table: el('ta
 const card = el('card');
 const action = el('action');
 const toggle = el('toggle');
+const replay = el('replay');
 const notice = el('notice');
 
 let route = null;      // set once a playback route is connected
 let pool = [];
 let current = null;    // the song on the table, hidden until revealed
-let phase = 'idle';    // idle | hidden | revealed | empty
-let paused = false;
+let phase = 'ready';   // ready | revealed | empty
+let playing = false;
+let started = false;   // has the current song been played at all yet
 
 function show(screen) {
   for (const [name, node] of Object.entries(screens)) {
@@ -36,30 +39,40 @@ function setCard(song) {
   card.classList.toggle('revealed', Boolean(song));
 }
 
-function renderTable() {
-  const labels = { idle: 'Draw', hidden: 'Reveal', revealed: 'Next', empty: 'Start over' };
-  action.textContent = labels[phase];
+function render() {
+  action.textContent = { ready: 'Reveal', revealed: 'Next', empty: 'Start over' }[phase];
   action.disabled = false;
 
-  // Pause is only meaningful once something is playing.
-  const hasTrack = phase === 'hidden' || phase === 'revealed';
-  toggle.classList.toggle('hidden', !hasTrack);
-  toggle.textContent = paused ? 'Resume' : 'Pause';
-  toggle.disabled = false;
+  toggle.classList.toggle('playing', playing);
+  toggle.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  toggle.disabled = phase === 'empty';
+  // Nothing to replay until the song has been started once.
+  replay.disabled = phase === 'empty' || !started;
 
-  card.classList.toggle('paused', paused);
+  // The record turns only while audio is actually running.
+  card.classList.toggle('paused', !playing);
 }
 
-async function onToggle() {
-  toggle.disabled = true;
-  say('');
-  try {
-    await (paused ? route.resume() : route.pause());
-    paused = !paused;
-  } catch (err) {
-    say(err.message, true);
+/** Puts the next card on the table, face down and silent. */
+async function deal() {
+  if (playing) {
+    await route.pause().catch(() => {});
+    playing = false;
   }
-  renderTable();
+
+  setCard(null);
+  const song = draw(pool);
+
+  if (!song) {
+    current = null;
+    phase = 'empty';
+    say('Every song has been played. Start over for a fresh deck.');
+    return;
+  }
+
+  current = song;
+  started = false;
+  phase = 'ready';
 }
 
 async function onAction() {
@@ -67,32 +80,57 @@ async function onAction() {
   say('');
 
   try {
-    if (phase === 'hidden') {
+    if (phase === 'ready') {
       setCard(current);
       phase = 'revealed';
-    } else if (phase === 'empty') {
-      resetSession();
-      setCard(null);
-      phase = 'idle';
+    } else if (phase === 'revealed') {
+      await deal();
     } else {
-      // Draw, or Next after a reveal.
-      setCard(null);
-      const song = draw(pool);
-      if (!song) {
-        phase = 'empty';
-        say('Every song has been played. Start over for a fresh deck.');
-      } else {
-        current = song;
-        await route.play(song.spotify_uri);
-        paused = false;
-        phase = 'hidden';
-      }
+      resetSession();
+      await deal();
     }
   } catch (err) {
     say(err.message, true);
   }
 
-  renderTable();
+  render();
+}
+
+async function onToggle() {
+  toggle.disabled = true;
+  say('');
+
+  try {
+    if (playing) {
+      await route.pause();
+      playing = false;
+    } else if (started) {
+      await route.resume();
+      playing = true;
+    } else {
+      await route.play(current.spotify_uri);
+      started = true;
+      playing = true;
+    }
+  } catch (err) {
+    say(err.message, true);
+  }
+
+  render();
+}
+
+async function onReplay() {
+  replay.disabled = true;
+  say('');
+
+  try {
+    await route.play(current.spotify_uri);
+    playing = true;
+  } catch (err) {
+    say(err.message, true);
+  }
+
+  render();
 }
 
 function onBegin() {
@@ -103,9 +141,12 @@ function onBegin() {
   } catch {
     // Only the SDK route needs this, and it is not fatal if it is refused.
   }
+
+  keepAwake();
   show('table');
-  phase = 'idle';
-  renderTable();
+  // A card is already on the table when the screen appears; the first tap of
+  // Play starts it. Nothing plays on its own.
+  deal().then(render);
 }
 
 async function boot() {
@@ -146,5 +187,6 @@ el('logout').addEventListener('click', () => { logout(); location.reload(); });
 el('begin').addEventListener('click', onBegin);
 action.addEventListener('click', onAction);
 toggle.addEventListener('click', onToggle);
+replay.addEventListener('click', onReplay);
 
 boot();

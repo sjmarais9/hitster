@@ -218,6 +218,58 @@ h1 {
   color: var(--accent);
 }
 
+/* Transport controls. Icons rather than words: they are read at a glance from
+   across a table, and they do not change width when the state changes. */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.icon-button.primary {
+  background: var(--accent);
+  color: #06210f;
+}
+
+.icon-button svg {
+  width: 2.25rem;
+  height: 2.25rem;
+  fill: currentColor;
+}
+
+.icon-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.icon-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* One button, two faces. Whichever icon is not current is simply not rendered. */
+#toggle .icon-pause,
+#toggle.playing .icon-play {
+  display: none;
+}
+
+#toggle.playing .icon-pause {
+  display: block;
+}
+
 .status {
   margin: 0;
   color: var(--muted);

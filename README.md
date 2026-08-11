@@ -56,13 +56,28 @@ the phone gets handed around a table.
 ## Layout
 
 ```
-index.html          app shell
-callback/           OAuth redirect target
-css/                styles
-src/                config, PKCE, auth, app
-data/               song pool
-scripts/            one-off import tooling
+index.html            app shell
+manifest.webmanifest  installable app metadata
+callback/             OAuth redirect target
+css/                  styles
+src/                  config, PKCE, auth, playback, game
+data/                 song pool
+icons/                generated, see scripts/make-icons.mjs
+scripts/              one-off tooling
 ```
+
+## Installing it on the phone
+
+Open the site in Chrome and use **Add to Home Screen**. The manifest asks for
+`standalone` display, so it launches without the URL bar or tab strip — which
+also removes the last piece of chrome that could show anything about the song.
+
+The icons are generated rather than drawn: `node scripts/make-icons.mjs` writes
+`icons/icon-192.png` and `icons/icon-512.png`. Run it only if the design
+changes; the output is committed.
+
+While a card is on the table the app holds a screen wake lock, so the phone does
+not dim mid-song. It is released automatically whenever the tab is backgrounded.
 
 ## Song data
 
