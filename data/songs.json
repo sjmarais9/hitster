@@ -1,0 +1,365 @@
+{
+  "meta": {
+    "count": 30,
+    "market": "ZA",
+    "generated": "2026-08-11",
+    "note": "Playable pool. year is our value and is the original release year, never Spotify's."
+  },
+  "songs": [
+    {
+      "artist": "Elvis Presley",
+      "title": "Jailhouse Rock",
+      "year": 1957,
+      "decade": "1950s",
+      "genres": [
+        "rock and roll"
+      ],
+      "spotify_uri": "spotify:track:4gphxUgq0JSFv2BCLhNDiE",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Ray Charles",
+      "title": "Hit the Road Jack",
+      "year": 1961,
+      "decade": "1960s",
+      "genres": [
+        "soul",
+        "r&b"
+      ],
+      "spotify_uri": "spotify:track:2HoqbEOXgbDSLZ5XCePEXt",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Beach Boys",
+      "title": "Good Vibrations",
+      "year": 1966,
+      "decade": "1960s",
+      "genres": [
+        "pop",
+        "psychedelic"
+      ],
+      "spotify_uri": "spotify:track:6aU6a9tdn2vHhnPGlboFZX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Creedence Clearwater Revival",
+      "title": "Bad Moon Rising",
+      "year": 1969,
+      "decade": "1960s",
+      "genres": [
+        "rock",
+        "roots rock"
+      ],
+      "spotify_uri": "spotify:track:20OFwXhEXf12DzwXmaV7fj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Marvin Gaye",
+      "title": "What's Going On",
+      "year": 1971,
+      "decade": "1970s",
+      "genres": [
+        "soul"
+      ],
+      "spotify_uri": "spotify:track:3Um9toULmYFGCpvaIPFw7l",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Stevie Wonder",
+      "title": "Superstition",
+      "year": 1972,
+      "decade": "1970s",
+      "genres": [
+        "funk",
+        "soul"
+      ],
+      "spotify_uri": "spotify:track:4N0TP4Rmj6QQezWV88ARNJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "ABBA",
+      "title": "Dancing Queen",
+      "year": 1976,
+      "decade": "1970s",
+      "genres": [
+        "pop",
+        "disco"
+      ],
+      "spotify_uri": "spotify:track:0GjEhVFGZW8afUYGChu3Rr",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Fleetwood Mac",
+      "title": "Go Your Own Way",
+      "year": 1977,
+      "decade": "1970s",
+      "genres": [
+        "rock",
+        "soft rock"
+      ],
+      "spotify_uri": "spotify:track:07GvNcU1WdyZJq3XxP0kZa",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Clash",
+      "title": "London Calling",
+      "year": 1979,
+      "decade": "1970s",
+      "genres": [
+        "punk",
+        "post-punk"
+      ],
+      "spotify_uri": "spotify:track:124Y9LPRCAz3q2OP0iCvcJ",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Blondie",
+      "title": "Call Me",
+      "year": 1980,
+      "decade": "1980s",
+      "genres": [
+        "new wave",
+        "pop"
+      ],
+      "spotify_uri": "spotify:track:7HKxTNVlkHsfMLhigmhC0I",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Toto",
+      "title": "Africa",
+      "year": 1982,
+      "decade": "1980s",
+      "genres": [
+        "soft rock",
+        "pop"
+      ],
+      "spotify_uri": "spotify:track:2374M0fQpWi3dLnB54qaLX",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Michael Jackson",
+      "title": "Billie Jean",
+      "year": 1982,
+      "decade": "1980s",
+      "genres": [
+        "pop",
+        "funk"
+      ],
+      "spotify_uri": "spotify:track:7J1uxwnxfQLu4APicE5Rnj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Johnny Clegg and Savuka",
+      "title": "Scatterlings of Africa",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "worldbeat",
+        "afro-pop"
+      ],
+      "spotify_uri": "spotify:track:6kDpN5vz6fLU60eJ1o5P4m",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Guns N' Roses",
+      "title": "Sweet Child O' Mine",
+      "year": 1987,
+      "decade": "1980s",
+      "genres": [
+        "hard rock"
+      ],
+      "spotify_uri": "spotify:track:7snQQk1zcKl8gZ92AnueZW",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Nirvana",
+      "title": "Smells Like Teen Spirit",
+      "year": 1991,
+      "decade": "1990s",
+      "genres": [
+        "grunge",
+        "alternative rock"
+      ],
+      "spotify_uri": "spotify:track:4CeeEOM32jQcH3eN9Q2dGj",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Dr. Dre",
+      "title": "Nuthin' but a 'G' Thang",
+      "year": 1992,
+      "decade": "1990s",
+      "genres": [
+        "hip hop",
+        "g-funk"
+      ],
+      "spotify_uri": "spotify:track:5Tbpp3OLLClPJF8t1DmrFD",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Oasis",
+      "title": "Wonderwall",
+      "year": 1995,
+      "decade": "1990s",
+      "genres": [
+        "britpop",
+        "rock"
+      ],
+      "spotify_uri": "spotify:track:41tTCXOzxSWAoVrfeIIh8x",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Mandoza",
+      "title": "Nkalakatha",
+      "year": 2000,
+      "decade": "2000s",
+      "genres": [
+        "kwaito"
+      ],
+      "spotify_uri": "spotify:track:2PGxiV2TSgVHd02eBd0Kz1",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Gorillaz",
+      "title": "Clint Eastwood",
+      "year": 2001,
+      "decade": "2000s",
+      "genres": [
+        "alternative",
+        "hip hop"
+      ],
+      "spotify_uri": "spotify:track:1RKUoGiLEbcXN4GY4spQDx",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "OutKast",
+      "title": "Hey Ya!",
+      "year": 2003,
+      "decade": "2000s",
+      "genres": [
+        "hip hop",
+        "funk"
+      ],
+      "spotify_uri": "spotify:track:2PpruBYCo4H7WOBJ7Q2EwM",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Amy Winehouse",
+      "title": "Rehab",
+      "year": 2006,
+      "decade": "2000s",
+      "genres": [
+        "soul",
+        "pop"
+      ],
+      "spotify_uri": "spotify:track:1L5tZi0izXsi5Kk5OJf4W0",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kings of Leon",
+      "title": "Sex on Fire",
+      "year": 2008,
+      "decade": "2000s",
+      "genres": [
+        "rock",
+        "indie rock"
+      ],
+      "spotify_uri": "spotify:track:0ntQJM78wzOLVeCUAW7Y45",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Adele",
+      "title": "Rolling in the Deep",
+      "year": 2010,
+      "decade": "2010s",
+      "genres": [
+        "pop",
+        "soul"
+      ],
+      "spotify_uri": "spotify:track:4OSBTYWVwsQhGLF9NHvIbR",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Daft Punk",
+      "title": "Get Lucky",
+      "year": 2013,
+      "decade": "2010s",
+      "genres": [
+        "disco",
+        "electronic"
+      ],
+      "spotify_uri": "spotify:track:69kOkLUCkxIZYexIgSG8rq",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Mark Ronson",
+      "title": "Uptown Funk",
+      "year": 2014,
+      "decade": "2010s",
+      "genres": [
+        "funk",
+        "pop"
+      ],
+      "spotify_uri": "spotify:track:32OlwWuMpZ6b0aN2RZOeMS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Kendrick Lamar",
+      "title": "HUMBLE.",
+      "year": 2017,
+      "decade": "2010s",
+      "genres": [
+        "hip hop"
+      ],
+      "spotify_uri": "spotify:track:7KXjTSCq5nL1LoYtL7XAwS",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Master KG",
+      "title": "Jerusalema",
+      "year": 2019,
+      "decade": "2010s",
+      "genres": [
+        "amapiano",
+        "house"
+      ],
+      "spotify_uri": "spotify:track:5ObhjYr8EYRm1XNi3kYo9Y",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "The Weeknd",
+      "title": "Blinding Lights",
+      "year": 2019,
+      "decade": "2010s",
+      "genres": [
+        "synth-pop",
+        "pop"
+      ],
+      "spotify_uri": "spotify:track:0VjIjW4GlUZAMYd2vXMi3b",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Harry Styles",
+      "title": "As It Was",
+      "year": 2022,
+      "decade": "2020s",
+      "genres": [
+        "pop",
+        "synth-pop"
+      ],
+      "spotify_uri": "spotify:track:4Dvkj6JhhA12EX05fT7y2e",
+      "market_checked": "ZA"
+    },
+    {
+      "artist": "Tyla",
+      "title": "Water",
+      "year": 2023,
+      "decade": "2020s",
+      "genres": [
+        "amapiano",
+        "r&b"
+      ],
+      "spotify_uri": "spotify:track:5aIVCx5tnk0ntmdiinnYvw",
+      "market_checked": "ZA"
+    }
+  ]
+}
