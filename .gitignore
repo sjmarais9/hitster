@@ -1,0 +1,11 @@
+# No secrets in this repo, ever. Belt and braces:
+.env
+.env.*
+*.secret
+
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Scratch output from the import script
+data/*.local.json
