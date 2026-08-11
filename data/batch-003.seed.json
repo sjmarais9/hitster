@@ -358,7 +358,7 @@
         "heavy metal"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -450,7 +450,7 @@
         "soul"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -1613,8 +1613,8 @@
         "art pop",
         "synth-pop"
       ],
-      "familiarity": "standard",
-      "skew": "kids",
+      "familiarity": "familiar",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -2499,7 +2499,7 @@
         "grunge"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -2620,7 +2620,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -2701,7 +2701,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -2741,7 +2741,7 @@
         "alternative rock"
       ],
       "familiarity": "standard",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3324,7 +3324,7 @@
         "rap metal"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3749,7 +3749,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -3983,7 +3983,7 @@
         "hip hop"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4089,7 +4089,7 @@
         "nu metal"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4262,7 +4262,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4303,7 +4303,7 @@
         "folk"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4721,7 +4721,7 @@
         "soul"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4734,7 +4734,7 @@
         "indie rock"
       ],
       "familiarity": "deep",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4760,7 +4760,7 @@
         "alternative rock"
       ],
       "familiarity": "deep",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -4827,7 +4827,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
@@ -5081,7 +5081,7 @@
         "alternative rock"
       ],
       "familiarity": "familiar",
-      "skew": "even",
+      "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
     },
