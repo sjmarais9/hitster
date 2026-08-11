@@ -2,9 +2,15 @@ import { beginLogin, isLoggedIn, logout } from './auth.js';
 import { connect } from './player.js';
 import { loadPool, draw, resetSession } from './game.js';
 import { keepAwake } from './wakelock.js';
+import * as filters from './filters.js';
 
 const el = (id) => document.getElementById(id);
-const screens = { signedOut: el('signed-out'), start: el('start'), table: el('table') };
+const screens = {
+  signedOut: el('signed-out'),
+  start: el('start'),
+  filters: el('filters'),
+  table: el('table'),
+};
 
 const card = el('card');
 const reveal = el('reveal');
@@ -15,7 +21,9 @@ const replay = el('replay');
 const notice = el('notice');
 
 let route = null;      // set once a playback route is connected
-let pool = [];
+let pool = [];         // everything with a verified URI
+let deck = [];         // what the current filters leave to draw from
+let chosen = filters.load();
 let current = null;    // the song on the table, hidden until revealed
 let phase = 'ready';   // ready | revealed | empty
 let playing = false;
@@ -62,6 +70,86 @@ function render() {
   card.classList.toggle('paused', !playing);
 }
 
+/** Rebuilds the filtered deck and updates everything that reports on it. */
+function refreshDeck() {
+  deck = filters.apply(pool, chosen);
+  el('deck-count').textContent = deck.length === 0
+    ? 'No songs match these filters.'
+    : `${deck.length} song${deck.length === 1 ? '' : 's'} in the deck`;
+  el('deck-summary').textContent = filters.describe(chosen);
+  // Nothing to draw from is not a game worth starting.
+  el('begin').disabled = route === null || deck.length === 0;
+}
+
+/**
+ * A toggle chip. `pressed` drives aria-pressed, which is also what the
+ * stylesheet keys off, so the visual and accessible states cannot diverge.
+ */
+function chip({ label, hint, pressed, onToggle }) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'chip';
+  button.setAttribute('aria-pressed', String(pressed));
+
+  const name = document.createElement('span');
+  name.textContent = label;
+  button.append(name);
+
+  if (hint) {
+    const detail = document.createElement('span');
+    detail.className = 'chip-hint';
+    detail.textContent = hint;
+    button.append(detail);
+  }
+
+  button.addEventListener('click', () => {
+    onToggle();
+    filters.save(chosen);
+    buildChips();
+    refreshDeck();
+  });
+
+  return button;
+}
+
+/** One of a set: picking a new one replaces the current choice. */
+function radioChips(container, options, selected, onPick) {
+  container.replaceChildren(...Object.entries(options).map(([key, option]) =>
+    chip({
+      label: option.label,
+      hint: option.hint,
+      pressed: selected === key,
+      onToggle: () => onPick(key),
+    })));
+}
+
+/** Many of a set, with the last one refusing to turn itself off. */
+function toggleChips(container, keys, labelFor, active, onChange) {
+  container.replaceChildren(...keys.map((key) =>
+    chip({
+      label: labelFor(key),
+      pressed: active.includes(key),
+      onToggle: () => {
+        const next = active.includes(key) ? active.filter((k) => k !== key) : [...active, key];
+        // Leaving nothing selected can only produce an empty deck, so the last
+        // one stays on rather than presenting a broken state.
+        if (next.length > 0) onChange(next);
+      },
+    })));
+}
+
+function buildChips() {
+  radioChips(el('level-options'), filters.LEVELS, chosen.level, (key) => { chosen.level = key; });
+  radioChips(el('crowd-options'), filters.CROWDS, chosen.crowd, (key) => { chosen.crowd = key; });
+
+  toggleChips(el('decade-options'), filters.DECADES, (d) => d, chosen.decades,
+    (next) => { chosen.decades = next; });
+
+  toggleChips(el('genre-options'), Object.keys(filters.GENRE_GROUPS),
+    (g) => filters.GENRE_GROUPS[g].label, chosen.genres,
+    (next) => { chosen.genres = next; });
+}
+
 /** Puts the next card on the table, face down and silent. */
 async function deal() {
   if (playing) {
@@ -70,12 +158,12 @@ async function deal() {
   }
 
   setCard(null);
-  const song = draw(pool);
+  const song = draw(deck);
 
   if (!song) {
     current = null;
     phase = 'empty';
-    say('Every song has been played. Start over for a fresh deck.');
+    say('Every song in this deck has been played. Start over, or widen the filters.');
     return;
   }
 
@@ -189,14 +277,16 @@ async function boot() {
   }
   route = connected.value;
 
-  const begin = el('begin');
-  begin.textContent = 'Start';
-  begin.disabled = false;
+  el('begin').textContent = 'Start';
+  buildChips();
+  refreshDeck();
 }
 
 el('login').addEventListener('click', () => beginLogin().catch((err) => say(err.message, true)));
 el('logout').addEventListener('click', () => { logout(); location.reload(); });
 el('begin').addEventListener('click', onBegin);
+el('open-filters').addEventListener('click', () => show('filters'));
+el('close-filters').addEventListener('click', () => show('start'));
 reveal.addEventListener('click', onReveal);
 action.addEventListener('click', onAction);
 toggle.addEventListener('click', onToggle);

@@ -303,6 +303,67 @@ h1 {
   display: block;
 }
 
+/* Filter screen. Used before a game rather than during one, so it can afford
+   more on screen than the table ever should. */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.filter-group h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  min-height: 3rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid #2c3242;
+  border-radius: 0.75rem;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+}
+
+.chip:active {
+  filter: brightness(1.15);
+}
+
+.chip-hint {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* Sits under the Deck button on the start screen. */
+.deck-summary {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
 .status {
   margin: 0;
   color: var(--muted);

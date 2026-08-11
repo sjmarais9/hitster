@@ -26,7 +26,40 @@
       <!-- This tap is load-bearing: it is the user gesture that buys permission
            to play audio for the rest of the session. -->
       <button id="begin" class="button" type="button" disabled>Preparing…</button>
+      <button id="open-filters" class="button secondary" type="button">
+        <span>Deck</span>
+        <span id="deck-summary" class="deck-summary"></span>
+      </button>
       <button id="logout" class="button secondary" type="button">Log out</button>
+    </section>
+
+    <!-- Chrome is fine here. This screen is used before a game starts, not
+         while the phone is being passed around. -->
+    <section id="filters" class="hidden">
+      <h1>Deck</h1>
+      <p id="deck-count" class="status"></p>
+
+      <div class="filter-group">
+        <h2>How well does this crowd know their music?</h2>
+        <div id="level-options" class="chips"></div>
+      </div>
+
+      <div class="filter-group">
+        <h2>Who is playing?</h2>
+        <div id="crowd-options" class="chips"></div>
+      </div>
+
+      <div class="filter-group">
+        <h2>Decades</h2>
+        <div id="decade-options" class="chips"></div>
+      </div>
+
+      <div class="filter-group">
+        <h2>Genres</h2>
+        <div id="genre-options" class="chips"></div>
+      </div>
+
+      <button id="close-filters" class="button" type="button">Done</button>
     </section>
 
     <section id="table" class="hidden">
