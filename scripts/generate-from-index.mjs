@@ -118,6 +118,44 @@ const RETRY = (() => {
 })();
 
 /**
+ * Apple's release date. The best fallback we have, and the only source that
+ * works across every decade.
+ *
+ * Measured against the same 60 songs used for the others: 88% exact and 94%
+ * within a year, against MusicBrainz's 84% and 92%. It matched 50 of 60 where
+ * MusicBrainz matched 37 of 40, so its coverage is slightly thinner on songs we
+ * already hold - but the point of a fallback is the songs we do not.
+ *
+ * Per decade it never collapses: 8/8 in the 1980s, 8/9 in the 1970s, 6/9 in the
+ * 1960s. Deezer scores 0/9 in the 1960s.
+ *
+ * One failure mode the cross-check cannot catch: Johnny B. Goode came back as
+ * 1955 against a true 1958. Wrong, but inside the same decade, so nothing
+ * downstream will notice. Small errors within a decade are this pipeline's
+ * blind spot, and are accepted as much less harmful than the twenty-year misses
+ * the cross-check exists to stop.
+ */
+async function itunesYear(artist, title) {
+  try {
+    const term = encodeURIComponent(`${artist} ${title}`);
+    const r = await fetch(`https://itunes.apple.com/search?term=${term}&entity=song&limit=10`);
+    if (!r.ok) return null;
+    const body = await r.json();
+
+    const wantA = normalise(artist);
+    const wantT = normalise(title);
+    const years = (body.results ?? [])
+      .filter((x) => normalise(x.trackName ?? '') === wantT && normalise(x.artistName ?? '') === wantA)
+      .map((x) => Number(String(x.releaseDate ?? '').slice(0, 4)))
+      .filter((y) => y > 1900 && y < 2030);
+
+    return years.length ? Math.min(...years) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Deezer's release date, used only as a fallback and only for recent songs.
  *
  * Measured against 60 songs with known years, Deezer is unusable before 1990
@@ -269,7 +307,7 @@ async function main() {
   const percentile = new Map();
   ranked.forEach(([key], i) => percentile.set(key, (i / Math.max(1, ranked.length - 1)) * 100));
 
-  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaDeezer: 0 };
+  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaItunes: 0, viaDeezer: 0 };
   let sinceCheckpoint = 0;
 
   /** Remember a failure so no later pass pays for it twice. */
@@ -307,8 +345,17 @@ async function main() {
 
     // MusicBrainz has no release-group for a great many songs - it dropped
     // 5,933 candidates on the first pass, and unevenly: African music was lost
-    // at 96%, reggae and funk at about 80%. Deezer covers those far better, but
-    // only tells the truth about recent releases, so it is asked only then.
+    // at 96%, reggae and funk at about 80%.
+    //
+    // Two fallbacks, tried in order of how far they can be trusted. iTunes
+    // first, because it is accurate across every decade. Deezer last, and only
+    // for recent songs, because before 1990 it returns remaster dates - Johnny
+    // B. Goode as 2017.
+    if (year === null) {
+      year = await itunesYear(entry.artist, entry.title);
+      if (year !== null) reasons.viaItunes++;
+      await sleep(350);
+    }
     if (year === null && RECENT.has(crowd)) {
       year = await deezerYear(entry.artist, entry.title);
       if (year !== null) reasons.viaDeezer++;
@@ -348,7 +395,11 @@ async function main() {
   console.log(`rejected, no year:   ${reasons.noYear}`);
   console.log(`rejected, decade clash: ${reasons.decadeClash}`);
   console.log(`skipped, no clear era:  ${reasons.noCrowdDecade}`);
-  if (reasons.viaDeezer) console.log(`\nrescued by Deezer:      ${reasons.viaDeezer}  (songs MusicBrainz had no record of)`);
+  const rescued = reasons.viaItunes + reasons.viaDeezer;
+  if (rescued) {
+    console.log(`\nrescued from MusicBrainz's gaps: ${rescued}`);
+    console.log(`  by iTunes: ${reasons.viaItunes}   by Deezer: ${reasons.viaDeezer}`);
+  }
   console.log(`\nWrote ${path.relative(ROOT, OUT)} with ${produced.length} songs`);
 }
 
