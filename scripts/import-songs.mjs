@@ -27,6 +27,9 @@ import { writeSongs } from './lib/songs-file.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+/** Exit code meaning "the daily quota ran out", not "something went wrong". */
+export const EXIT_RATE_LIMITED = 75;
+
 const HELP = `
 Resolve a batch of songs to Spotify track URIs.
 
@@ -321,6 +324,10 @@ async function main() {
   if (aborted) {
     console.log(`\nSTOPPED EARLY: ${aborted.message}`);
     console.log(`Everything resolved so far has been saved. Re-run the same command to continue.`);
+    // Distinct exit code so a scheduled run can tell "quota reached, stop for
+    // today" apart from "finished" or "broke". Without it a wrapper would keep
+    // marching through the remaining batches into the same wall.
+    process.exitCode = EXIT_RATE_LIMITED;
   }
 
   if (review.length > 0 || yearSuspects.length > 0) {

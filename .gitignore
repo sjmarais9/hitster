@@ -13,3 +13,6 @@ data/canonicity.json
 
 # Spotify refresh token, so imports do not need a browser every run
 .spotify-token.json
+
+# Scheduled import logs
+logs/
