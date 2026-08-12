@@ -17,6 +17,24 @@
 
 * { box-sizing: border-box; }
 
+/* Android Chrome paints a translucent rectangle over whatever is tapped. It
+   ignores border-radius, so it flashes a square over the round transport
+   buttons and over the record itself - which is the one element on the table
+   that should never look like anything but a record.
+
+   Safe to remove only because every control here has its own pressed state;
+   the ones that did not have been given one rather than left silent. */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* A long press on a control should not start selecting its label. Confined to
+   buttons, so song titles on a revealed card can still be selected. */
+button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 html, body {
   margin: 0;
   min-height: 100dvh;
@@ -83,8 +101,11 @@ h1 {
   cursor: default;
 }
 
+/* Both, not just the scale. Without the tap highlight, 1.5% of shrink is not
+   enough to read as a press on a phone in a dim room. */
 .button:active {
   transform: scale(0.985);
+  filter: brightness(1.12);
 }
 
 .panel > section {
@@ -427,8 +448,12 @@ h1 {
     inset 0 -1px 0 rgb(0 0 0 / 0.35);
 }
 
+/* The knob had only a cursor change, which says nothing to a finger. Brightness
+   rather than a transform: the transform slot is holding the rotation, and a
+   scale appended to it would fight the turn. */
 .knob:active {
   cursor: grabbing;
+  filter: brightness(1.15);
 }
 
 /* Eased on a click, immediate under a finger. */

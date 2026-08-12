@@ -1,7 +1,7 @@
 // Thin wrapper over the Spotify Web API. Every call goes through getAccessToken,
 // so refreshes are handled in one place rather than at each call site.
 
-import { getAccessToken } from './auth.js?v=d9be13d1';
+import { getAccessToken } from './auth.js?v=a930c0cd';
 
 export async function api(path, { method = 'GET', body } = {}) {
   const response = await fetch(`https://api.spotify.com/v1/${path}`, {
