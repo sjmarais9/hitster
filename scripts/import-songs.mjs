@@ -23,6 +23,7 @@ import path from 'node:path';
 import { MARKET } from '../src/config.js';
 import { authorise } from './lib/cli-auth.mjs';
 import { pickBest, releaseYear } from './lib/match.mjs';
+import { writeSongs } from './lib/songs-file.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -76,8 +77,18 @@ async function readJson(file, fallback) {
   }
 }
 
+/**
+ * The pool and the review file both hold a `songs` array, so both go through
+ * the shared serialiser. Writing them with plain indentation reformats every
+ * song into twenty lines and makes the next diff unreadable.
+ */
 async function writeJson(file, data) {
-  await writeFile(path.resolve(ROOT, file), JSON.stringify(data, null, 2) + '\n', 'utf8');
+  const target = path.resolve(ROOT, file);
+  if (Array.isArray(data.songs)) {
+    await writeSongs(target, data);
+    return;
+  }
+  await writeFile(target, JSON.stringify(data, null, 2) + '\n', 'utf8');
 }
 
 /** Batches may be a bare array or the { meta, songs } wrapper the seed uses. */

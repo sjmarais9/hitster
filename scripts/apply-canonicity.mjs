@@ -20,10 +20,11 @@
 // knows. `familiarity` remains the household judgement, and the sampler blends
 // the two rather than letting either win outright - see src/scoring.js.
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { normalise } from './lib/match.mjs';
+import { writeSongs } from './lib/songs-file.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TARGETS = [
@@ -118,25 +119,6 @@ for (const s of all) {
 
 // --- write -------------------------------------------------------------------
 
-/**
- * One song per line, which is how these files are written by hand and the only
- * way their diffs stay reviewable. A plain JSON.stringify with indentation
- * turns each song into twenty lines and every edit into thousands.
- */
-function serialise(doc) {
-  const { songs, ...rest } = doc;
-  const head = JSON.stringify(rest, null, 2).replace(/^\{\n/, '').replace(/\n\}$/, '');
-  // Built field by field rather than by string-replacing a compact dump: a
-  // title containing a comma or a colon would corrupt the latter.
-  const lines = (songs ?? []).map((s) => {
-    const fields = Object.entries(s)
-      .map(([k, v]) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`)
-      .join(', ');
-    return `    { ${fields} }`;
-  }).join(',\n');
-  return `{\n${head},\n  "songs": [\n${lines}\n  ]\n}\n`;
-}
-
 let changed = 0;
 for (const { file, doc } of docs) {
   doc.songs = (doc.songs ?? []).map((song) => {
@@ -147,7 +129,7 @@ for (const { file, doc } of docs) {
   });
 
   if (!dryRun) {
-    await writeFile(path.resolve(ROOT, file), serialise(doc), 'utf8');
+    await writeSongs(path.resolve(ROOT, file), doc);
   }
 }
 
@@ -173,3 +155,5 @@ for (const [tier, xs] of Object.entries(tiers)) {
 }
 
 if (dryRun) console.log('\nDry run: nothing written.');
+
+
