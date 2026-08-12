@@ -16,3 +16,6 @@ data/canonicity.json
 
 # Scheduled import logs
 logs/
+
+# Year audit output, regenerable
+data/year-audit.json
