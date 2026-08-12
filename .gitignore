@@ -19,3 +19,6 @@ logs/
 
 # Year audit output, regenerable
 data/year-audit.json
+
+# Records when the Spotify quota lockout expires
+.import-lockout.json

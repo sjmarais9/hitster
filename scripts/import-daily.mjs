@@ -19,12 +19,50 @@
 //   1   something actually went wrong
 
 import { spawn } from 'node:child_process';
+import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { readSongs } from './lib/songs-file.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXIT_RATE_LIMITED = 75;
+
+// When a run is locked out, Spotify says for how long. Recording that and
+// refusing to call again before it expires costs nothing under any theory, and
+// matters if calling while locked extends the lockout - which the evidence
+// hints at:
+//
+//   10:24 -> Retry-After 33273s -> should clear 19:36
+//   16:15 -> Retry-After 19487s -> should clear 21:39
+//
+// The second window ends two hours after the first predicted. Two data points
+// are not proof, but polling into a closed door is worthless even if harmless,
+// so there is no reason to keep doing it.
+const LOCKOUT_FILE = path.join(ROOT, '.import-lockout.json');
+
+async function lockedUntil() {
+  try {
+    const { until } = JSON.parse(await readFile(LOCKOUT_FILE, 'utf8'));
+    const when = new Date(until);
+    return when > new Date() ? when : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Reads the wait Spotify reported out of what the import just printed. */
+async function recordLockout(seconds) {
+  const until = new Date(Date.now() + seconds * 1000);
+  try {
+    await writeFile(LOCKOUT_FILE, JSON.stringify({
+      until: until.toISOString(),
+      note: 'Do not call Spotify before this. Delete to force an attempt.',
+    }, null, 2) + '\n', 'utf8');
+  } catch {
+    // Not recording it only means a wasted attempt next time.
+  }
+  return until;
+}
 
 // Oldest first, so the batches that have been waiting longest become playable
 // first. batch-002 is already in the pool.
@@ -41,12 +79,22 @@ const PORT = process.argv.includes('--port')
 
 function runImport(file) {
   return new Promise((resolve) => {
+    let seconds = null;
     const child = spawn(
       process.execPath,
       [path.join(ROOT, 'scripts', 'import-songs.mjs'), '--in', file, '--port', PORT],
-      { cwd: ROOT, stdio: 'inherit' },
+      { cwd: ROOT, stdio: ['inherit', 'pipe', 'inherit'] },
     );
-    child.on('close', (code) => resolve(code ?? 1));
+
+    // Passed through so the log looks the same, but watched for the wait time
+    // so the next run knows not to bother.
+    child.stdout.on('data', (chunk) => {
+      process.stdout.write(chunk);
+      const match = /Rate limited for (\d+)s/.exec(chunk.toString());
+      if (match) seconds = Number(match[1]);
+    });
+
+    child.on('close', (code) => resolve({ code: code ?? 1, seconds }));
   });
 }
 
@@ -70,6 +118,14 @@ async function outstanding(file) {
 const started = new Date().toISOString().replace('T', ' ').slice(0, 19);
 console.log(`=== daily import, ${started} ===\n`);
 
+const stillLocked = await lockedUntil();
+if (stillLocked) {
+  const mins = Math.round((stillLocked - Date.now()) / 60000);
+  console.log(`Still rate limited for about ${mins} more minutes (until ${stillLocked.toISOString().slice(11, 16)} UTC).`);
+  console.log('Not calling Spotify. Delete .import-lockout.json to force an attempt.');
+  process.exit(EXIT_RATE_LIMITED);
+}
+
 let hitQuota = false;
 
 for (const file of BATCHES) {
@@ -85,11 +141,16 @@ for (const file of BATCHES) {
   }
 
   console.log(`\n${file}: ${todo} songs outstanding`);
-  const code = await runImport(file);
+  const { code, seconds } = await runImport(file);
 
   if (code === EXIT_RATE_LIMITED) {
     hitQuota = true;
-    console.log(`\nQuota reached. Stopping for today; everything resolved has been saved.`);
+    if (seconds) {
+      const until = await recordLockout(seconds);
+      console.log(`\nQuota reached. Nothing will be attempted before ${until.toISOString().slice(0, 16)}Z.`);
+    } else {
+      console.log(`\nQuota reached. Stopping for today; everything resolved has been saved.`);
+    }
     break;
   }
   if (code !== 0) {
