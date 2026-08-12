@@ -79,7 +79,7 @@ Four dimensions multiply together:
 
 | Control | What it does | Can it exclude? |
 |---|---|---|
-| **Familiarity** — three buttons | Sharpens or flattens the preference for well-known songs | Never |
+| **Familiarity** — three buttons | Sharpens or flattens the preference for well-known songs | Never, at any level |
 | **Crowd** — a slider, adults to kids | Sets the resulting mix, not just a preference | Only at the exact ends, where the label says so |
 | **Genre** — a mixer, one fader each | Raises or lowers a genre family | Only at `Off`, which is labelled |
 | **Decade** — a mixer, one fader each | Raises or lowers an era | Only at `Off`, which is labelled |
@@ -96,6 +96,38 @@ moves when the genre mixer and the crowd slider move too, since neither genre
 nor age is spread evenly across the eras — so the number is recomputed from the
 same weights the draw uses, and a test pins it to what 40,000 draws actually do.
 
+### What the extremes actually do
+
+Worth being precise, because "weighted, not filtered" is easy to state and easy
+to quietly break.
+
+**No familiarity level ever excludes a song, and Encyclopaedic does not even
+disfavour one.** The level sets an exponent `k` applied to each song's score:
+
+| Level | `k` | Weakest song | Strongest | Ratio |
+|---|---|---|---|---|
+| **Encyclopaedic** | 0 | 1 | 1 | **1:1** — perfectly flat |
+| Confident | 2 | 2.56 | 100 | 39:1 |
+| Casual | 4 | 6.55 | 10,000 | ~1,500:1 |
+
+At Encyclopaedic every song's familiarity weight is `scoreOf ** 0`, which is 1
+however obscure it is, so the draw is shaped only by the crowd slider and the
+two mixers. At Casual the most obscure possible song is about 1,500 times less
+likely than a perfect standard — you would probably never see it in a night, but
+the weight stays positive, which is the whole point. The tags are wrong often
+enough that a mis-tagged song must not vanish from every game forever.
+
+The **crowd slider** zeroes the opposite side only at *exactly* 0 or 1. Its step
+is 0.05 and the label reads "Adults only" from 0.05 down, so one notch off the
+end still says Adults only while leaving a kids-tagged song possible. Songs
+tagged `even` are never excluded at either end, since they carry half weight on
+both sides.
+
+Muting **every** genre fader at once makes `pickWeighted` fall back to a uniform
+draw over the whole deck rather than deadlocking. Better than refusing to deal,
+but it means all-Off behaves like "no preference" rather than like Off. It takes
+dragging all nine faders down, so it is unlikely to happen by accident.
+
 The familiarity weight blends two disagreeing sources: our own `familiarity`
 tag, which knows this household but is one person's judgement, and a measured
 `canonicity` score, which knows the world but has never met the family.
@@ -106,9 +138,12 @@ tier boundary and, more usefully, separates songs the tags treat as identical.
 
 The crowd slider is normalised by population; both mixers deliberately are not.
 The adults/kids imbalance is an artefact worth correcting. Genre family sizes
-are real — 1,064 rock songs against 12 African ones — and so are decade sizes,
-where the 1950s holds fourteen songs. Normalising either would give a flat mixer
-the job of handing those fourteen an eighth of the night.
+are real — 3,338 rock songs against 12 African ones — and so are decade sizes,
+where the 1950s holds thirteen. Normalising either would give a flat mixer the
+job of handing those thirteen an eighth of the night.
+
+Run `node scripts/stats.mjs` for the current counts, which reports the playable
+pool and the import queue separately rather than summing them.
 
 ## Installing it on the phone
 
