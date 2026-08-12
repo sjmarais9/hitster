@@ -357,6 +357,62 @@ h1 {
   color: var(--muted);
 }
 
+/* Set once before a game rather than reached for mid-round, so a slider is
+   acceptable here where it would not be on the table. */
+.slider {
+  width: 100%;
+  height: 2.5rem;
+  margin: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+}
+
+.slider::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(90deg, #2c3242, var(--accent));
+}
+
+.slider::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: linear-gradient(90deg, #2c3242, var(--accent));
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 2rem;
+  height: 2rem;
+  margin-top: -0.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--text);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--text);
+  cursor: pointer;
+}
+
+.slider-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.slider-value {
+  color: var(--text);
+  font-weight: 600;
+}
+
 /* Sits under the Deck button on the start screen. */
 .deck-summary {
   font-size: 0.875rem;

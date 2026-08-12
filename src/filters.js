@@ -13,18 +13,34 @@
 
 const STORAGE_KEY = 'hitster.filters';
 
-// Familiarity is cumulative. A crowd that knows its music should still get the
-// obvious songs, so widening never drops the easier tiers.
-export const LEVELS = {
-  casual: { label: 'Casual', hint: 'The obvious ones', tiers: ['standard'] },
-  confident: { label: 'Confident', hint: 'Plus well-known songs', tiers: ['standard', 'familiar'] },
-  everything: { label: 'Encyclopaedic', hint: 'Everything, including deep cuts', tiers: ['standard', 'familiar', 'deep'] },
-};
+// Familiarity and skew are no longer filters. They weight the draw instead, in
+// scoring.js, so a song is made less likely rather than removed. Nothing is
+// excluded for being slightly too obscure or slightly too grown-up.
+//
+// Only decade and genre still exclude, because "no 1960s tonight" is a
+// statement about what the table wants to hear rather than a difficulty
+// setting, and a probabilistic version of it would just be baffling.
+// Imported as well as re-exported: `export ... from` forwards the binding
+// without introducing it locally, and describe() below needs to read it.
+import { LEVELS } from './scoring.js';
 
-export const CROWDS = {
-  everyone: { label: 'Everyone', hint: 'No restriction', skews: ['even', 'adults', 'kids'] },
-  withKids: { label: 'Playing with kids', hint: 'Nothing only the adults would know', skews: ['even', 'kids'] },
-  adultsOnly: { label: 'Adults only', hint: 'Nothing aimed at the children', skews: ['even', 'adults'] },
+export { LEVELS };
+
+// The crowd control is a position from 0 to 1 rather than a set of options:
+// 0 draws only what the adults know, 1 only what the children know, and the
+// middle produces a genuinely even mix rather than mirroring the pool's own
+// lopsidedness. See skewWeights in scoring.js.
+export const CROWD = {
+  min: 0,
+  max: 1,
+  step: 0.05,
+  labelFor(position) {
+    if (position <= 0.05) return 'Adults only';
+    if (position < 0.35) return 'Mostly adults';
+    if (position <= 0.65) return 'Balanced';
+    if (position < 0.95) return 'Mostly kids';
+    return 'Kids only';
+  },
 };
 
 export const DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
@@ -45,7 +61,7 @@ export const GENRE_GROUPS = {
 
 export const DEFAULTS = {
   level: 'everything',
-  crowd: 'everyone',
+  crowd: 0.5,
   decades: [...DECADES],
   genres: Object.keys(GENRE_GROUPS),
 };
@@ -77,24 +93,23 @@ function groupsFor(song) {
   return matched.length > 0 ? matched : ['other'];
 }
 
+/**
+ * The songs eligible to be drawn at all. Familiarity and skew are deliberately
+ * absent: they shape the odds, not the deck.
+ */
 export function apply(pool, filters) {
-  const tiers = LEVELS[filters.level]?.tiers ?? DEFAULTS.level;
-  const skews = CROWDS[filters.crowd]?.skews ?? CROWDS.everyone.skews;
-
   return pool.filter((song) => {
-    // An untagged song is playable rather than invisible; the tags are ours and
-    // may lag the pool. Only an explicit tag can exclude a song.
-    if (song.familiarity && !tiers.includes(song.familiarity)) return false;
-    if (song.skew && !skews.includes(song.skew)) return false;
     if (!filters.decades.includes(song.decade)) return false;
     return groupsFor(song).some((g) => filters.genres.includes(g));
   });
 }
 
-/** A short line for the UI, e.g. "Confident, playing with kids, 4 decades". */
+/** A short line for the UI, e.g. "Confident · mostly kids · 4 decades". */
 export function describe(filters) {
   const parts = [LEVELS[filters.level]?.label ?? 'All'];
-  if (filters.crowd !== 'everyone') parts.push(CROWDS[filters.crowd].label.toLowerCase());
+
+  const crowd = CROWD.labelFor(filters.crowd ?? 0.5);
+  if (crowd !== 'Balanced') parts.push(crowd.toLowerCase());
 
   const decades = filters.decades.length;
   if (decades !== DECADES.length) {

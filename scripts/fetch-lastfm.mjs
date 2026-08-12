@@ -33,9 +33,16 @@ const CHECKPOINT_EVERY = 100;
 async function apiKey() {
   if (process.env.LASTFM_API_KEY) return process.env.LASTFM_API_KEY.trim();
   try {
-    const env = await readFile(path.join(ROOT, '.env'), 'utf8');
-    const line = env.split(/\r?\n/).find((l) => l.startsWith('LASTFM_API_KEY='));
-    if (line) return line.slice('LASTFM_API_KEY='.length).trim();
+    // Tolerant on purpose. A .env written by PowerShell carries a byte order
+    // mark, one written by hand may have spaces or quotes around the value, and
+    // none of that should look like a missing key.
+    const env = (await readFile(path.join(ROOT, '.env'), 'utf8')).replace(/^﻿/, '');
+    for (const raw of env.split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line.startsWith('LASTFM_API_KEY')) continue;
+      const value = line.slice(line.indexOf('=') + 1).trim().replace(/^["']|["']$/g, '');
+      if (value) return value;
+    }
   } catch {
     // no .env, fall through
   }

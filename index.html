@@ -44,9 +44,18 @@
         <div id="level-options" class="chips"></div>
       </div>
 
+      <!-- A slider rather than buttons: it is set once before a game, not
+           reached for mid-round, so it does not need a thumb-sized target. -->
       <div class="filter-group">
         <h2>Who is playing?</h2>
-        <div id="crowd-options" class="chips"></div>
+        <input id="crowd-slider" class="slider" type="range"
+               min="0" max="1" step="0.05" value="0.5"
+               aria-label="Balance between adults and children">
+        <div class="slider-ends">
+          <span>Adults</span>
+          <span id="crowd-label" class="slider-value">Balanced</span>
+          <span>Kids</span>
+        </div>
       </div>
 
       <div class="filter-group">

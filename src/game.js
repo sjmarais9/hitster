@@ -2,6 +2,7 @@
 // order — stays physical on the table, so this is only ever "which song next".
 
 import { basePath } from './config.js';
+import { weightsFor, pickWeighted } from './scoring.js';
 
 // Per-tab, so closing the tab starts a fresh game. Survives a reload mid-game,
 // which is the case that actually matters when a phone is being passed around.
@@ -39,13 +40,18 @@ export function resetSession() {
 /**
  * Draws a song not yet played this session, and records it.
  * Returns null when the deck is exhausted.
+ *
+ * Weights are computed over what is still unplayed rather than the whole deck,
+ * so the crowd balance holds as the night goes on. Weighting the full deck and
+ * then discarding played songs would let the mix drift once the small side -
+ * usually the children's - had been used up.
  */
-export function draw(pool) {
+export function draw(pool, options = {}) {
   const seen = played();
   const available = pool.filter((song) => !seen.has(song.spotify_uri));
   if (available.length === 0) return null;
 
-  const song = available[Math.floor(Math.random() * available.length)];
+  const song = pickWeighted(available, weightsFor(available, options));
   remember(song.spotify_uri);
   return song;
 }

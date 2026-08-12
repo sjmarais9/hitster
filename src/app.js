@@ -140,7 +140,10 @@ function toggleChips(container, keys, labelFor, active, onChange) {
 
 function buildChips() {
   radioChips(el('level-options'), filters.LEVELS, chosen.level, (key) => { chosen.level = key; });
-  radioChips(el('crowd-options'), filters.CROWDS, chosen.crowd, (key) => { chosen.crowd = key; });
+
+  const slider = el('crowd-slider');
+  slider.value = String(chosen.crowd ?? 0.5);
+  el('crowd-label').textContent = filters.CROWD.labelFor(chosen.crowd ?? 0.5);
 
   toggleChips(el('decade-options'), filters.DECADES, (d) => d, chosen.decades,
     (next) => { chosen.decades = next; });
@@ -158,7 +161,8 @@ async function deal() {
   }
 
   setCard(null);
-  const song = draw(deck);
+  // The filters both narrow the deck and shape the odds within it.
+  const song = draw(deck, chosen);
 
   if (!song) {
     current = null;
@@ -285,6 +289,12 @@ async function boot() {
 el('login').addEventListener('click', () => beginLogin().catch((err) => say(err.message, true)));
 el('logout').addEventListener('click', () => { logout(); location.reload(); });
 el('begin').addEventListener('click', onBegin);
+el('crowd-slider').addEventListener('input', (event) => {
+  chosen.crowd = Number(event.target.value);
+  el('crowd-label').textContent = filters.CROWD.labelFor(chosen.crowd);
+  filters.save(chosen);
+  // No refreshDeck: the slider changes the odds, not which songs are eligible.
+});
 el('open-filters').addEventListener('click', () => show('filters'));
 el('close-filters').addEventListener('click', () => show('start'));
 reveal.addEventListener('click', onReveal);
