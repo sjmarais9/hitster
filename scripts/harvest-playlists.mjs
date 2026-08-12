@@ -59,6 +59,18 @@ const LOCAL = [
   'sa hip hop', 'south african rock', 'african classics', 'afro house',
 ];
 
+// Added after the first harvest. Validation showed Last Christmas and
+// Ghostbusters scoring near zero despite being tagged `standard` - not a
+// tagging error, but songs that live on seasonal and soundtrack playlists which
+// decade-by-genre themes never touch.
+const OCCASION = [
+  'christmas classics', 'christmas party', 'movie soundtracks', 'film classics',
+  'novelty songs', 'sing along', 'workout classics', 'running songs',
+  'kids party', 'disney classics', 'musicals', 'tv themes',
+  'love songs', 'breakup songs', 'sad songs', 'protest songs',
+  'stadium anthems', 'festival anthems', 'pub jukebox', 'braai playlist',
+];
+
 function buildThemes() {
   const themes = [];
   for (const decade of DECADES) {
@@ -69,6 +81,7 @@ function buildThemes() {
   }
   for (const q of GENERAL) themes.push({ q, decade: null, genre: null });
   for (const q of LOCAL) themes.push({ q, decade: null, genre: 'african' });
+  for (const q of OCCASION) themes.push({ q, decade: null, genre: null });
   return themes;
 }
 
@@ -104,12 +117,26 @@ async function main() {
   const themes = buildThemes();
   console.log(`${themes.length} themes, up to ${PLAYLISTS_PER_THEME} playlists each\n`);
 
+  // Resume from whatever a previous run gathered. Without this, adding themes
+  // would discard the existing index rather than extend it - forty minutes of
+  // work thrown away to add twenty themes.
+  let existing = { tracks: {}, meta: {} };
+  try {
+    existing = JSON.parse(await readFile(OUT, 'utf8'));
+  } catch {
+    // first run
+  }
+
   // key -> { n, decades: {}, genres: {}, artist, title }
-  const index = new Map();
-  const seenPlaylists = new Set();
-  let playlistCount = 0;
-  let trackCount = 0;
+  const index = new Map(Object.entries(existing.tracks ?? {}));
+  const seenPlaylists = new Set(existing.meta?.playlist_ids ?? []);
+  let playlistCount = existing.meta?.playlists ?? 0;
+  let trackCount = existing.meta?.track_appearances ?? 0;
   let sinceCheckpoint = 0;
+
+  if (index.size > 0) {
+    console.log(`resuming: ${index.size} tracks, ${seenPlaylists.size} playlists already harvested\n`);
+  }
 
   async function save() {
     const tracks = {};
@@ -122,6 +149,9 @@ async function main() {
       meta: {
         source: 'Deezer public playlists',
         playlists: playlistCount,
+        // Kept so a later run can add themes without re-fetching, and without
+        // double-counting a playlist that two themes both surface.
+        playlist_ids: [...seenPlaylists],
         themes: themes.length,
         track_appearances: trackCount,
         distinct_tracks_kept: Object.keys(tracks).length,
