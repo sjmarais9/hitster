@@ -9,3 +9,4 @@ Thumbs.db
 
 # Scratch output from the import script
 data/*.local.json
+data/canonicity.json
