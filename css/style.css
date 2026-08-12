@@ -491,16 +491,6 @@ h1 {
   color: var(--text);
 }
 
-.knob-stop[aria-pressed="true"] {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
-  color: var(--text);
-}
-
-.knob-stop:active {
-  filter: brightness(1.15);
-}
-
 .knob-hint {
   margin: 0;
   font-size: 0.875rem;
