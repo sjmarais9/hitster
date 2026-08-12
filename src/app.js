@@ -1,6 +1,6 @@
 import { beginLogin, isLoggedIn, logout } from './auth.js';
 import { connect } from './player.js';
-import { loadPool, draw, resetSession } from './game.js';
+import { loadPool, draw, resetSession, playedCount } from './game.js';
 import { keepAwake } from './wakelock.js';
 import { projectedShares } from './scoring.js';
 import * as filters from './filters.js';
@@ -34,6 +34,44 @@ function show(screen) {
   for (const [name, node] of Object.entries(screens)) {
     node.classList.toggle('hidden', name !== screen);
   }
+  if (screen === 'start') refreshStart();
+}
+
+// --- moving between screens --------------------------------------------------
+//
+// Each screen is a history entry, so the phone's back button does what it looks
+// like it does. Before this there was no way out of a game at all: back left
+// the app, and coming back landed on the login screen mid-round.
+//
+// The two in-app back controls call history.back() rather than go() so the
+// stack unwinds instead of growing a new entry every time the deck is opened.
+
+function go(screen) {
+  if (history.state?.screen === screen) return;
+  history.pushState({ screen }, '');
+  show(screen);
+}
+
+/** Stops the music on the way out of a game. The session itself is kept. */
+async function leaveTable() {
+  if (!playing) return;
+  playing = false;
+  await route?.pause().catch(() => {});
+  render();
+}
+
+window.addEventListener('popstate', (event) => {
+  const screen = event.state?.screen ?? (isLoggedIn() ? 'start' : 'signedOut');
+  if (screen !== 'table') leaveTable();
+  show(screen);
+});
+
+/** The start screen reports whether there is a game to come back to. */
+function refreshStart() {
+  const played = playedCount();
+  el('begin').textContent = route === null ? 'Preparing…'
+    : played > 0 ? 'Resume game' : 'Start';
+  el('new-game').classList.toggle('hidden', played === 0);
 }
 
 function say(message, isError = false) {
@@ -84,50 +122,145 @@ function refreshDeck() {
   renderShares();
 }
 
-/**
- * A toggle chip. `pressed` drives aria-pressed, which is also what the
- * stylesheet keys off, so the visual and accessible states cannot diverge.
- */
-function chip({ label, hint, pressed, onToggle }) {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'chip';
-  button.setAttribute('aria-pressed', String(pressed));
+// --- the level knob ----------------------------------------------------------
+//
+// A volume knob, because that is what this control is: how much of the
+// catalogue is being let through. Casual is barely open, Encyclopaedic is wide
+// open, and the exponent it sets runs the same way - k=4 down to k=0.
+//
+// Three stops across a 270-degree sweep, the way an amplifier's is laid out.
 
-  const name = document.createElement('span');
-  name.textContent = label;
-  button.append(name);
+const SWEEP = 135;
 
-  if (hint) {
-    const detail = document.createElement('span');
-    detail.className = 'chip-hint';
-    detail.textContent = hint;
-    button.append(detail);
-  }
-
-  button.addEventListener('click', () => {
-    onToggle();
-    filters.save(chosen);
-    buildChips();
-    refreshDeck();
-  });
-
-  return button;
+/** Degrees clockwise from straight up, clamped to the sweep. */
+function angleAt(node, x, y) {
+  const box = node.getBoundingClientRect();
+  const deg = Math.atan2(x - (box.left + box.width / 2),
+    (box.top + box.height / 2) - y) * (180 / Math.PI);
+  return Math.max(-SWEEP, Math.min(SWEEP, deg));
 }
 
-/** One of a set: picking a new one replaces the current choice. */
-function radioChips(container, options, selected, onPick) {
-  container.replaceChildren(...Object.entries(options).map(([key, option]) =>
-    chip({
-      label: option.label,
-      hint: option.hint,
-      pressed: selected === key,
-      onToggle: () => onPick(key),
-    })));
+function buildKnob() {
+  const keys = Object.keys(filters.LEVELS);
+  const angleOf = (i) => -SWEEP + (i * SWEEP * 2) / (keys.length - 1);
+  let index = Math.max(0, keys.indexOf(chosen.level));
+
+  const dial = document.createElement('div');
+  dial.className = 'knob-dial';
+
+  // Tick marks behind the knob, one per stop, so the sweep is legible when the
+  // pointer is between them mid-drag.
+  for (const i of keys.keys()) {
+    const tick = document.createElement('span');
+    tick.className = 'knob-tick';
+    tick.style.setProperty('--angle', `${angleOf(i)}deg`);
+    dial.append(tick);
+  }
+
+  const knob = document.createElement('button');
+  knob.type = 'button';
+  knob.className = 'knob';
+  knob.setAttribute('role', 'slider');
+  knob.setAttribute('aria-valuemin', '0');
+  knob.setAttribute('aria-valuemax', String(keys.length - 1));
+  knob.setAttribute('aria-label', 'How well does this crowd know their music');
+
+  const pointer = document.createElement('span');
+  pointer.className = 'knob-pointer';
+  knob.append(pointer);
+  dial.append(knob);
+
+  const scale = document.createElement('div');
+  scale.className = 'knob-scale';
+  const stops = keys.map((key, i) => {
+    const stop = document.createElement('button');
+    stop.type = 'button';
+    stop.className = 'knob-stop';
+    stop.textContent = filters.LEVELS[key].label;
+    // Clicking a label is the primary way in. The knob turns to follow.
+    stop.addEventListener('click', () => select(i));
+    scale.append(stop);
+    return stop;
+  });
+
+  const hint = document.createElement('p');
+  hint.className = 'knob-hint';
+
+  function paint() {
+    knob.style.setProperty('--angle', `${angleOf(index)}deg`);
+    knob.setAttribute('aria-valuenow', String(index));
+    knob.setAttribute('aria-valuetext', filters.LEVELS[keys[index]].label);
+    stops.forEach((stop, i) => stop.setAttribute('aria-pressed', String(i === index)));
+    hint.textContent = filters.LEVELS[keys[index]].hint;
+  }
+
+  function select(next) {
+    const clamped = Math.max(0, Math.min(keys.length - 1, next));
+    if (clamped === index) return;
+    index = clamped;
+    chosen.level = keys[index];
+    paint();
+    filters.save(chosen);
+    // No refreshDeck: the level changes the odds, not which songs are eligible.
+    // It does move the decades, since the eras are not equally well known.
+    renderShares();
+  }
+
+  // Drag to turn. Snapping to the nearest stop rather than tracking freely
+  // keeps it honest - there are only three settings, and a knob that came to
+  // rest between them would be lying about what it had selected.
+  let turning = false;
+  let moved = false;
+  let from = null;
+
+  knob.addEventListener('pointerdown', (event) => {
+    knob.setPointerCapture(event.pointerId);
+    turning = true;
+    moved = false;
+    from = { x: event.clientX, y: event.clientY };
+    // The easing that makes a click feel like a knob turning makes a drag feel
+    // like it is lagging behind the finger.
+    knob.classList.add('turning');
+  });
+
+  knob.addEventListener('pointermove', (event) => {
+    if (!turning) return;
+    // A few pixels of slop, so a tap that wobbles is still a tap.
+    if (!moved && Math.hypot(event.clientX - from.x, event.clientY - from.y) < 5) return;
+    moved = true;
+    const angle = angleAt(knob, event.clientX, event.clientY);
+    select(Math.round(((angle + SWEEP) / (SWEEP * 2)) * (keys.length - 1)));
+  });
+
+  const release = () => {
+    turning = false;
+    knob.classList.remove('turning');
+  };
+  knob.addEventListener('pointercancel', release);
+  knob.addEventListener('pointerup', release);
+
+  // Tap rather than turn: step up, wrapping round from full volume so the knob
+  // is never a dead control. The wrap target is always in range, so select()'s
+  // clamp leaves it alone. Handled on click rather than pointerup so that
+  // Enter and Space reach it too - the element is still a button underneath.
+  knob.addEventListener('click', () => {
+    if (!moved) select((index + 1) % keys.length);
+    moved = false;
+  });
+
+  knob.addEventListener('keydown', (event) => {
+    const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[event.key];
+    if (!step) return;
+    event.preventDefault();
+    select(index + step);
+  });
+
+  paint();
+  el('level-knob').replaceChildren(dial, scale, hint);
 }
 
 function buildChips() {
-  radioChips(el('level-options'), filters.LEVELS, chosen.level, (key) => { chosen.level = key; });
+  buildKnob();
 
   const slider = el('crowd-slider');
   slider.value = String(chosen.crowd ?? 0.5);
@@ -135,6 +268,34 @@ function buildChips() {
 
   buildDecadeMixer();
   buildGenreMixer();
+}
+
+/**
+ * Makes a range input respond only to its thumb.
+ *
+ * A native slider jumps to wherever the track is touched, which on a page of
+ * seventeen faders means scrolling past them nudges them. Refusing any press
+ * that did not land on the thumb makes the page scrollable again without
+ * shrinking the thumb's own target, and CSS pairs this with `touch-action:
+ * pan-y` so a vertical drag starting on a fader scrolls rather than sets.
+ */
+function thumbOnly(input) {
+  input.addEventListener('pointerdown', (event) => {
+    const box = input.getBoundingClientRect();
+    // Read the thumb width from CSS rather than repeating it here, so the two
+    // cannot drift apart.
+    const thumb = parseFloat(getComputedStyle(input).getPropertyValue('--thumb')) || 32;
+
+    const min = Number(input.min) || 0;
+    const max = Number(input.max) || 100;
+    const travel = box.width - thumb;
+    const position = max === min ? 0 : (Number(input.value) - min) / (max - min);
+    const centre = box.left + thumb / 2 + position * travel;
+
+    // Half the thumb, plus a little, because fingers are not precise and the
+    // alternative is a control that feels broken.
+    if (Math.abs(event.clientX - centre) > thumb / 2 + 6) event.preventDefault();
+  });
 }
 
 /**
@@ -166,6 +327,7 @@ function fader({ id, label, level, onInput }) {
   input.value = String(level);
 
   input.addEventListener('input', () => onInput(Number(input.value)));
+  thumbOnly(input);
 
   row.append(name, value, input);
   return { row, value };
@@ -336,19 +498,23 @@ function onBegin() {
   }
 
   keepAwake();
-  show('table');
-  // A card is already on the table when the screen appears; the first tap of
-  // Play starts it. Nothing plays on its own.
-  deal().then(render);
+  go('table');
+  // Resuming keeps the card that is already on the table. Only a fresh game
+  // deals, and it deals before the screen is touched so nothing plays on its
+  // own - the first tap of Play starts it.
+  if (current === null) deal().then(render);
+  else render();
 }
 
 async function boot() {
   if (!isLoggedIn()) {
     show('signedOut');
+    history.replaceState({ screen: 'signedOut' }, '');
     return;
   }
 
   show('start');
+  history.replaceState({ screen: 'start' }, '');
 
   // Connect and load the pool up front, so the Begin tap has nothing to await.
   const [connected, loaded] = await Promise.allSettled([
@@ -370,9 +536,9 @@ async function boot() {
   }
   route = connected.value;
 
-  el('begin').textContent = 'Start';
   buildChips();
   refreshDeck();
+  refreshStart();
 }
 
 el('login').addEventListener('click', () => beginLogin().catch((err) => say(err.message, true)));
@@ -387,8 +553,21 @@ el('crowd-slider').addEventListener('input', (event) => {
   // evenly across the eras.
   renderShares();
 });
-el('open-filters').addEventListener('click', () => show('filters'));
-el('close-filters').addEventListener('click', () => show('start'));
+thumbOnly(el('crowd-slider'));
+
+el('open-filters').addEventListener('click', () => go('filters'));
+// back() rather than go('start'), so opening and closing the deck repeatedly
+// unwinds the history stack instead of piling entries onto it.
+el('close-filters').addEventListener('click', () => history.back());
+el('leave').addEventListener('click', () => history.back());
+el('new-game').addEventListener('click', () => {
+  resetSession();
+  current = null;
+  phase = 'ready';
+  started = false;
+  refreshStart();
+  say('');
+});
 reveal.addEventListener('click', onReveal);
 action.addEventListener('click', onAction);
 toggle.addEventListener('click', onToggle);

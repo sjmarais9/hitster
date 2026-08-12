@@ -30,6 +30,10 @@
         <span>Deck</span>
         <span id="deck-summary" class="deck-summary"></span>
       </button>
+      <!-- Only offered once a game is actually under way. Leaving the table
+           keeps the session, so that this is the one thing that discards it and
+           it is never done by accident. -->
+      <button id="new-game" class="button secondary hidden" type="button">Start a new game</button>
       <button id="logout" class="button secondary" type="button">Log out</button>
     </section>
 
@@ -39,9 +43,11 @@
       <h1>Deck</h1>
       <p id="deck-count" class="status"></p>
 
+      <!-- A volume knob, because that is what it is: how much of the catalogue
+           is being let through. Encyclopaedic is full volume. -->
       <div class="filter-group">
         <h2>How well does this crowd know their music?</h2>
-        <div id="level-options" class="chips"></div>
+        <div id="level-knob" class="knob-control"></div>
       </div>
 
       <!-- A slider rather than buttons: it is set once before a game, not
@@ -81,6 +87,13 @@
     </section>
 
     <section id="table" class="hidden">
+      <!-- The one piece of chrome on this screen. Without it the only way out
+           of a game is the phone's back button, which used to leave the app
+           entirely and land on the login page. -->
+      <div class="table-bar">
+        <button id="leave" class="link-button" type="button">← Deck</button>
+      </div>
+
       <div id="card" class="card">
         <div class="card-inner">
           <!-- The face-down card is itself the reveal control. It stays
@@ -89,9 +102,15 @@
           <button id="reveal" class="card-face card-back" type="button" disabled
                   aria-label="Reveal the song">
             <!-- The record stops turning when playback is paused, so the card
-                 doubles as the playing indicator. -->
-            <div class="vinyl" aria-hidden="true"><span class="vinyl-label"></span></div>
-            <span id="card-mark" class="card-mark">?</span>
+                 doubles as the playing indicator. The mark sits inside the
+                 label rather than beside it, so it turns with the record
+                 instead of needing an animation of its own that would drift
+                 out of phase. -->
+            <div class="vinyl" aria-hidden="true">
+              <span class="vinyl-label">
+                <span id="card-mark" class="card-mark">?</span>
+              </span>
+            </div>
           </button>
           <!-- Left empty until Reveal. The details are injected at that moment
                and cleared on the next draw, so there is never a spoiler sitting

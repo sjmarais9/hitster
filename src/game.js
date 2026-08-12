@@ -37,6 +37,11 @@ export function resetSession() {
   sessionStorage.removeItem(PLAYED_KEY);
 }
 
+/** How far into a game we are. Zero means nothing would be lost by starting over. */
+export function playedCount() {
+  return played().size;
+}
+
 /**
  * Draws a song not yet played this session, and records it.
  * Returns null when the deck is exhausted.

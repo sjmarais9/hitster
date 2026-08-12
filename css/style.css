@@ -93,6 +93,30 @@ h1 {
   gap: 1.25rem;
 }
 
+/* The only chrome on the table screen, and deliberately quiet: it must never
+   be mistaken for Next in a dim room, but without it the phone's back button
+   is the sole way out of a game - and that used to leave the app entirely. */
+.table-bar {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: -0.75rem;
+}
+
+.link-button {
+  padding: 0.5rem 0.375rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.link-button:active {
+  color: var(--text);
+}
+
 /* The card. Reveal is meant to feel like turning a card over, so it flips
    rather than swapping text. Reduced-motion users get the same result
    instantly, via the global rule at the bottom of this file. */
@@ -100,9 +124,11 @@ h1 {
   perspective: 1200px;
 }
 
+/* Grows with the viewport but never past the point where the transport controls
+   and Next would be pushed off a short screen. */
 .card-inner {
   position: relative;
-  height: 18rem;
+  height: clamp(19rem, 48vh, 25rem);
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -148,18 +174,12 @@ h1 {
   filter: brightness(1.15);
 }
 
-/* Both children share one grid cell so the mark sits on the label while the
-   record turns underneath it. */
-.card-back > * {
-  grid-area: 1 / 1;
-}
-
+/* Sized against three limits at once: a comfortable maximum, the width of a
+   narrow phone, and the height of a short one. */
 .vinyl {
   position: relative;
-  width: 13rem;
-  height: 13rem;
-  max-width: 60vw;
-  max-height: 60vw;
+  width: min(18rem, 70vw, 36vh);
+  aspect-ratio: 1;
   border-radius: 50%;
   /* Grooves. Concentric rings a couple of pixels apart read as vinyl at any
      size without needing an image. */
@@ -184,12 +204,17 @@ h1 {
     transparent 56%);
 }
 
+/* A percentage of the record, so it scales with it. The mark lives inside,
+   which is what makes the word turn with the label instead of hanging still
+   over a spinning disc. */
 .vinyl-label {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 6rem;
-  height: 6rem;
+  width: 46%;
+  height: 46%;
+  display: grid;
+  place-items: center;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   /* Grey until the song has been heard. The label lighting up is the signal
@@ -211,18 +236,17 @@ h1 {
 }
 
 /* Before the song has played this is a question mark; once it has, the same
-   spot becomes the word to tap. */
+   spot becomes the word to tap. Either way it is printed on the label and turns
+   with it. */
 .card-mark {
-  position: relative;
-  z-index: 1;
-  font-size: 3.5rem;
+  font-size: 3.25rem;
   font-weight: 700;
   line-height: 1;
   color: var(--muted);
 }
 
 .card.revealable .card-mark {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #06210f;
@@ -326,54 +350,160 @@ h1 {
   color: var(--muted);
 }
 
-.chips {
+/* The level control, as a vintage amplifier's volume knob. It is not decoration
+   for its own sake: the setting really is a volume - how much of the catalogue
+   is being let through - and Encyclopaedic really is wide open. Three stops
+   across a 270-degree sweep, the way an amp is laid out. */
+.knob-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.knob-dial {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 9.5rem;
+  height: 9.5rem;
+}
+
+/* Ticks on the bezel, so the sweep is legible while the knob is mid-turn.
+   transform-origin is half the dial, which puts the pivot at its centre. */
+.knob-tick {
+  position: absolute;
+  top: 0.25rem;
+  left: 50%;
+  width: 2px;
+  height: 0.6rem;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: #4a5163;
+  transform-origin: 50% 4.5rem;
+  transform: rotate(var(--angle));
+}
+
+.knob {
+  position: relative;
+  width: 6.75rem;
+  height: 6.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: grab;
+  /* The one control on this page that wants the whole gesture: it is turned,
+     not scrolled past. Small enough that the page is still scrollable around it. */
+  touch-action: none;
+  /* Knurling. A repeating conic gradient gives the milled edge of a metal knob
+     without an image, and it turns with the control so the rotation reads. */
+  background: repeating-conic-gradient(from 0deg, #454b5c 0 3deg, #2b303c 3deg 6deg);
+  box-shadow:
+    0 0.4rem 1rem rgb(0 0 0 / 0.55),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  transform: rotate(var(--angle, 0deg));
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* The brushed cap, inset from the knurled edge. */
+.knob::before {
+  content: '';
+  position: absolute;
+  inset: 0.55rem;
+  border-radius: 50%;
+  background: linear-gradient(155deg, #3f4557 0%, #262a34 55%, #313746 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.10),
+    inset 0 -1px 0 rgb(0 0 0 / 0.35);
+}
+
+.knob:active {
+  cursor: grabbing;
+}
+
+/* Eased on a click, immediate under a finger. */
+.knob.turning {
+  transition: none;
+}
+
+.knob:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* The indicator, in amber rather than the app's green: this is the one piece
+   of the interface pretending to be hardware, and amber is what the hardware
+   used. */
+.knob-pointer {
+  position: absolute;
+  top: 0.85rem;
+  left: 50%;
+  width: 3px;
+  height: 1.4rem;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #e0a92b;
+  box-shadow: 0 0 0.55rem rgb(224 169 43 / 0.65);
+}
+
+.knob-scale {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
 }
 
-.chip {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.125rem;
-  min-height: 3rem;
-  padding: 0.625rem 1rem;
+.knob-stop {
+  padding: 0.45rem 0.8rem;
   border: 1px solid #2c3242;
-  border-radius: 0.75rem;
+  border-radius: 0.625rem;
   background: var(--surface);
-  color: var(--text);
+  color: var(--muted);
   font: inherit;
-  font-size: 1rem;
-  text-align: left;
+  font-size: 0.875rem;
   cursor: pointer;
   touch-action: manipulation;
 }
 
-.chip[aria-pressed="true"] {
+.knob-stop[aria-pressed="true"] {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+  color: var(--text);
 }
 
-.chip:active {
+.knob-stop:active {
   filter: brightness(1.15);
 }
 
-.chip-hint {
-  font-size: 0.8125rem;
+.knob-hint {
+  margin: 0;
+  font-size: 0.875rem;
   color: var(--muted);
 }
 
 /* Set once before a game rather than reached for mid-round, so a slider is
-   acceptable here where it would not be on the table. */
+   acceptable here where it would not be on the table.
+
+   Seventeen faders on one scrolling page means the ordinary slider behaviour -
+   jump to wherever the track is touched - turns every scroll into an accidental
+   edit. Two things stop that. `pan-y` hands vertical drags back to the page, so
+   scrolling past a fader scrolls; and thumbOnly() in app.js refuses any press
+   that did not land on the thumb, so a tap on the track does nothing at all.
+
+   In px, not rem: thumbOnly reads this with getComputedStyle, which does not
+   resolve rem for custom properties. */
 .slider {
+  /* Larger than it was, because it is now the only part that responds and a
+     miss does nothing at all rather than setting a rough value. */
+  --thumb: 36px;
+
   width: 100%;
   height: 2.5rem;
   margin: 0;
   background: transparent;
   -webkit-appearance: none;
   appearance: none;
-  touch-action: manipulation;
+  touch-action: pan-y;
 }
 
 .slider::-webkit-slider-runnable-track {
@@ -388,25 +518,34 @@ h1 {
   background: linear-gradient(90deg, #2c3242, var(--accent));
 }
 
+/* The thumb is the only part that responds now, so it is given a ring to make
+   it look like the thing to grab rather than a dot on a line. */
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 2rem;
-  height: 2rem;
-  margin-top: -0.75rem;
+  width: var(--thumb);
+  height: var(--thumb);
+  /* Centred on the track, derived rather than hard-coded so changing --thumb
+     alone keeps it aligned. */
+  margin-top: calc((0.5rem - var(--thumb)) / 2);
   border: 0;
   border-radius: 50%;
   background: var(--text);
-  cursor: pointer;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.45);
+  cursor: grab;
 }
 
 .slider::-moz-range-thumb {
-  width: 2rem;
-  height: 2rem;
+  width: var(--thumb);
+  height: var(--thumb);
   border: 0;
   border-radius: 50%;
   background: var(--text);
-  cursor: pointer;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.45);
+  cursor: grab;
 }
+
+.slider:active::-webkit-slider-thumb { cursor: grabbing; }
+.slider:active::-moz-range-thumb { cursor: grabbing; }
 
 /* The mixers, genre and decade alike. Label and value on one line, fader
    beneath, so nine of them stack without becoming a wall of text. */
@@ -441,7 +580,8 @@ h1 {
 
 .mixer-row .slider {
   grid-column: 1 / -1;
-  height: 2rem;
+  /* Tall enough for the thumb, which now has to be caught rather than tapped past. */
+  height: 2.25rem;
 }
 
 .slider-ends {
