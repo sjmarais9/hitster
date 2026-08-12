@@ -355,33 +355,42 @@ h1 {
    is being let through - and Encyclopaedic really is wide open. Three stops
    across a 270-degree sweep, the way an amp is laid out. */
 .knob-control {
+  /* Two radii, so the ticks and the labels stay on their own rings however the
+     rest is adjusted. */
+  --ring: 4.4rem;
+  --label-ring: 5.7rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.875rem;
 }
 
+/* Wider than it is tall: the outer two labels sit low and to the sides, which
+   is where the width is needed. */
 .knob-dial {
   position: relative;
   display: grid;
   place-items: center;
-  width: 9.5rem;
-  height: 9.5rem;
+  width: min(15.5rem, 100%);
+  height: 14rem;
 }
 
-/* Ticks on the bezel, so the sweep is legible while the knob is mid-turn.
-   transform-origin is half the dial, which puts the pivot at its centre. */
+/* Ticks and labels are placed the same way: rotate about the centre, push out
+   along the new axis. Labels then counter-rotate so the text stays upright
+   while its position follows the sweep. */
 .knob-tick {
   position: absolute;
-  top: 0.25rem;
   left: 50%;
+  top: 50%;
   width: 2px;
-  height: 0.6rem;
-  margin-left: -1px;
+  height: 0.65rem;
   border-radius: 1px;
   background: #4a5163;
-  transform-origin: 50% 4.5rem;
-  transform: rotate(var(--angle));
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--angle))
+    translateY(calc(-1 * var(--ring)));
 }
 
 .knob {
@@ -446,23 +455,25 @@ h1 {
   box-shadow: 0 0 0.55rem rgb(224 169 43 / 0.65);
 }
 
-.knob-scale {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
 .knob-stop {
-  padding: 0.45rem 0.8rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  padding: 0.35rem 0.65rem;
   border: 1px solid #2c3242;
   border-radius: 0.625rem;
   background: var(--surface);
   color: var(--muted);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--angle))
+    translateY(calc(-1 * var(--label-ring)))
+    rotate(calc(-1 * var(--angle)));
 }
 
 .knob-stop[aria-pressed="true"] {
@@ -486,12 +497,26 @@ h1 {
 
    Seventeen faders on one scrolling page means the ordinary slider behaviour -
    jump to wherever the track is touched - turns every scroll into an accidental
-   edit. Two things stop that. `pan-y` hands vertical drags back to the page, so
-   scrolling past a fader scrolls; and thumbOnly() in app.js refuses any press
-   that did not land on the thumb, so a tap on the track does nothing at all.
+   edit.
 
-   In px, not rem: thumbOnly reads this with getComputedStyle, which does not
-   resolve rem for custom properties. */
+   `pointer-events: none` is doing the real work: the input's own pointer
+   handling is switched off entirely, and thumbOnly() in app.js drives the value
+   from the shell instead. Trying to intercept the input's own events was not
+   enough - a range input sets its value internally, below where preventDefault
+   reaches. `pan-y` on the shell hands vertical drags back to the page so
+   scrolling past a fader scrolls.
+
+   --thumb is in px, not rem: thumbOnly reads it with getComputedStyle, which
+   does not resolve rem for custom properties. */
+.slider-shell {
+  display: block;
+  touch-action: pan-y;
+}
+
+.mixer-row .slider-shell {
+  grid-column: 1 / -1;
+}
+
 .slider {
   /* Larger than it was, because it is now the only part that responds and a
      miss does nothing at all rather than setting a rough value. */
@@ -503,7 +528,7 @@ h1 {
   background: transparent;
   -webkit-appearance: none;
   appearance: none;
-  touch-action: pan-y;
+  pointer-events: none;
 }
 
 .slider::-webkit-slider-runnable-track {
@@ -579,7 +604,6 @@ h1 {
 }
 
 .mixer-row .slider {
-  grid-column: 1 / -1;
   /* Tall enough for the thumb, which now has to be caught rather than tapped past. */
   height: 2.25rem;
 }

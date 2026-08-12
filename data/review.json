@@ -1,53 +1,12 @@
 {
   "meta": {
-    "count": 2,
+    "count": 3,
     "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
   },
+  "year_suspects": [],
   "songs": [
-    {
-      "artist": "The Jimi Hendrix Experience",
-      "title": "Purple Haze",
-      "year": 1967,
-      "problem": "partial match (title exact, artist loose)",
-      "candidates": [
-        {
-          "uri": "spotify:track:0wJoRiX5K5BxlqZTolB2LD",
-          "title": "Purple Haze",
-          "artists": [
-            "Jimi Hendrix"
-          ],
-          "album": "Are You Experienced",
-          "spotify_release_year": 1967,
-          "verdict": "probable"
-        }
-      ]
-    },
-    {
-      "artist": "Just Jinjer",
-      "title": "Sugar Man",
-      "year": 1997,
-      "problem": "title and artist do not match",
-      "candidates": [
-        {
-          "uri": "spotify:track:4MqxuYaCIuA1BFwsSInr0A",
-          "title": "Sugarman",
-          "artists": [
-            "Just Jinger"
-          ],
-          "album": "Greatest Hits",
-          "spotify_release_year": 2001,
-          "verdict": "reject"
-        }
-      ]
-    }
-  ],
-  "year_suspects": [
-    {
-      "artist": "Black Coffee",
-      "title": "Superman",
-      "our_year": 2011,
-      "spotify_earliest_year": 2009,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    }
+    { "artist": "Elvis Costello", "title": "Pump It Up", "year": 1978, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:3oyc1mIdCBGaU55wX7otqM","title":"Pump It Up - 2021 Remaster","artists":["Elvis Costello & The Attractions"],"album":"This Year's Model (2021 Remaster)","spotify_release_year":1978,"verdict":"probable"}] },
+    { "artist": "Ian Dury and The Blockheads", "title": "Hit Me with Your Rhythm Stick", "year": 1978, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:2gzbLcxWkBUvxoQU50VsjT","title":"Hit Me with Your Rhythm Stick - Live","artists":["Ian Dury","The Blockheads"],"album":"Live! Warts 'N' Audience…Plus!","spotify_release_year":1991,"verdict":"probable"}] },
+    { "artist": "Stimela", "title": "Whispers in the Deep", "year": 1986, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:2l6oKzoQV4RFrZmuQw2Hc1","title":"Phinda Mzala (Whispers in the Deep)","artists":["Stimela"],"album":"Look, Listen and Decide","spotify_release_year":1986,"verdict":"reject"}] }
   ]
 }

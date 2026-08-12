@@ -170,16 +170,18 @@ function buildKnob() {
   knob.append(pointer);
   dial.append(knob);
 
-  const scale = document.createElement('div');
-  scale.className = 'knob-scale';
+  // Each label sits at the angle its setting turns the knob to, the way the
+  // scale is printed around an amplifier's dial. CSS does the geometry from
+  // --angle; nothing here needs to know where they land.
   const stops = keys.map((key, i) => {
     const stop = document.createElement('button');
     stop.type = 'button';
     stop.className = 'knob-stop';
+    stop.style.setProperty('--angle', `${angleOf(i)}deg`);
     stop.textContent = filters.LEVELS[key].label;
     // Clicking a label is the primary way in. The knob turns to follow.
     stop.addEventListener('click', () => select(i));
-    scale.append(stop);
+    dial.append(stop);
     return stop;
   });
 
@@ -256,7 +258,7 @@ function buildKnob() {
   });
 
   paint();
-  el('level-knob').replaceChildren(dial, scale, hint);
+  el('level-knob').replaceChildren(dial, hint);
 }
 
 function buildChips() {
@@ -274,28 +276,83 @@ function buildChips() {
  * Makes a range input respond only to its thumb.
  *
  * A native slider jumps to wherever the track is touched, which on a page of
- * seventeen faders means scrolling past them nudges them. Refusing any press
- * that did not land on the thumb makes the page scrollable again without
- * shrinking the thumb's own target, and CSS pairs this with `touch-action:
- * pan-y` so a vertical drag starting on a fader scrolls rather than sets.
+ * seventeen faders means scrolling past them edits them.
+ *
+ * The first attempt at this called preventDefault() on pointerdown and did not
+ * work: the range input sets its value from its own internal handling, which
+ * that does not reach. So the native pointer behaviour is switched off outright
+ * — `pointer-events: none` in CSS — and replaced. A wrapper takes the pointer
+ * events, decides whether the press landed on the thumb, and if it did, drives
+ * `value` and fires `input` itself.
+ *
+ * The element stays a real `<input type="range">`, so it keeps its keyboard
+ * behaviour, its focus ring and its ARIA for nothing.
  */
 function thumbOnly(input) {
-  input.addEventListener('pointerdown', (event) => {
+  const shell = document.createElement('span');
+  shell.className = 'slider-shell';
+  input.replaceWith(shell);
+  shell.append(input);
+
+  const geometry = () => {
     const box = input.getBoundingClientRect();
     // Read the thumb width from CSS rather than repeating it here, so the two
-    // cannot drift apart.
-    const thumb = parseFloat(getComputedStyle(input).getPropertyValue('--thumb')) || 32;
-
+    // cannot drift apart. In px, because getComputedStyle does not resolve rem
+    // for custom properties.
+    const thumb = parseFloat(getComputedStyle(input).getPropertyValue('--thumb')) || 36;
     const min = Number(input.min) || 0;
-    const max = Number(input.max) || 100;
-    const travel = box.width - thumb;
+    const max = Number(input.max) || 0;
+    return { box, thumb, min, max, travel: box.width - thumb };
+  };
+
+  /** Is this press on the thumb, rather than somewhere along the track? */
+  function onThumb(clientX) {
+    const { box, thumb, min, max, travel } = geometry();
     const position = max === min ? 0 : (Number(input.value) - min) / (max - min);
     const centre = box.left + thumb / 2 + position * travel;
-
-    // Half the thumb, plus a little, because fingers are not precise and the
+    // Half the thumb plus a little, because fingers are not precise and the
     // alternative is a control that feels broken.
-    if (Math.abs(event.clientX - centre) > thumb / 2 + 6) event.preventDefault();
+    return Math.abs(clientX - centre) <= thumb / 2 + 6;
+  }
+
+  function valueAt(clientX) {
+    const { box, thumb, min, max, travel } = geometry();
+    const fraction = travel <= 0 ? 0 : (clientX - box.left - thumb / 2) / travel;
+    const raw = min + Math.max(0, Math.min(1, fraction)) * (max - min);
+    const step = Number(input.step) || 1;
+    // Rounded to the step, then to a sane number of decimals: 0.30000000000004
+    // would be a real value that never equals the 0.3 anything else compares to.
+    return Number((Math.round(raw / step) * step).toFixed(4));
+  }
+
+  function set(value) {
+    if (Number(input.value) === value) return;
+    input.value = String(value);
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  let dragging = false;
+
+  shell.addEventListener('pointerdown', (event) => {
+    if (!onThumb(event.clientX)) return;   // a tap on the track does nothing
+    dragging = true;
+    shell.setPointerCapture(event.pointerId);
+    event.preventDefault();
   });
+
+  shell.addEventListener('pointermove', (event) => {
+    if (!dragging) return;
+    event.preventDefault();
+    set(valueAt(event.clientX));
+  });
+
+  const stop = (event) => {
+    if (!dragging) return;
+    dragging = false;
+    try { shell.releasePointerCapture(event.pointerId); } catch { /* already gone */ }
+  };
+  shell.addEventListener('pointerup', stop);
+  shell.addEventListener('pointercancel', stop);
 }
 
 /**
@@ -327,17 +384,20 @@ function fader({ id, label, level, onInput }) {
   input.value = String(level);
 
   input.addEventListener('input', () => onInput(Number(input.value)));
+
+  // Appended first: thumbOnly wraps the input in place, which needs a parent.
+  row.append(name, value, input);
   thumbOnly(input);
 
-  row.append(name, value, input);
   return { row, value };
 }
 
-/** Where each decade's live share readout is written. */
-let shareLabels = new Map();
+/** Where each live share readout is written, per mixer. */
+let decadeLabels = new Map();
+let genreLabels = new Map();
 
 function buildDecadeMixer() {
-  shareLabels = new Map();
+  decadeLabels = new Map();
 
   el('decade-mixer').replaceChildren(...filters.DECADES.map((decade) => {
     const { row, value } = fader({
@@ -352,12 +412,14 @@ function buildDecadeMixer() {
         refreshDeck();
       },
     });
-    shareLabels.set(decade, value);
+    decadeLabels.set(decade, value);
     return row;
   }));
 }
 
 function buildGenreMixer() {
+  genreLabels = new Map();
+
   el('genre-mixer').replaceChildren(...Object.entries(filters.GENRE_FAMILIES).map(([key, family]) => {
     const { row, value } = fader({
       id: key,
@@ -365,43 +427,42 @@ function buildGenreMixer() {
       level: chosen.genreLevels?.[key] ?? 1,
       onInput: (level) => {
         chosen.genreLevels = { ...chosen.genreLevels, [key]: level };
-        render();
         filters.save(chosen);
         // No refreshDeck: a muted genre stays in the deck, weighted to nothing,
         // so the mixer can be moved mid-session without the unplayed set
-        // shifting under the player. But it does move the decades.
+        // shifting under the player.
         renderShares();
       },
     });
 
-    const render = () => {
-      const v = chosen.genreLevels?.[key] ?? 1;
-      value.textContent = v === 0 ? 'Off' : v === 1 ? '—' : `${v.toFixed(1)}×`;
-      value.classList.toggle('is-off', v === 0);
-    };
-    render();
-
+    genreLabels.set(key, value);
     return row;
   }));
 }
 
 /**
- * The live mix readout.
+ * The live mix readout, for both mixers.
  *
  * A fader position is a multiplier, and "1.4×" does not answer the question
  * being asked, which is whether the nineties are back up to a quarter of the
- * night. Showing the resulting share instead turns guesswork into aiming - and
- * it has to be recomputed when the genre mixer moves too, because weighting up
- * rock drags the decades along with it.
+ * night. The resulting share does, and it turns guesswork into aiming.
+ *
+ * Both are recomputed together on every change, because the two mixers are not
+ * independent of each other or of the crowd slider: rock is not spread evenly
+ * across the decades, so weighting it up moves the eras, and weighting up the
+ * 1990s moves the genres straight back.
  */
 function renderShares() {
-  const shares = projectedShares(deck, chosen, (song) => song.decade);
+  const paint = (labels, shares, levels) => {
+    for (const [key, node] of labels) {
+      const off = (levels?.[key] ?? 1) <= 0;
+      node.textContent = off ? 'Off' : `${Math.round((shares[key] ?? 0) * 100)}%`;
+      node.classList.toggle('is-off', off);
+    }
+  };
 
-  for (const [decade, node] of shareLabels) {
-    const off = (chosen.decadeLevels?.[decade] ?? 1) <= 0;
-    node.textContent = off ? 'Off' : `${Math.round((shares[decade] ?? 0) * 100)}%`;
-    node.classList.toggle('is-off', off);
-  }
+  paint(decadeLabels, projectedShares(deck, chosen, (song) => song.decade), chosen.decadeLevels);
+  paint(genreLabels, projectedShares(deck, chosen, filters.familyOf), chosen.genreLevels);
 }
 
 /** Puts the next card on the table, face down and silent. */
