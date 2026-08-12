@@ -118,6 +118,25 @@ for (const s of all) {
 
 // --- write -------------------------------------------------------------------
 
+/**
+ * One song per line, which is how these files are written by hand and the only
+ * way their diffs stay reviewable. A plain JSON.stringify with indentation
+ * turns each song into twenty lines and every edit into thousands.
+ */
+function serialise(doc) {
+  const { songs, ...rest } = doc;
+  const head = JSON.stringify(rest, null, 2).replace(/^\{\n/, '').replace(/\n\}$/, '');
+  // Built field by field rather than by string-replacing a compact dump: a
+  // title containing a comma or a colon would corrupt the latter.
+  const lines = (songs ?? []).map((s) => {
+    const fields = Object.entries(s)
+      .map(([k, v]) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`)
+      .join(', ');
+    return `    { ${fields} }`;
+  }).join(',\n');
+  return `{\n${head},\n  "songs": [\n${lines}\n  ]\n}\n`;
+}
+
 let changed = 0;
 for (const { file, doc } of docs) {
   doc.songs = (doc.songs ?? []).map((song) => {
@@ -128,7 +147,7 @@ for (const { file, doc } of docs) {
   });
 
   if (!dryRun) {
-    await writeFile(path.resolve(ROOT, file), JSON.stringify(doc, null, 2) + '\n', 'utf8');
+    await writeFile(path.resolve(ROOT, file), serialise(doc), 'utf8');
   }
 }
 
