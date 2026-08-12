@@ -39,12 +39,31 @@ export function scoreOf(song) {
 }
 
 // The exponent applied to the score. Higher means a sharper preference for
-// well-known songs. This is the whole of what the three UI levels do, and it is
-// the main dial for tuning how a night plays without touching any song data.
+// well-known songs. This is the whole of what the UI levels do, and it is the
+// main dial for tuning how a night plays without touching any song data.
+//
+// Four rather than three, because the old spacing was not even. Measured across
+// the pool, as the share of the draw that is tagged `deep`:
+//
+//   k=4  Casual          0.6%    one deep cut every 170 cards
+//   k=2  Confident       5.3%    one every 19
+//   k=1  Devoted        14.9%    one every 7
+//   k=0  Encyclopaedic  35.4%    one in three
+//
+// Casual to Confident is the difference between two kinds of rare, which nobody
+// at a table would feel. Confident to Encyclopaedic was a sevenfold jump - the
+// point where a night changes character - and k=1 is the rung that was missing
+// from it.
+//
+// Declaration order is the order they appear on the knob, quietest first. A
+// test holds them to descending k, so the control cannot end up wired backwards.
 export const LEVELS = {
   casual: { label: 'Casual', hint: 'Mostly songs everyone knows', k: 4 },
   confident: { label: 'Confident', hint: 'A fair spread', k: 2 },
-  everything: { label: 'Encyclopaedic', hint: 'Deep cuts included', k: 0 },
+  devoted: { label: 'Devoted', hint: 'Album tracks, not just singles', k: 1 },
+  // Not "deep cuts included" - at k=0 nothing is favoured over anything at all,
+  // which is a stronger and stranger claim, and the label should make it.
+  everything: { label: 'Encyclopaedic', hint: 'Every song equally likely', k: 0 },
 };
 
 // --- skew --------------------------------------------------------------------

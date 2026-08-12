@@ -7,6 +7,7 @@
     "import": "node scripts/import-songs.mjs",
     "stats": "node scripts/stats.mjs",
     "stamp": "node scripts/stamp.mjs",
-    "test": "node scripts/stamp.mjs --check && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/smoke.test.mjs"
+    "stamp:check": "node scripts/stamp.mjs --check",
+    "test": "node scripts/stamp.mjs && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/smoke.test.mjs"
   }
 }

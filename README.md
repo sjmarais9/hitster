@@ -79,7 +79,7 @@ Four dimensions multiply together:
 
 | Control | What it does | Can it exclude? |
 |---|---|---|
-| **Familiarity** — three buttons | Sharpens or flattens the preference for well-known songs | Never, at any level |
+| **Familiarity** — a knob, four settings | Sharpens or flattens the preference for well-known songs | Never, at any level |
 | **Crowd** — a slider, adults to kids | Sets the resulting mix, not just a preference | Only at the exact ends, where the label says so |
 | **Genre** — a mixer, one fader each | Raises or lowers a genre family | Only at `Off`, which is labelled |
 | **Decade** — a mixer, one fader each | Raises or lowers an era | Only at `Off`, which is labelled |
@@ -102,13 +102,15 @@ Worth being precise, because "weighted, not filtered" is easy to state and easy
 to quietly break.
 
 **No familiarity level ever excludes a song, and Encyclopaedic does not even
-disfavour one.** The level sets an exponent `k` applied to each song's score:
+disfavour one.** The level sets an exponent `k` applied to each song's score.
+The right-hand column is what it actually costs, measured across the pool:
 
-| Level | `k` | Weakest song | Strongest | Ratio |
-|---|---|---|---|---|
-| **Encyclopaedic** | 0 | 1 | 1 | **1:1** — perfectly flat |
-| Confident | 2 | 2.56 | 100 | 39:1 |
-| Casual | 4 | 6.55 | 10,000 | ~1,500:1 |
+| Level | `k` | Ratio, best song to worst | Share of the draw tagged `deep` |
+|---|---|---|---|
+| Casual | 4 | ~1,500:1 | 0.6% — one every 170 cards |
+| Confident | 2 | 39:1 | 5.3% — one every 19 |
+| Devoted | 1 | 6:1 | 14.9% — one every 7 |
+| **Encyclopaedic** | 0 | **1:1** — perfectly flat | 35.4% — one in three |
 
 At Encyclopaedic every song's familiarity weight is `scoreOf ** 0`, which is 1
 however obscure it is, so the draw is shaped only by the crowd slider and the
@@ -116,6 +118,13 @@ two mixers. At Casual the most obscure possible song is about 1,500 times less
 likely than a perfect standard — you would probably never see it in a night, but
 the weight stays positive, which is the whole point. The tags are wrong often
 enough that a mis-tagged song must not vanish from every game forever.
+
+**Devoted was added because the original three were not evenly spaced.** Casual
+to Confident moved deep cuts from 0.6% to 5.3% — the difference between two
+kinds of rare, which nobody at a table would feel. Confident to Encyclopaedic
+was a sevenfold jump, and that is where a night changes character. `k=1` is the
+rung that was missing from it. A test holds every neighbouring pair to at least
+a doubling, so a fifth level cannot be added without earning its place.
 
 The **crowd slider** zeroes the opposite side only at *exactly* 0 or 1. Its step
 is 0.05 and the label reads "Adults only" from 0.05 down, so one notch off the

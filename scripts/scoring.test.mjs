@@ -265,3 +265,40 @@ test('every level is usable', () => {
     assert.ok(w.every((x) => x >= 0 && Number.isFinite(x)), `${level} produced a bad weight`);
   }
 });
+
+test('the levels are declared quietest first', () => {
+  // The knob lays them out in declaration order, left to right, so a level
+  // inserted in the wrong place would wire the control backwards without
+  // breaking anything that would show up as an error.
+  const ks = Object.values(LEVELS).map((l) => l.k);
+  for (let i = 1; i < ks.length; i++) {
+    assert.ok(ks[i] < ks[i - 1], `k must fall along the sweep, got ${ks.join(' -> ')}`);
+  }
+  assert.equal(ks.at(-1), 0, 'the loudest setting must be perfectly flat');
+});
+
+test('each level is a step someone would feel', () => {
+  // Four levels are only worth four stops if each one changes the night. The
+  // old three did not: Casual to Confident moved deep cuts from 0.6% to 5.3%,
+  // two kinds of rare, while Confident to Encyclopaedic was a sevenfold jump.
+  // This holds every neighbouring pair to at least a doubling.
+  const deck = [
+    ...Array.from({ length: 25 }, (_, i) => song({ title: `std${i}`, familiarity: 'standard', canonicity: 90 })),
+    ...Array.from({ length: 40 }, (_, i) => song({ title: `fam${i}`, familiarity: 'familiar', canonicity: 50 })),
+    ...Array.from({ length: 35 }, (_, i) => song({ title: `deep${i}`, familiarity: 'deep', canonicity: 10 })),
+  ];
+
+  const deepShare = (level) => {
+    const w = weightsFor(deck, { level, crowd: 0.5 });
+    const total = w.reduce((a, b) => a + b, 0);
+    return deck.reduce((acc, s, i) => acc + (s.familiarity === 'deep' ? w[i] / total : 0), 0);
+  };
+
+  const keys = Object.keys(LEVELS);
+  for (let i = 1; i < keys.length; i++) {
+    const previous = deepShare(keys[i - 1]);
+    const current = deepShare(keys[i]);
+    assert.ok(current > previous * 2,
+      `${keys[i - 1]} -> ${keys[i]} barely moves: ${(previous * 100).toFixed(1)}% to ${(current * 100).toFixed(1)}%`);
+  }
+});

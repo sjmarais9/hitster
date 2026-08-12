@@ -13,7 +13,7 @@ were will lead you wrong.
 
 **They are weights, not filters.** Familiarity and skew no longer decide whether
 a song can be drawn. They shape how likely it is. A song tagged `deep` still
-appears in a casual game, roughly 350 times less often than the best card but
+appears in a casual game, roughly 1,500 times less often than the best card but
 never zero. That changes the cost of a mistake enormously: a mis-tag used to
 make a song invisible, and now only makes it rarer.
 

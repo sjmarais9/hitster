@@ -357,8 +357,8 @@ h1 {
 .knob-control {
   /* Two radii, so the ticks and the labels stay on their own rings however the
      rest is adjusted. */
-  --ring: 4.4rem;
-  --label-ring: 5.7rem;
+  --ring: 4.3rem;
+  --label-ring: 6rem;
 
   display: flex;
   flex-direction: column;
@@ -366,14 +366,15 @@ h1 {
   gap: 0.875rem;
 }
 
-/* Wider than it is tall: the outer two labels sit low and to the sides, which
-   is where the width is needed. */
+/* Wider than it is tall: with four stops the labels sit at the corners, two up
+   and two down, so it is width that runs out first. Nothing at top centre any
+   more, which is why this is shorter than it was with three. */
 .knob-dial {
   position: relative;
   display: grid;
   place-items: center;
-  width: min(15.5rem, 100%);
-  height: 14rem;
+  width: min(16rem, 100%);
+  height: 12.5rem;
 }
 
 /* Ticks and labels are placed the same way: rotate about the centre, push out
@@ -395,8 +396,8 @@ h1 {
 
 .knob {
   position: relative;
-  width: 6.75rem;
-  height: 6.75rem;
+  width: 6.25rem;
+  height: 6.25rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -455,25 +456,39 @@ h1 {
   box-shadow: 0 0 0.55rem rgb(224 169 43 / 0.65);
 }
 
+/* Printed on the panel rather than boxed. Chips looked like buttons that had
+   escaped a form; a scale round a dial is lettering. It also buys the width
+   that "Encyclopaedic" needs to clear the knob at the bottom right. */
 .knob-stop {
   position: absolute;
   left: 50%;
   top: 50%;
-  padding: 0.35rem 0.65rem;
-  border: 1px solid #2c3242;
-  border-radius: 0.625rem;
-  background: var(--surface);
+  padding: 0.25rem 0.35rem;
+  border: 0;
+  background: none;
   color: var(--muted);
   font: inherit;
   font-size: 0.8125rem;
+  letter-spacing: 0.01em;
   white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
+  transition: color 0.2s ease;
   transform:
     translate(-50%, -50%)
     rotate(var(--angle))
     translateY(calc(-1 * var(--label-ring)))
     rotate(calc(-1 * var(--angle)));
+}
+
+/* Lit in the same amber as the pointer, so the eye pairs the two. */
+.knob-stop[aria-pressed="true"] {
+  color: #e0a92b;
+  font-weight: 600;
+}
+
+.knob-stop:active {
+  color: var(--text);
 }
 
 .knob-stop[aria-pressed="true"] {
