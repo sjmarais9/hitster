@@ -33,6 +33,7 @@ const TARGETS = [
   'data/batch-003.seed.json',
   'data/batch-004.seed.json',
   'data/batch-005.seed.json',
+  'data/batch-006.seed.json',
 ];
 
 const readJson = async (file, fallback) => {
