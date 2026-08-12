@@ -29,8 +29,16 @@ const TARGETS = {
   saShare: 5,
 };
 
-const SA_ARTISTS = ['Johnny Clegg', 'Mango Groove', 'Springbok Nude Girls', 'Just Jinger',
-  'Freshlyground', 'Black Coffee', 'Prime Circle', 'Seether', 'Tyla', 'Mandoza', 'Master KG'];
+// Maintained by hand, because "is this artist South African" is not derivable
+// from anything in the schema. Add to it as batches introduce new ones.
+const SA_ARTISTS = [
+  'Johnny Clegg', 'Mango Groove', 'Springbok Nude Girls', 'Just Jinger', 'Freshlyground',
+  'Black Coffee', 'Prime Circle', 'Seether', 'Tyla', 'Mandoza', 'Master KG',
+  'Brenda Fassie', 'Yvonne Chaka Chaka', 'Ladysmith Black Mambazo', 'Lucky Dube',
+  'Boom Shaka', 'TKZee', 'Bongo Maffin', 'Sho Madjozi', 'Nasty C', 'Miriam Makeba',
+  'Juluka', 'Stimela', 'Mdu', 'Zola', 'Mafikizolo', 'Cassper Nyovest', 'Kabza De Small',
+  'Uncle Waffles', 'Vusi Mahlasela', 'Rodriguez',
+];
 const ROCK = /rock|punk|metal|grunge|britpop|indie|new wave|post-punk/i;
 
 const file = process.argv[2] ?? 'data/songs.json';
@@ -39,6 +47,10 @@ const songs = doc.songs ?? [];
 
 const flags = [];
 const flag = (kind, song, why) => flags.push({ kind, line: `${song.artist} - ${song.title} (${song.year})`, why });
+
+// A seed batch has null URIs by design; only the pool is expected to have them.
+// Without this the checker reports every song in a fresh batch as broken.
+const isSeed = songs.every((song) => song.spotify_uri === null);
 
 // --- integrity ---------------------------------------------------------------
 
@@ -49,7 +61,7 @@ for (const song of songs) {
   if (!song.familiarity || !song.skew) {
     flag('integrity', song, 'missing familiarity or skew');
   }
-  if (!song.spotify_uri) {
+  if (!isSeed && !song.spotify_uri) {
     flag('integrity', song, 'in the pool without a URI - should not be playable');
   }
 }
