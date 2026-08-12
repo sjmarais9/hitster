@@ -22,3 +22,6 @@ data/year-audit.json
 
 # Records when the Spotify quota lockout expires
 .import-lockout.json
+
+# Candidates already tried and failed, regenerable but slow
+data/generation-rejects.json

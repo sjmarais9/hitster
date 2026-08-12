@@ -22,7 +22,7 @@
 // Resumable: already-processed candidates are skipped and the batch is written
 // every 25 songs.
 
-import { readFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { normalise } from './lib/match.mjs';
@@ -30,6 +30,26 @@ import { writeSongs, readSongs } from './lib/songs-file.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'data', 'batch-006.seed.json');
+
+// Candidates that have already been tried and failed, and why.
+//
+// Without this, every pass re-asks MusicBrainz about everything that failed
+// before. The rock top-up spent forty-five minutes re-confirming roughly 2,350
+// known failures because accepted songs were remembered and rejected ones were
+// not.
+//
+// The reason matters, because not all rejections are permanent:
+//
+//   noEra        the index has no clear era for it. Permanent until the
+//                playlist harvest is extended.
+//   decadeClash  two sources disagreed about when it came out. Permanent while
+//                the sources are the same - retrying gets the same answer.
+//   noYear       nobody could date it. Worth retrying when a NEW year source
+//                exists, which is exactly why the Deezer fallback was added.
+//
+// So a plain re-run skips everything cached, and `--retry noYear` reopens the
+// only category a new source can help with.
+const REJECTS = path.join(ROOT, 'data', 'generation-rejects.json');
 
 const UA = 'HitsterPool/1.0 (sjmarais@inrangegolf.com)';
 const PAUSE_MS = 1100;            // MusicBrainz asks for one request per second
@@ -90,6 +110,12 @@ const ERA = (() => {
 })();
 
 const RECENT = new Set(['2000s', '2010s', '2020s']);
+
+// Reasons to try again despite a cached rejection, e.g. `--retry noYear`.
+const RETRY = (() => {
+  const i = args.indexOf('--retry');
+  return new Set(i === -1 ? [] : args[i + 1].split(','));
+})();
 
 /**
  * Deezer's release date, used only as a fallback and only for recent songs.
@@ -208,13 +234,29 @@ async function main() {
   const produced = existing.songs ?? [];
   for (const s of produced) known.add(`${normalise(s.artist)}|${normalise(s.title)}`);
 
+  // And whatever previous runs already ruled out.
+  let rejects = {};
+  try {
+    rejects = JSON.parse(await readFile(REJECTS, 'utf8')).rejected ?? {};
+  } catch {
+    // No cache yet; this run builds one.
+  }
+  const cachedSkips = Object.entries(rejects)
+    .filter(([, r]) => !RETRY.has(r.reason)).length;
+  if (cachedSkips) {
+    console.log(`${cachedSkips} candidates already ruled out, skipping`
+      + (RETRY.size ? ` (retrying: ${[...RETRY].join(', ')})` : ''));
+  }
+
   const candidates = Object.entries(index)
     .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(e.title) && !known.has(key)
       && leansToward(e, GENRE)
       // A recovery pass only wants the songs Deezer can actually date. Without
       // this it would re-ask MusicBrainz about 9,516 candidates to reach the
       // 3,133 worth asking Deezer about.
-      && (ERA !== 'recent' || RECENT.has(crowdDecade(e))))
+      && (ERA !== 'recent' || RECENT.has(crowdDecade(e)))
+      // Already tried and failed, for a reason nothing has changed about.
+      && !(rejects[key] && !RETRY.has(rejects[key].reason)))
     .sort((a, b) => b[1].n - a[1].n)          // most canonical first
     .slice(0, LIMIT === Infinity ? undefined : LIMIT);
 
@@ -230,21 +272,35 @@ async function main() {
   const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaDeezer: 0 };
   let sinceCheckpoint = 0;
 
+  /** Remember a failure so no later pass pays for it twice. */
+  function reject(key, entry, reason) {
+    rejects[key] = { artist: entry.artist, title: entry.title, reason };
+    reasons[reason === 'noEra' ? 'noCrowdDecade' : reason]++;
+  }
+
   async function save() {
     await writeSongs(OUT, {
       meta: {
         batch: 'batch-006',
         count: produced.length,
-        note: 'Generated from the playlist index rather than written by hand. year comes from MusicBrainz release-groups and is accepted only where it agrees with the decade the song\'s playlists put it in. familiarity and skew are seeded from canonicity and year respectively - they are starting points, not judgements, and have not been reviewed.',
-        source: 'data/canonicity.json + MusicBrainz release-groups',
+        note: 'Generated from the playlist index rather than written by hand. year comes from MusicBrainz release-groups, falling back to Deezer for post-2000 songs it cannot date, and is accepted only where it agrees with the decade the song\'s playlists put it in. familiarity and skew are seeded from canonicity and year respectively - they are starting points, not judgements, and have not been reviewed.',
+        source: 'data/canonicity.json + MusicBrainz release-groups + Deezer',
       },
       songs: produced,
     });
+
+    await writeFile(REJECTS, JSON.stringify({
+      meta: {
+        count: Object.keys(rejects).length,
+        note: 'Candidates already tried and failed. noEra and decadeClash are permanent while the sources are unchanged; noYear is worth retrying when a new year source exists, via --retry noYear.',
+      },
+      rejected: rejects,
+    }, null, 2) + '\n', 'utf8');
   }
 
   for (const [i, [key, entry]] of candidates.entries()) {
     const crowd = crowdDecade(entry);
-    if (!crowd) { reasons.noCrowdDecade++; continue; }
+    if (!crowd) { reject(key, entry, 'noEra'); continue; }
 
     let year = await yearOf(entry.artist, entry.title);
     await sleep(PAUSE_MS);
@@ -259,12 +315,12 @@ async function main() {
       await sleep(220);
     }
 
-    if (year === null) { reasons.noYear++; continue; }
+    if (year === null) { reject(key, entry, 'noYear'); continue; }
 
     // The cross-check. Two unrelated sources must place the song in the same
     // decade, or we do not use it.
     const [lo, hi] = DECADE_YEARS[crowd] ?? [0, 9999];
-    if (year < lo || year > hi) { reasons.decadeClash++; continue; }
+    if (year < lo || year > hi) { reject(key, entry, 'decadeClash'); continue; }
 
     produced.push({
       artist: entry.artist,

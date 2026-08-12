@@ -1,7 +1,7 @@
 {
   "meta": {
     "batch": "batch-006",
-    "count": 4870,
+    "count": 4895,
     "note": "Generated from the playlist index rather than written by hand. year comes from MusicBrainz release-groups and is accepted only where it agrees with the decade the song's playlists put it in. familiarity and skew are seeded from canonicity and year respectively - they are starting points, not judgements, and have not been reviewed.",
     "source": "data/canonicity.json + MusicBrainz release-groups"
   },
@@ -4875,6 +4875,31 @@
     { "artist": "Metallica", "title": "Frantic", "year": 2003, "decade": "2000s", "genres": ["metal"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 80 },
     { "artist": "Deftones", "title": "Diamond Eyes", "year": 2010, "decade": "2010s", "genres": ["metal","rock"], "familiarity": "familiar", "skew": "even", "spotify_uri": null, "market_checked": null, "canonicity": 82 },
     { "artist": "Hot Hot Heat", "title": "Bandages", "year": 2003, "decade": "2000s", "genres": ["rock","indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 82 },
-    { "artist": "Radiohead", "title": "Everything in Its Right Place", "year": 2003, "decade": "2000s", "genres": ["indie","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 82 }
+    { "artist": "Radiohead", "title": "Everything in Its Right Place", "year": 2003, "decade": "2000s", "genres": ["indie","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 82 },
+    { "artist": "Howie Day", "title": "Collide", "year": 2004, "decade": "2000s", "genres": ["rock","punk"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 82 },
+    { "artist": "Seether", "title": "Gasoline", "year": 2003, "decade": "2000s", "genres": ["metal","indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 83 },
+    { "artist": "Linkin Park", "title": "The Emptiness Machine", "year": 2024, "decade": "2020s", "genres": ["metal","punk"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 83 },
+    { "artist": "The Black Keys", "title": "Wild Child", "year": 2022, "decade": "2020s", "genres": ["rock"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 83 },
+    { "artist": "Wall Of Voodoo", "title": "Mexican Radio", "year": 1982, "decade": "1980s", "genres": ["punk"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 76 },
+    { "artist": "Supergrass", "title": "Moving", "year": 1999, "decade": "1990s", "genres": ["indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 76 },
+    { "artist": "Gavin DeGraw", "title": "Not Over You", "year": 2011, "decade": "2010s", "genres": ["rock","pop"], "familiarity": "familiar", "skew": "even", "spotify_uri": null, "market_checked": null, "canonicity": 77 },
+    { "artist": "Coleman Hell", "title": "2 Heads", "year": 2015, "decade": "2010s", "genres": ["indie","country"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 77 },
+    { "artist": "Phil Ochs", "title": "I Ain't Marching Anymore", "year": 1965, "decade": "1960s", "genres": ["rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 77 },
+    { "artist": "Southside Johnny And The Asbury Jukes", "title": "I Don't Want to Go Home", "year": 1976, "decade": "1970s", "genres": ["rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 64 },
+    { "artist": "The B-52's", "title": "52 Girls", "year": 1979, "decade": "1970s", "genres": ["rock","indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 64 },
+    { "artist": "The Cranberries", "title": "Promises", "year": 1999, "decade": "1990s", "genres": ["rock","pop"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 65 },
+    { "artist": "Tesla", "title": "Modern Day Cowboy", "year": 1987, "decade": "1980s", "genres": ["rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 65 },
+    { "artist": "Venom", "title": "Black Metal", "year": 1982, "decade": "1980s", "genres": ["metal"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 66 },
+    { "artist": "Krokus", "title": "Bedside Radio", "year": 1980, "decade": "1980s", "genres": ["metal"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 67 },
+    { "artist": "Dexys Midnight Runners", "title": "Jackie Wilson Said (I'm In Heaven When You Smile)", "year": 1982, "decade": "1980s", "genres": ["indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 67 },
+    { "artist": "Kate Bush", "title": "The Dreaming", "year": 1982, "decade": "1980s", "genres": ["indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 67 },
+    { "artist": "Dag Nasty", "title": "Can I Say", "year": 1986, "decade": "1980s", "genres": ["punk"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 68 },
+    { "artist": "The Black Crowes", "title": "Remedy", "year": 1992, "decade": "1990s", "genres": ["rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 68 },
+    { "artist": "Pantera", "title": "This Love", "year": 1992, "decade": "1990s", "genres": ["metal"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 68 },
+    { "artist": "Rammstein", "title": "Du riechst so gut", "year": 1995, "decade": "1990s", "genres": ["metal"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 69 },
+    { "artist": "The Dandy Warhols", "title": "Not If You Were The Last Junkie On Earth", "year": 1998, "decade": "1990s", "genres": ["indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 69 },
+    { "artist": "Rancid", "title": "Ruby Soho", "year": 1995, "decade": "1990s", "genres": ["indie","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 69 },
+    { "artist": "Scissor Sisters", "title": "Take Your Mama", "year": 2004, "decade": "2000s", "genres": ["indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 70 },
+    { "artist": "Opeth", "title": "The Drapery Falls", "year": 2001, "decade": "2000s", "genres": ["metal","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 70 }
   ]
 }
