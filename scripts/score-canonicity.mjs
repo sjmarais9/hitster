@@ -1,16 +1,27 @@
 #!/usr/bin/env node
 //
-// Joins the playlist canonicity index to our songs and asks whether it agrees
-// with the familiarity tags we assigned by hand:
+// Validates the external canonicity signals against our hand-assigned
+// familiarity tags:
 //
 //   node scripts/score-canonicity.mjs
 //
-// This is the validation step, and it comes before any use of the data. If
-// `standard` songs do not score higher than `deep` ones, playlist frequency is
-// not measuring what we want and should be dropped - exactly as Spotify
-// popularity was, though that failed for a duller reason.
+// Two independent sources:
+//   Deezer   how many playlists a track appears on   (curation)
+//   Last.fm  how many distinct people scrobbled it   (breadth of listening)
 //
-// Nothing here writes to the pool. It reports.
+// Everything is compared WITHIN DECADE. Raw counts across decades are
+// meaningless: a 1967 song and a 2015 song face completely different playlist
+// populations and completely different scrobbling userbases. Comparing them
+// directly measures the platform, not the song.
+//
+// Three questions, in order:
+//   1. Do the sources agree with each other? Two unrelated methods agreeing is
+//      much stronger evidence than either alone.
+//   2. Do they agree with our tags? If `standard` songs do not rank above
+//      `deep` ones within their own decade, the signal is not usable.
+//   3. Where do they disagree with us, and is the data or the tag wrong?
+//
+// Writes nothing. This decides whether the data is worth using at all.
 
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -28,17 +39,14 @@ const readJson = async (file, fallback) => {
   }
 };
 
-const canon = await readJson('data/canonicity.json', { tracks: {}, meta: {} });
-const index = canon.tracks ?? {};
+const deezer = (await readJson('data/canonicity.json', { tracks: {} })).tracks ?? {};
+const lastfm = (await readJson('data/lastfm.json', { tracks: {} })).tracks ?? {};
 
-const sources = ['data/songs.json', 'data/batch-003.seed.json', 'data/batch-004.seed.json', 'data/batch-005.seed.json'];
 const songs = [];
-for (const file of sources) {
-  const doc = await readJson(file, { songs: [] });
-  songs.push(...(doc.songs ?? []));
+for (const file of ['data/songs.json', 'data/batch-003.seed.json', 'data/batch-004.seed.json', 'data/batch-005.seed.json']) {
+  songs.push(...((await readJson(file, { songs: [] })).songs ?? []));
 }
 
-// Deduplicate: the pool already contains batch 002.
 const seen = new Set();
 const pool = songs.filter((s) => {
   const k = `${s.artist}|${s.title}`.toLowerCase();
@@ -47,78 +55,115 @@ const pool = songs.filter((s) => {
   return true;
 });
 
-const keyFor = (s) => `${normalise(s.artist)}|${normalise(s.title)}`;
+// Join. Absence is data: a song on no playlist and with no listeners is obscure.
+const joined = pool.map((s) => ({
+  ...s,
+  playlists: deezer[`${normalise(s.artist)}|${normalise(s.title)}`]?.n ?? 0,
+  listeners: lastfm[`${s.artist}|${s.title}`.toLowerCase()]?.listeners ?? null,
+}));
 
-const matched = [];
-const missing = [];
-for (const song of pool) {
-  const hit = index[keyFor(song)];
-  if (hit) matched.push({ ...song, n: hit.n, decades: hit.decades, genres: hit.genres });
-  else missing.push(song);
-}
+const withLastfm = joined.filter((s) => s.listeners !== null);
 
-console.log(`index: ${Object.keys(index).length} tracks from ${canon.meta?.playlists ?? '?'} playlists`);
-console.log(`our songs: ${pool.length}`);
-console.log(`matched: ${matched.length} (${((matched.length / pool.length) * 100).toFixed(1)}%)`);
-console.log(`unmatched: ${missing.length} - absence is itself a signal of obscurity\n`);
+console.log(`pool ${pool.length} songs`);
+console.log(`  on at least one playlist: ${joined.filter((s) => s.playlists > 0).length}`);
+console.log(`  with Last.fm data fetched: ${withLastfm.length}`);
 
-if (matched.length === 0) {
-  console.log('Nothing matched yet. Let the harvester finish and re-run.');
-  process.exit(0);
+/** Percentile rank of each song within its own decade, 0-100. */
+function percentileByDecade(list, valueOf) {
+  const byDecade = new Map();
+  for (const s of list) {
+    if (!byDecade.has(s.decade)) byDecade.set(s.decade, []);
+    byDecade.get(s.decade).push(s);
+  }
+  const out = new Map();
+  for (const [, group] of byDecade) {
+    const sorted = [...group].sort((a, b) => valueOf(a) - valueOf(b));
+    sorted.forEach((s, i) => out.set(s, (i / Math.max(1, sorted.length - 1)) * 100));
+  }
+  return out;
 }
 
 const median = (xs) => {
-  if (!xs.length) return 0;
+  if (!xs.length) return null;
   const s = [...xs].sort((a, b) => a - b);
   return s[Math.floor(s.length / 2)];
 };
 
-// --- the validation ----------------------------------------------------------
+// --- 1. do the two sources agree with each other? ----------------------------
 
-console.log('DOES IT AGREE WITH OUR TAGS?');
-console.log('tier         n songs   matched   median n   mean n   max n');
-for (const tier of ['standard', 'familiar', 'deep']) {
-  const all = pool.filter((s) => s.familiarity === tier);
-  const hits = matched.filter((s) => s.familiarity === tier);
-  const ns = hits.map((s) => s.n);
-  const mean = ns.length ? (ns.reduce((a, b) => a + b, 0) / ns.length) : 0;
-  console.log(
-    `  ${tier.padEnd(10)} ${String(all.length).padStart(6)}  ` +
-    `${`${((hits.length / (all.length || 1)) * 100).toFixed(0)}%`.padStart(8)}  ` +
-    `${String(median(ns)).padStart(8)}   ${mean.toFixed(1).padStart(6)}  ${String(Math.max(0, ...ns)).padStart(5)}`,
-  );
-}
-console.log('\nIf median n does not fall from standard to deep, the signal is not usable.');
+if (withLastfm.length > 30) {
+  const pd = percentileByDecade(withLastfm, (s) => s.playlists);
+  const pl = percentileByDecade(withLastfm, (s) => s.listeners);
 
-// --- disagreements -----------------------------------------------------------
-
-const ranked = [...matched].sort((a, b) => b.n - a.n);
-const cutoffHigh = ranked[Math.floor(ranked.length * 0.1)]?.n ?? 0;
-const cutoffLow = ranked[Math.floor(ranked.length * 0.75)]?.n ?? 0;
-
-const tooLow = matched.filter((s) => s.familiarity === 'deep' && s.n >= cutoffHigh);
-const tooHigh = matched.filter((s) => s.familiarity === 'standard' && s.n <= cutoffLow);
-
-console.log(`\nTagged deep but in the top 10% of playlist appearances (n >= ${cutoffHigh}): ${tooLow.length}`);
-for (const s of tooLow.sort((a, b) => b.n - a.n).slice(0, 20)) {
-  console.log(`  n=${String(s.n).padStart(3)}  ${s.artist} - ${s.title} (${s.year})`);
+  // Spearman: Pearson correlation of the two percentile ranks.
+  const xs = withLastfm.map((s) => pd.get(s));
+  const ys = withLastfm.map((s) => pl.get(s));
+  const mx = xs.reduce((a, b) => a + b, 0) / xs.length;
+  const my = ys.reduce((a, b) => a + b, 0) / ys.length;
+  let num = 0, dx = 0, dy = 0;
+  for (let i = 0; i < xs.length; i++) {
+    num += (xs[i] - mx) * (ys[i] - my);
+    dx += (xs[i] - mx) ** 2;
+    dy += (ys[i] - my) ** 2;
+  }
+  const rho = num / Math.sqrt(dx * dy);
+  console.log(`\n1. DO THE SOURCES AGREE WITH EACH OTHER?`);
+  console.log(`   rank correlation, within decade: ${rho.toFixed(2)}`);
+  console.log(`   ${rho > 0.6 ? 'Strong. Two unrelated methods pointing the same way.'
+    : rho > 0.3 ? 'Moderate. They overlap but measure different things.'
+      : 'Weak. At least one is not measuring canonicity.'}`);
+} else {
+  console.log('\n1. Not enough Last.fm data yet to compare sources.');
 }
 
-console.log(`\nTagged standard but in the bottom quartile (n <= ${cutoffLow}): ${tooHigh.length}`);
-for (const s of tooHigh.sort((a, b) => a.n - b.n).slice(0, 20)) {
-  console.log(`  n=${String(s.n).padStart(3)}  ${s.artist} - ${s.title} (${s.year})`);
+// --- 2. do they agree with our tags? -----------------------------------------
+
+console.log(`\n2. DO THEY AGREE WITH OUR TAGS? (median percentile within decade)`);
+
+for (const [label, list, valueOf] of [
+  ['Deezer playlists', joined, (s) => s.playlists],
+  ['Last.fm listeners', withLastfm, (s) => s.listeners],
+]) {
+  if (list.length < 30) continue;
+  const pct = percentileByDecade(list, valueOf);
+  console.log(`\n   ${label}`);
+  console.log(`     tier        n     median percentile`);
+  for (const tier of ['standard', 'familiar', 'deep']) {
+    const group = list.filter((s) => s.familiarity === tier);
+    if (!group.length) continue;
+    const m = median(group.map((s) => pct.get(s)));
+    const bar = '#'.repeat(Math.round((m ?? 0) / 4));
+    console.log(`     ${tier.padEnd(10)} ${String(group.length).padStart(5)}   ${(m ?? 0).toFixed(0).padStart(3)}  ${bar}`);
+  }
+}
+console.log(`\n   Usable only if the percentile falls from standard to deep.`);
+
+// --- 3. where do they disagree with us? --------------------------------------
+
+const pd = percentileByDecade(joined, (s) => s.playlists);
+const deepButPopular = joined
+  .filter((s) => s.familiarity === 'deep' && pd.get(s) >= 92 && s.playlists >= 5)
+  .sort((a, b) => b.playlists - a.playlists);
+
+const standardButObscure = joined
+  .filter((s) => s.familiarity === 'standard' && pd.get(s) <= 40)
+  .sort((a, b) => a.playlists - b.playlists);
+
+console.log(`\n3. DISAGREEMENTS`);
+console.log(`\n   Tagged deep, top decile of their decade: ${deepButPopular.length}`);
+for (const s of deepButPopular.slice(0, 15)) {
+  console.log(`     ${String(s.playlists).padStart(3)} playlists  ${s.artist} - ${s.title} (${s.year})`);
+}
+console.log(`\n   Tagged standard, bottom 40% of their decade: ${standardButObscure.length}`);
+for (const s of standardButObscure.slice(0, 15)) {
+  console.log(`     ${String(s.playlists).padStart(3)} playlists  ${s.artist} - ${s.title} (${s.year})`);
 }
 
-// --- what a derived score would look like ------------------------------------
+// --- known blind spot ---------------------------------------------------------
 
-console.log('\nProposed 1-10 canonicity score, by percentile of n among matched songs:');
-const buckets = Array.from({ length: 10 }, (_, i) => {
-  const lo = Math.floor((i / 10) * ranked.length);
-  const hi = Math.floor(((i + 1) / 10) * ranked.length);
-  const slice = ranked.slice(lo, hi);
-  return { score: 10 - i, min: Math.min(...slice.map((s) => s.n)), max: Math.max(...slice.map((s) => s.n)), count: slice.length };
-});
-for (const b of buckets) {
-  console.log(`  score ${String(b.score).padStart(2)}  n ${String(b.min).padStart(3)}-${String(b.max).padStart(3)}  ${b.count} songs`);
-}
-console.log(`  score  0  unmatched            ${missing.length} songs`);
+const SA = ['Mandoza', 'Master KG', 'Johnny Clegg', 'Brenda Fassie', 'Mango Groove', 'Tyla',
+  'Ladysmith', 'Yvonne Chaka Chaka', 'Lucky Dube', 'Freshlyground', 'Cassper', 'Nasty C',
+  'Sho Madjozi', 'Kabza', 'Uncle Waffles', 'TKZee', 'Zola', 'Mafikizolo', 'Miriam Makeba'];
+const sa = joined.filter((s) => SA.some((a) => s.artist.includes(a)));
+console.log(`\n   South African songs: ${sa.length}, of which ${sa.filter((s) => s.playlists > 0).length} appear on any playlist`);
+console.log(`   This is the blind spot no external source fixes. Local tags must win here.`);
