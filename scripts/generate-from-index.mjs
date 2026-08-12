@@ -43,6 +43,33 @@ const flag = (name, fallback) => {
 const LIMIT = flag('limit', Infinity);
 const MIN_PLAYLISTS = flag('min-playlists', 5);
 
+// Restricts the run to one genre family, for topping up a deliberate lean.
+// The main pass produces a broad spread; a second pass with --genre rock and a
+// lower --min-playlists adds rock without displacing anything already accepted,
+// which is how the pool gets weighted toward a taste rather than flattened to
+// whatever the playlists happen to contain.
+const GENRE = (() => {
+  const i = args.indexOf('--genre');
+  return i === -1 ? null : args[i + 1];
+})();
+
+const GENRE_FAMILIES = {
+  rock: ['rock', 'punk', 'metal', 'indie'],
+  pop: ['pop', 'dance'],
+  urban: ['hip hop', 'r&b', 'soul', 'funk'],
+  roots: ['country', 'reggae', 'african'],
+};
+
+/** The genre a song leans toward, from the themes it appeared on. */
+function leansToward(entry, family) {
+  const wanted = GENRE_FAMILIES[family];
+  if (!wanted) return true;
+  const counts = Object.entries(entry.genres ?? {});
+  if (!counts.length) return false;
+  const top = counts.sort((a, b) => b[1] - a[1])[0][0];
+  return wanted.includes(top);
+}
+
 // Titles that are not the song we want, however well they match.
 const JUNK = /\bkaraoke\b|\bmade popular by\b|\btribute\b|\bin the style of\b|\blive\b(?!\s*(and|to|at last))|\bremix\b|\bedit\b|\bmix\)|\bcover\b|\binstrumental\b|\bbacking track\b|\bremaster(ed)?\b/i;
 
@@ -136,7 +163,8 @@ async function main() {
   for (const s of produced) known.add(`${normalise(s.artist)}|${normalise(s.title)}`);
 
   const candidates = Object.entries(index)
-    .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(e.title) && !known.has(key))
+    .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(e.title) && !known.has(key)
+      && leansToward(e, GENRE))
     .sort((a, b) => b[1].n - a[1].n)          // most canonical first
     .slice(0, LIMIT === Infinity ? undefined : LIMIT);
 
