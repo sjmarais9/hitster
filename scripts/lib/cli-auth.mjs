@@ -8,8 +8,44 @@
 
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { CLIENT_ID, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT } from '../../src/config.js';
 import { createVerifier, createState, challengeFor } from '../../src/pkce.js';
+
+// Spotify's refresh token outlives the session, so the browser step only has to
+// happen once ever rather than once per run. Without this an import cannot be
+// scheduled or repeated unattended, which matters when the daily quota means a
+// large backlog takes a week of runs.
+//
+// Gitignored, and holds no client secret - PKCE has none. Losing it costs one
+// browser click.
+const TOKEN_FILE = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)), '..', '..', '.spotify-token.json',
+);
+
+async function loadRefreshToken() {
+  try {
+    const raw = await readFile(TOKEN_FILE, 'utf8');
+    return JSON.parse(raw.replace(/^﻿/, '')).refresh_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function saveRefreshToken(token) {
+  if (!token) return;
+  try {
+    await writeFile(TOKEN_FILE, JSON.stringify({
+      refresh_token: token,
+      saved: new Date().toISOString(),
+      note: 'Spotify refresh token, so imports do not need a browser every run. Gitignored. Delete this file to force a fresh login.',
+    }, null, 2) + '\n', 'utf8');
+  } catch {
+    // Not being able to cache it only costs a browser click next time.
+  }
+}
 
 // Beyond this, a 429 is a quota rather than a short throttle and is not worth
 // sleeping through. Spotify has returned Retry-After values of over 20 hours.
@@ -101,6 +137,24 @@ async function postToken(body) {
  * that refreshes itself when the token ages out mid-run.
  */
 export async function authorise({ port = 3000 } = {}) {
+  // A stored refresh token means no browser, which is what lets a long import
+  // be re-run day after day without a human present.
+  const stored = await loadRefreshToken();
+  if (stored) {
+    try {
+      const refreshed = await postToken({
+        grant_type: 'refresh_token',
+        refresh_token: stored,
+        client_id: CLIENT_ID,
+      });
+      console.log('Authorised from the stored refresh token; no browser needed.');
+      await saveRefreshToken(refreshed.refresh_token ?? stored);
+      return makeClient({ ...refreshed, refresh_token: refreshed.refresh_token ?? stored });
+    } catch (err) {
+      console.log(`Stored token rejected (${err.message}). Falling back to a browser login.`);
+    }
+  }
+
   const redirectUri = `http://127.0.0.1:${port}/callback`;
   const verifier = createVerifier();
   const state = createState();
@@ -126,13 +180,20 @@ export async function authorise({ port = 3000 } = {}) {
   openBrowser(authUrl);
 
   const code = await pending;
-  let tokens = await postToken({
+  const fresh = await postToken({
     grant_type: 'authorization_code',
     code,
     redirect_uri: redirectUri,
     client_id: CLIENT_ID,
     code_verifier: verifier,
   });
+  await saveRefreshToken(fresh.refresh_token);
+  return makeClient(fresh);
+}
+
+/** Wraps a token set in an authorised, self-refreshing GET helper. */
+function makeClient(initial) {
+  let tokens = initial;
   let expiresAt = Date.now() + tokens.expires_in * 1000;
 
   async function token() {
@@ -145,6 +206,8 @@ export async function authorise({ port = 3000 } = {}) {
     // Spotify does not always return a new refresh token; keep the old one.
     tokens = { ...refreshed, refresh_token: refreshed.refresh_token || tokens.refresh_token };
     expiresAt = Date.now() + tokens.expires_in * 1000;
+    // Rotated tokens must be persisted or the next unattended run is locked out.
+    await saveRefreshToken(tokens.refresh_token);
     return tokens.access_token;
   }
 
