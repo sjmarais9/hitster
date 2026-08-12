@@ -42,8 +42,17 @@ JavaScript is the preferred starting point. Everything is served from GitHub Pag
 
 ### Authentication
 
-Authorization Code Flow with PKCE. Tokens held in memory or `sessionStorage`, with refresh token
-handling so a game night does not get interrupted by a token expiring after an hour.
+Authorization Code Flow with PKCE, with refresh token handling so a game night does not get
+interrupted by a token expiring after an hour.
+
+The access token is held in `sessionStorage`. The refresh token is held in `localStorage`, so a
+session survives the app being closed or reaped from the background.
+
+**Amended from the original, which required both in `sessionStorage`.** The intent there was that
+a phone handed round a table should not be left holding a live Spotify session. In practice
+Android reaps a backgrounded PWA freely, so that produced a login prompt on most launches —
+being asked to log in mid-party is a worse outcome than the one it was avoiding. `Log out` still
+ends the session on demand. The client secret rule below is unaffected and still absolute.
 
 Required scopes:
 

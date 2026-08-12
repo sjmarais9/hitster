@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=bf94c849';
-import { connect } from './player.js?v=bf94c849';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=bf94c849';
-import { keepAwake } from './wakelock.js?v=bf94c849';
-import { projectedShares } from './scoring.js?v=bf94c849';
-import * as filters from './filters.js?v=bf94c849';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=926e269f';
+import { connect } from './player.js?v=926e269f';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=926e269f';
+import { keepAwake } from './wakelock.js?v=926e269f';
+import { projectedShares } from './scoring.js?v=926e269f';
+import * as filters from './filters.js?v=926e269f';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -593,6 +593,13 @@ async function boot() {
 
   if (connected.status === 'rejected') {
     say(connected.reason.message, true);
+    // A stored refresh token that Spotify has since rejected leaves us on a
+    // start screen with a disabled button and no way back to the login. Its
+    // own handler has already cleared it, so asking again is the whole fix.
+    if (!isLoggedIn()) {
+      show('signedOut');
+      history.replaceState({ screen: 'signedOut' }, '');
+    }
     return;
   }
   route = connected.value;

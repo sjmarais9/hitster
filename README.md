@@ -50,8 +50,15 @@ Authorization Code Flow with PKCE. There is no client secret anywhere in this re
 should ever be added — PKCE exists precisely so public clients do not need one. The Client ID is
 public and is committed deliberately.
 
-Tokens are kept in `sessionStorage`, so closing the tab ends the session. That is intentional:
-the phone gets handed around a table.
+The access token lives in `sessionStorage` and the refresh token in `localStorage`, so a session
+survives the tab closing or the phone reaping the app in the background. **Log out** ends it.
+
+That split replaced an earlier rule keeping both per-tab, on the reasoning that a phone handed
+round a table should not be left holding a live Spotify session. Android reaps a backgrounded PWA
+freely, so what it actually produced was a login prompt on most launches — worse, mid-party, than
+the thing it was guarding against. The trade is that a persisted refresh token is exposed to any
+script on the origin; there are none here beyond Spotify's own playback SDK, the token grants only
+the scopes listed above, and it can be revoked from a Spotify account page.
 
 ## Layout
 

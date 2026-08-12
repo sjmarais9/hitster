@@ -1,33 +1,84 @@
 // Authorization Code Flow with PKCE against Spotify.
 //
-// Tokens live in sessionStorage, which is per-tab and cleared when the tab
-// closes. That is deliberate: the phone gets passed around a table, and a game
-// night should not leave a live Spotify session behind on the device.
+// Two stores, holding different things for different reasons.
+//
+// The access token stays in sessionStorage: per-tab, gone when the tab closes,
+// and only ever an hour old anyway. The refresh token goes in localStorage, so
+// the session survives the tab being closed, the phone killing the app in the
+// background, or opening the site in a fresh tab.
+//
+// It used to all live in sessionStorage, on the reasoning that a phone being
+// passed round a table should not be left holding a live Spotify session. What
+// that actually produced was a login prompt every time the app was relaunched -
+// which is most times, since Android reaps a backgrounded PWA freely. Being
+// asked to log in mid-party is a worse outcome than the one it was avoiding, and
+// Log out is still there for anyone who wants the old behaviour on demand.
+//
+// The trade this makes: localStorage is readable by any script on this origin,
+// so a persisted refresh token is exposed to cross-site scripting in a way a
+// per-tab one is less so. There are no third-party scripts here beyond
+// Spotify's own playback SDK, the token only grants what SCOPES asks for, and
+// revoking it is one tap in a Spotify account page. Standard practice for a
+// PKCE single-page app, and the right call for this one.
+//
 // Refreshing is handled transparently so an hour-long game is not interrupted.
 
-import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=bf94c849';
-import { createVerifier, createState, challengeFor } from './pkce.js?v=bf94c849';
+import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=926e269f';
+import { createVerifier, createState, challengeFor } from './pkce.js?v=926e269f';
 
+// One-shot values for a single login flow. Per-tab is exactly right for these:
+// the callback lands in the same tab that started it, and nothing should be
+// able to complete a login the tab did not begin.
 const VERIFIER_KEY = 'hitster.pkce_verifier';
 const STATE_KEY = 'hitster.oauth_state';
-const TOKENS_KEY = 'hitster.tokens';
+
+const TOKENS_KEY = 'hitster.tokens';    // sessionStorage: the access token
+const REFRESH_KEY = 'hitster.refresh';  // localStorage: the long-lived half
 
 // Refresh this far ahead of actual expiry so a request never races the clock.
 const REFRESH_MARGIN_MS = 60_000;
 
-function readTokens() {
+function readRefreshToken() {
   try {
-    const raw = sessionStorage.getItem(TOKENS_KEY);
-    return raw ? JSON.parse(raw) : null;
+    return localStorage.getItem(REFRESH_KEY);
   } catch {
+    // Private browsing or a blocked origin. The session simply will not persist.
     return null;
   }
 }
 
-function writeTokens(tokens) {
-  sessionStorage.setItem(TOKENS_KEY, JSON.stringify(tokens));
+/**
+ * The access token if this tab has one, always carrying whatever refresh token
+ * is on the device - which may be the only half that survived a relaunch.
+ */
+function readTokens() {
+  const refresh_token = readRefreshToken();
+  let session = null;
+  try {
+    const raw = sessionStorage.getItem(TOKENS_KEY);
+    session = raw ? JSON.parse(raw) : null;
+  } catch {
+    session = null;
+  }
+
+  if (!session) return refresh_token ? { refresh_token, expires_at: 0 } : null;
+  return { ...session, refresh_token: session.refresh_token || refresh_token };
 }
 
+function writeTokens(tokens) {
+  sessionStorage.setItem(TOKENS_KEY, JSON.stringify(tokens));
+  try {
+    if (tokens.refresh_token) localStorage.setItem(REFRESH_KEY, tokens.refresh_token);
+  } catch {
+    // Not fatal: the game still works, it just asks for a login next launch.
+  }
+}
+
+/**
+ * True when a game could be started without a trip to Spotify. A refresh token
+ * on its own counts - getAccessToken will redeem it - so a relaunched app goes
+ * straight to the start screen rather than the login button.
+ */
 export function isLoggedIn() {
   return readTokens() !== null;
 }
@@ -36,6 +87,9 @@ export function logout() {
   sessionStorage.removeItem(TOKENS_KEY);
   sessionStorage.removeItem(VERIFIER_KEY);
   sessionStorage.removeItem(STATE_KEY);
+  try {
+    localStorage.removeItem(REFRESH_KEY);
+  } catch { /* nothing persisted to begin with */ }
 }
 
 /**
