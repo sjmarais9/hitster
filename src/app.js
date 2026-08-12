@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=926e269f';
-import { connect } from './player.js?v=926e269f';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=926e269f';
-import { keepAwake } from './wakelock.js?v=926e269f';
-import { projectedShares } from './scoring.js?v=926e269f';
-import * as filters from './filters.js?v=926e269f';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=d9be13d1';
+import { connect } from './player.js?v=d9be13d1';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=d9be13d1';
+import { keepAwake } from './wakelock.js?v=d9be13d1';
+import { projectedShares } from './scoring.js?v=d9be13d1';
+import * as filters from './filters.js?v=d9be13d1';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -128,7 +128,8 @@ function refreshDeck() {
 // catalogue is being let through. Casual is barely open, Encyclopaedic is wide
 // open, and the exponent it sets runs the same way - k=4 down to k=0.
 //
-// Three stops across a 270-degree sweep, the way an amplifier's is laid out.
+// The stops are spread across a 270-degree sweep, the way an amplifier's are,
+// and their count comes from LEVELS - nothing here assumes how many there are.
 
 const SWEEP = 135;
 

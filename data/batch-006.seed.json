@@ -1,7 +1,7 @@
 {
   "meta": {
     "batch": "batch-006",
-    "count": 7118,
+    "count": 7143,
     "note": "Generated from the playlist index rather than written by hand. year comes from MusicBrainz release-groups, falling back to Deezer for post-2000 songs it cannot date, and is accepted only where it agrees with the decade the song's playlists put it in. familiarity and skew are seeded from canonicity and year respectively - they are starting points, not judgements, and have not been reviewed.",
     "source": "data/canonicity.json + MusicBrainz release-groups + Deezer"
   },
@@ -7123,6 +7123,31 @@
     { "artist": "Four Tops", "title": "Ain't No Woman (Like The One I've Got)", "year": 1972, "decade": "1970s", "genres": ["soul","funk"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
     { "artist": "Barry White", "title": "Never, Never Gonna Give Ya Up", "year": 1973, "decade": "1970s", "genres": ["soul","r&b"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
     { "artist": "Gladys Knight & The Pips", "title": "I Wish It Would Rain (Single Version)", "year": 1964, "decade": "1960s", "genres": ["soul"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
-    { "artist": "Maxine Brown", "title": "Oh, No Not My Baby", "year": 1964, "decade": "1960s", "genres": ["soul","r&b"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 }
+    { "artist": "Maxine Brown", "title": "Oh, No Not My Baby", "year": 1964, "decade": "1960s", "genres": ["soul","r&b"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "The Velvelettes", "title": "Needle In A Haystack", "year": 1964, "decade": "1960s", "genres": ["funk"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Brenton Wood", "title": "Oogum Boogum Song", "year": 1967, "decade": "1960s", "genres": ["funk","dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "LeAnn Rimes", "title": "One Way Ticket (Because I Can)", "year": 1996, "decade": "1990s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Pam Tillis", "title": "Don't Tell Me What To Do", "year": 1990, "decade": "1990s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Mindy McCready", "title": "Guys Do It All the Time", "year": 1996, "decade": "1990s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "The Osborne Brothers", "title": "Rocky Top", "year": 1967, "decade": "1960s", "genres": ["country","dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "George Jones", "title": "Tender Years (Single Version)", "year": 1961, "decade": "1960s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Sonny James", "title": "You're The Only World I Know", "year": 1966, "decade": "1960s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Jerry Lee Lewis", "title": "What's Made Milwaukee Famous (Has Made A Loser Out Of Me)", "year": 1968, "decade": "1960s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 60 },
+    { "artist": "Bob Marley & The Wailers", "title": "Judge Not", "year": 1962, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "The Jamaicans", "title": "Ba Ba Boom", "year": 1967, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "The Uniques", "title": "My Conversation", "year": 1968, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Prince Buster", "title": "Rough Rider", "year": 1968, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "The Tennors", "title": "Ride Your Donkey", "year": 1968, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Prince Buster", "title": "Al Capone", "year": 1967, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Dave Barker", "title": "Lock Jaw", "year": 1969, "decade": "1960s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Delroy Wilson", "title": "Run Run", "year": 1975, "decade": "1970s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Bob Marley & The Wailers", "title": "Coming In From The Cold", "year": 1980, "decade": "1980s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "The Heptones", "title": "Country Boy", "year": 1976, "decade": "1970s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Ohio Players", "title": "Funky Worm", "year": 1972, "decade": "1970s", "genres": ["r&b","soul"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Frida", "title": "I Know There's Something Going On (Single Version)", "year": 1982, "decade": "1980s", "genres": ["rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Linda Ronstadt", "title": "When Will I Be Loved", "year": 1974, "decade": "1970s", "genres": ["country"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "The Allman Brothers Band", "title": "Midnight Rider", "year": 1970, "decade": "1970s", "genres": ["country","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Four Tops", "title": "It's All In The Game", "year": 1970, "decade": "1970s", "genres": ["soul","r&b"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Styx", "title": "Come Sail Away", "year": 1977, "decade": "1970s", "genres": ["rock","pop"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 }
   ]
 }
