@@ -45,25 +45,27 @@ export const CROWD = {
 
 export const DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
 
-// Grouped rather than raw, because the pool carries well over a hundred
-// distinct genre strings and nobody wants to pick from that at a table.
-export const GENRE_GROUPS = {
-  rock: { label: 'Rock & alternative', match: /rock|punk|grunge|britpop|indie|new wave|shoegaze|madchester/i },
-  metal: { label: 'Metal', match: /metal/i },
-  pop: { label: 'Pop', match: /pop/i },
-  hiphop: { label: 'Hip hop & R&B', match: /hip hop|rap|r&b|grime|trap/i },
-  electronic: { label: 'Electronic & dance', match: /electronic|house|techno|edm|dance|trance|dubstep|big beat|trip hop|downtempo|eurodance/i },
-  soul: { label: 'Soul, funk & disco', match: /soul|funk|disco|motown|jazz|blues/i },
-  folk: { label: 'Country & folk', match: /country|folk/i },
-  african: { label: 'African', match: /kwaito|amapiano|afro|isicathamiya|worldbeat|gqom|bubblegum/i },
-  other: { label: 'Everything else', match: null },
-};
+// Genre is a mixer now, not a set of switches. The families live in scoring.js
+// with the weighting that uses them; this re-exports so the UI has one import.
+//
+// Switches could not express "mostly rock, some of everything", which is the
+// actual preference. A fader can, and it moves that decision from the pool's
+// composition - where it could only be changed by generating more songs - to a
+// setting that can be tuned from how a night actually played.
+// Imported as well as re-exported. `export ... from` forwards a binding without
+// introducing it locally, and DEFAULTS and describe() below both read it. This
+// is the second time that has bitten here.
+import { GENRE_FAMILIES, familyOf } from './scoring.js';
 
+export { GENRE_FAMILIES, familyOf };
+
+// Every fader starts flat, so an untouched mixer reproduces exactly what the
+// pool contains and nothing changes until something is deliberately moved.
 export const DEFAULTS = {
   level: 'everything',
   crowd: 0.5,
   decades: [...DECADES],
-  genres: Object.keys(GENRE_GROUPS),
+  genreLevels: Object.fromEntries(Object.keys(GENRE_FAMILIES).map((k) => [k, 1])),
 };
 
 export function load() {
@@ -85,23 +87,16 @@ export function save(filters) {
   }
 }
 
-/** Which genre groups a song belongs to. Falls back to `other`. */
-function groupsFor(song) {
-  const matched = Object.entries(GENRE_GROUPS)
-    .filter(([, group]) => group.match && song.genres?.some((g) => group.match.test(g)))
-    .map(([key]) => key);
-  return matched.length > 0 ? matched : ['other'];
-}
-
 /**
- * The songs eligible to be drawn at all. Familiarity and skew are deliberately
- * absent: they shape the odds, not the deck.
+ * The songs eligible to be drawn at all.
+ *
+ * Only decade excludes now. Familiarity, skew and genre all shape the odds
+ * instead - a genre fader has to be pulled all the way to Off before anything
+ * disappears, and that is a deliberate act rather than a side effect of moving
+ * a control.
  */
 export function apply(pool, filters) {
-  return pool.filter((song) => {
-    if (!filters.decades.includes(song.decade)) return false;
-    return groupsFor(song).some((g) => filters.genres.includes(g));
-  });
+  return pool.filter((song) => filters.decades.includes(song.decade));
 }
 
 /** A short line for the UI, e.g. "Confident · mostly kids · 4 decades". */
@@ -116,10 +111,17 @@ export function describe(filters) {
     parts.push(decades === 1 ? filters.decades[0] : `${decades} decades`);
   }
 
-  const genres = filters.genres.length;
-  if (genres !== Object.keys(GENRE_GROUPS).length) {
-    parts.push(genres === 1 ? GENRE_GROUPS[filters.genres[0]].label.toLowerCase() : `${genres} genres`);
-  }
+  // Only worth mentioning the mixer when it has actually been moved.
+  const levels = filters.genreLevels ?? {};
+  const muted = Object.keys(GENRE_FAMILIES).filter((k) => (levels[k] ?? 1) <= 0);
+  const moved = Object.keys(GENRE_FAMILIES).filter((k) => {
+    const v = levels[k] ?? 1;
+    return v > 0 && v !== 1;
+  });
+
+  if (muted.length === 1) parts.push(`no ${GENRE_FAMILIES[muted[0]].label.toLowerCase()}`);
+  else if (muted.length > 1) parts.push(`${muted.length} genres off`);
+  if (moved.length) parts.push('mixed');
 
   return parts.join(' · ');
 }

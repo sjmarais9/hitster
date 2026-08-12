@@ -401,6 +401,42 @@ h1 {
   cursor: pointer;
 }
 
+/* The genre mixer. Label and value on one line, fader beneath, so nine of them
+   stack without becoming a wall of text. */
+.mixer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mixer-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0 0.5rem;
+}
+
+.mixer-label {
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.mixer-value {
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.mixer-value.is-off {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.mixer-row .slider {
+  grid-column: 1 / -1;
+  height: 2rem;
+}
+
 .slider-ends {
   display: flex;
   justify-content: space-between;

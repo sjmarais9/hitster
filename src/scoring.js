@@ -75,20 +75,63 @@ function skewWeights(deck, position) {
   });
 }
 
+// --- genre -------------------------------------------------------------------
+
+// The mixer. One fader per family, flat at 1 by default so an untouched mixer
+// draws the pool exactly as it is.
+//
+// Deliberately NOT normalised by family size, unlike the crowd slider. There
+// the imbalance is an artefact worth correcting: the pool is 80% adults-skewed
+// only because of what has been generated, and the children deserve an even
+// game regardless. Here the sizes are real. The pool holds 1,064 rock songs and
+// 12 African ones, and normalising would make a flat mixer give both the same
+// airtime - those 12 songs would repeat all night. A fader raises how likely
+// each song of a family is, and cannot conjure a mix the pool cannot sustain.
+export const GENRE_FAMILIES = {
+  rock: { label: 'Rock & alternative', match: /rock|punk|grunge|britpop|indie|new wave|shoegaze|madchester/i },
+  metal: { label: 'Metal', match: /metal/i },
+  pop: { label: 'Pop', match: /pop/i },
+  hiphop: { label: 'Hip hop & R&B', match: /hip hop|rap|r&b|grime|trap/i },
+  electronic: { label: 'Electronic & dance', match: /electronic|house|techno|edm|dance|trance|dubstep|big beat|trip hop|downtempo|eurodance/i },
+  soul: { label: 'Soul, funk & disco', match: /soul|funk|disco|motown|jazz|blues/i },
+  folk: { label: 'Country & folk', match: /country|folk/i },
+  african: { label: 'African', match: /kwaito|amapiano|afro|isicathamiya|worldbeat|gqom|bubblegum/i },
+  other: { label: 'Everything else', match: null },
+};
+
+/**
+ * One family per song, first match wins. Disjoint on purpose: a song counted in
+ * two families would be double-weighted and quietly over-drawn.
+ */
+export function familyOf(song) {
+  for (const [key, family] of Object.entries(GENRE_FAMILIES)) {
+    if (family.match && song.genres?.some((g) => family.match.test(g))) return key;
+  }
+  return 'other';
+}
+
+function genreWeights(deck, levels) {
+  return deck.map((song) => {
+    // Absent from the saved settings means untouched, which means flat.
+    const level = levels?.[familyOf(song)] ?? 1;
+    // Exactly zero is the mixer's Off position and genuinely excludes. Every
+    // other value only changes how likely a song is.
+    return level > 0 ? level : 0;
+  });
+}
+
 // --- combining ---------------------------------------------------------------
 
 /**
  * Relative draw weight for every song in the deck.
  * `level` names an entry in LEVELS; `crowd` is the slider position, 0 to 1.
  */
-export function weightsFor(deck, { level = 'everything', crowd = 0.5 } = {}) {
+export function weightsFor(deck, { level = 'everything', crowd = 0.5, genreLevels } = {}) {
   const k = LEVELS[level]?.k ?? 0;
   const skew = skewWeights(deck, crowd);
+  const genre = genreWeights(deck, genreLevels);
 
-  return deck.map((song, i) => {
-    const familiarity = scoreOf(song) ** k;
-    return familiarity * skew[i];
-  });
+  return deck.map((song, i) => scoreOf(song) ** k * skew[i] * genre[i]);
 }
 
 /**

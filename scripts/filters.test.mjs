@@ -1,12 +1,11 @@
 // Tests for the deck filters: node --test scripts/filters.test.mjs
 //
-// Since weighted sampling landed, familiarity and skew no longer belong here -
-// they shape the odds in scoring.js rather than deciding eligibility. What is
-// left is what genuinely excludes: decade and genre.
+// Only decade excludes now. Familiarity, skew and genre all shape the odds
+// instead, and are tested in scoring.test.mjs.
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { apply, describe, DEFAULTS, LEVELS, CROWD, DECADES, GENRE_GROUPS } from '../src/filters.js';
+import { apply, describe, DEFAULTS, LEVELS, CROWD, DECADES, GENRE_FAMILIES, familyOf } from '../src/filters.js';
 
 const song = (over = {}) => ({
   artist: 'A', title: 'B', year: 1995, decade: '1990s',
@@ -15,10 +14,10 @@ const song = (over = {}) => ({
 });
 
 const POOL = [
-  song({ title: 'std-even-90s-rock', familiarity: 'standard', skew: 'even' }),
-  song({ title: 'fam-adults-80s-pop', familiarity: 'familiar', skew: 'adults', decade: '1980s', genres: ['pop'] }),
-  song({ title: 'deep-kids-20s-hiphop', familiarity: 'deep', skew: 'kids', decade: '2020s', genres: ['hip hop'] }),
-  song({ title: 'deep-adults-70s-soul', familiarity: 'deep', skew: 'adults', decade: '1970s', genres: ['soul', 'funk'] }),
+  song({ title: 'rock-90s' }),
+  song({ title: 'pop-80s', decade: '1980s', genres: ['pop'] }),
+  song({ title: 'hiphop-20s', decade: '2020s', genres: ['hip hop'] }),
+  song({ title: 'soul-70s', decade: '1970s', genres: ['soul', 'funk'] }),
 ];
 
 const titles = (result) => result.map((s) => s.title).sort();
@@ -27,40 +26,35 @@ test('defaults let everything through', () => {
   assert.equal(apply(POOL, DEFAULTS).length, POOL.length);
 });
 
-test('familiarity no longer excludes anything', () => {
-  // It weights the draw instead. A casual game still has every song in its
-  // deck; the obscure ones simply almost never come up.
+test('only decade excludes', () => {
+  const result = apply(POOL, { ...DEFAULTS, decades: ['1970s', '2020s'] });
+  assert.deepEqual(titles(result), ['hiphop-20s', 'soul-70s']);
+});
+
+test('the genre mixer never removes songs from the deck', () => {
+  // Even muted, a genre stays in the deck; it is the weighting that zeroes it.
+  // Keeping the deck whole means the mixer can be changed mid-session without
+  // the unplayed set shifting under the player.
+  const silent = Object.fromEntries(Object.keys(GENRE_FAMILIES).map((k) => [k, 0]));
+  assert.equal(apply(POOL, { ...DEFAULTS, genreLevels: silent }).length, POOL.length);
+});
+
+test('familiarity and the crowd slider never remove songs either', () => {
   for (const level of Object.keys(LEVELS)) {
     assert.equal(apply(POOL, { ...DEFAULTS, level }).length, POOL.length);
   }
-});
-
-test('the crowd slider no longer excludes anything', () => {
-  for (const crowd of [0, 0.25, 0.5, 0.75, 1]) {
-    assert.equal(apply(POOL, { ...DEFAULTS, crowd }).length, POOL.length,
-      `crowd ${crowd} should not remove songs from the deck`);
+  for (const crowd of [0, 0.5, 1]) {
+    assert.equal(apply(POOL, { ...DEFAULTS, crowd }).length, POOL.length);
   }
 });
 
-test('decade filter excludes', () => {
-  const result = apply(POOL, { ...DEFAULTS, decades: ['1970s', '2020s'] });
-  assert.deepEqual(titles(result), ['deep-adults-70s-soul', 'deep-kids-20s-hiphop']);
-});
-
-test('genre groups match on any of a song\'s genres', () => {
-  const soul = apply(POOL, { ...DEFAULTS, genres: ['soul'] });
-  assert.deepEqual(titles(soul), ['deep-adults-70s-soul']);
-});
-
-test('a song matching no group falls into other', () => {
-  const odd = [song({ title: 'odd', genres: ['sea shanty'] })];
-  assert.equal(apply(odd, { ...DEFAULTS, genres: ['other'] }).length, 1);
-  assert.equal(apply(odd, { ...DEFAULTS, genres: ['rock'] }).length, 0);
-});
-
-test('decade and genre combine', () => {
-  const result = apply(POOL, { ...DEFAULTS, decades: ['2020s'], genres: ['hiphop'] });
-  assert.deepEqual(titles(result), ['deep-kids-20s-hiphop']);
+test('familyOf assigns exactly one family, first match wins', () => {
+  assert.equal(familyOf(song({ genres: ['rock'] })), 'rock');
+  assert.equal(familyOf(song({ genres: ['hip hop'] })), 'hiphop');
+  // Overlapping genres must not produce two families, or the song gets
+  // double-weighted and quietly over-drawn.
+  assert.equal(familyOf(song({ genres: ['punk', 'pop'] })), 'rock');
+  assert.equal(familyOf(song({ genres: ['sea shanty'] })), 'other');
 });
 
 test('crowd labels cover the whole range', () => {
@@ -75,22 +69,32 @@ test('describe stays quiet when nothing is narrowed', () => {
   assert.equal(describe(DEFAULTS), LEVELS.everything.label);
 });
 
-test('describe names what was narrowed', () => {
-  const text = describe({ ...DEFAULTS, crowd: 0.9, decades: ['1990s'] });
+test('describe names what was changed', () => {
+  const text = describe({
+    ...DEFAULTS,
+    crowd: 0.9,
+    decades: ['1990s'],
+    genreLevels: { ...DEFAULTS.genreLevels, folk: 0 },
+  });
   assert.match(text, /mostly kids/);
   assert.match(text, /1990s/);
+  assert.match(text, /no country/);
 });
 
-test('a saved selection missing a newer key still works', () => {
-  // load() merges over DEFAULTS; this is the shape that produces.
-  const legacy = { ...DEFAULTS, crowd: undefined };
-  assert.equal(apply(POOL, legacy).length, POOL.length);
-  assert.ok(describe(legacy).length > 0);
+test('describe reports a moved fader as mixed', () => {
+  const text = describe({ ...DEFAULTS, genreLevels: { ...DEFAULTS.genreLevels, rock: 1.6 } });
+  assert.match(text, /mixed/);
 });
 
-test('every decade and genre key is usable', () => {
+test('a saved selection from before the mixer still works', () => {
+  // load() merges over DEFAULTS, but an old saved object carries `genres` and
+  // no `genreLevels`. Neither should break anything.
+  const legacy = { level: 'casual', crowd: 0.5, decades: [...DECADES], genres: ['rock', 'pop'] };
+  assert.equal(apply(POOL, { ...DEFAULTS, ...legacy }).length, POOL.length);
+  assert.ok(describe({ ...DEFAULTS, ...legacy }).length > 0);
+});
+
+test('every decade key is usable', () => {
   assert.equal(DECADES.length, 8);
-  assert.ok(Object.keys(GENRE_GROUPS).includes('other'));
   for (const decade of DECADES) apply(POOL, { ...DEFAULTS, decades: [decade] });
-  for (const genre of Object.keys(GENRE_GROUPS)) apply(POOL, { ...DEFAULTS, genres: [genre] });
 });

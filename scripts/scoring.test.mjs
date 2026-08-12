@@ -111,6 +111,60 @@ test('the two dimensions compose without one swamping the other', () => {
     `a hard kids setting should still surface the kids song, got ${both['obscure-kid']}`);
 });
 
+test('a flat mixer draws the pool exactly as it is', () => {
+  // Lopsided like the real pool: 9 rock to 1 African. Untouched faders must not
+  // rebalance that, or 12 real African songs would repeat all night.
+  const deck = [
+    ...Array.from({ length: 9 }, (_, i) => song({ title: `rock${i}`, genres: ['rock'] })),
+    song({ title: 'afro0', genres: ['amapiano'] }),
+  ];
+
+  const flat = distribution(deck, { level: 'everything', crowd: 0.5 });
+  assert.ok(Math.abs(flat.afro0 - 0.1) < 0.03,
+    `flat mixer should mirror the pool's 1-in-10, African got ${flat.afro0}`);
+});
+
+test('raising a fader raises that family proportionally', () => {
+  const deck = [
+    ...Array.from({ length: 9 }, (_, i) => song({ title: `rock${i}`, genres: ['rock'] })),
+    song({ title: 'afro0', genres: ['amapiano'] }),
+  ];
+
+  // Each African song becomes 5x as likely; with one of ten songs that takes it
+  // from 1/10 to 5/14, which is a real shift without pretending the pool is
+  // bigger than it is.
+  const boosted = distribution(deck, {
+    level: 'everything', crowd: 0.5, genreLevels: { rock: 1, african: 5 },
+  });
+  assert.ok(boosted.afro0 > 0.28 && boosted.afro0 < 0.42,
+    `a 5x fader should give roughly 5/14 of draws, got ${boosted.afro0}`);
+});
+
+test('a fader only changes likelihood until it reaches Off', () => {
+  const deck = [
+    song({ title: 'rock', genres: ['rock'] }),
+    song({ title: 'folk', genres: ['country'] }),
+  ];
+
+  // Turned down but not off: rarer, never impossible. This is the property the
+  // whole weighted design exists for.
+  const low = distribution(deck, { level: 'everything', crowd: 0.5, genreLevels: { folk: 0.1 } }, 50000);
+  assert.ok(low.folk > 0, 'a turned-down genre must still appear');
+  assert.ok(low.folk < 0.2, `and appear rarely, got ${low.folk}`);
+
+  // Off means off, deliberately.
+  const off = distribution(deck, { level: 'everything', crowd: 0.5, genreLevels: { folk: 0 } }, 20000);
+  assert.equal(off.folk, 0, 'Off must genuinely exclude, or the label lies');
+});
+
+test('muting every genre falls back to uniform rather than drawing nothing', () => {
+  const deck = [song({ title: 'a', genres: ['rock'] }), song({ title: 'b', genres: ['pop'] })];
+  const silent = { rock: 0, pop: 0, other: 0 };
+  const weights = weightsFor(deck, { level: 'everything', crowd: 0.5, genreLevels: silent });
+  const picked = pickWeighted(deck, weights, seeded(11));
+  assert.ok(picked, 'an all-muted mixer must not leave the game unable to draw');
+});
+
 test('pickWeighted survives an all-zero weight vector', () => {
   const deck = [song({ title: 'a' }), song({ title: 'b' })];
   const picked = pickWeighted(deck, [0, 0], seeded(3));

@@ -148,9 +148,53 @@ function buildChips() {
   toggleChips(el('decade-options'), filters.DECADES, (d) => d, chosen.decades,
     (next) => { chosen.decades = next; });
 
-  toggleChips(el('genre-options'), Object.keys(filters.GENRE_GROUPS),
-    (g) => filters.GENRE_GROUPS[g].label, chosen.genres,
-    (next) => { chosen.genres = next; });
+  buildMixer();
+}
+
+/** One fader per genre family. Zero is Off and genuinely excludes; the rest
+ *  only changes how often a genre comes up. */
+function buildMixer() {
+  const container = el('genre-mixer');
+  const levels = chosen.genreLevels ?? {};
+
+  container.replaceChildren(...Object.entries(filters.GENRE_FAMILIES).map(([key, family]) => {
+    const row = document.createElement('div');
+    row.className = 'mixer-row';
+
+    const name = document.createElement('label');
+    name.className = 'mixer-label';
+    name.textContent = family.label;
+    name.htmlFor = `fader-${key}`;
+
+    const value = document.createElement('span');
+    value.className = 'mixer-value';
+
+    const fader = document.createElement('input');
+    fader.type = 'range';
+    fader.id = `fader-${key}`;
+    fader.className = 'slider';
+    fader.min = '0';
+    fader.max = '2';
+    fader.step = '0.1';
+    fader.value = String(levels[key] ?? 1);
+
+    const render = () => {
+      const v = Number(fader.value);
+      value.textContent = v === 0 ? 'Off' : v === 1 ? '—' : `${v.toFixed(1)}×`;
+      value.classList.toggle('is-off', v === 0);
+    };
+    render();
+
+    fader.addEventListener('input', () => {
+      chosen.genreLevels = { ...chosen.genreLevels, [key]: Number(fader.value) };
+      render();
+      filters.save(chosen);
+      // No refreshDeck: the mixer changes odds, not which songs are eligible.
+    });
+
+    row.append(name, value, fader);
+    return row;
+  }));
 }
 
 /** Puts the next card on the table, face down and silent. */
