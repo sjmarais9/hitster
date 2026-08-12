@@ -1,9 +1,11 @@
 {
   "meta": {
     "batch": "batch-005",
-    "count": 1000,
+    "count": 171,
+    "status": "Closed at 171 of a planned 1000, by decision rather than by accident. These 171 are complete and valid; the remaining 829 were never written.",
     "note": "Years are original release years and are the source of truth. familiarity and skew are ours, tagged per docs/tagging.md. spotify_uri is null until the import script resolves and verifies each track.",
-    "targets": "pre-1970 50, 1970s 120, 1980s 155, 1990s 210, 2000s 190, 2010s 170, 2020s 100. Rebalanced mid-batch on owner instruction: slightly more weight after 2000 (now ~46% of the batch), and a more even genre spread. The pre-1980 blocks came out 74% rock, so later decades deliberately carry more hip hop, electronic, soul and r&b, African, Latin and country to bring the batch nearer 40% rock overall. Familiar/deep line per docs/tagging.md. `even` only where the family experienced it together, per rule 8."
+    "why_closed": "Abandoned once scripts/generate-from-index.mjs existed. Hand-writing songs makes the years depend on one person's recall, which is the largest correctness risk here and the only error that genuinely breaks the game. The generator derives years from MusicBrainz release-groups and accepts them only where they agree with the era the song's playlists place it in, so its years are better than mine as well as arriving faster. Continuing to write these by hand would have been slower work of lower quality.",
+    "coverage_warning": "This batch is heavily pre-1980 and 74% rock, because it was closed before the rebalance toward post-2000 and wider genres could be applied. batch-006 is global in flavour and does nothing to correct the South African under-representation either. Both gaps need addressing deliberately rather than being assumed to average out."
   },
   "songs": [
     { "artist": "Fats Domino", "title": "Blueberry Hill", "year": 1956, "decade": "1950s", "genres": ["rock and roll","r&b"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 29 },
