@@ -39,6 +39,20 @@ Worked examples, agreed with the owner:
 - `deep` — Hit the Road Jack, Good Vibrations, Bad Moon Rising, What's Going On,
   London Calling, Nuthin' but a 'G' Thang, Scatterlings of Africa
 
+### `deep` is over-used, and it is the standing error
+
+Batch 004 came out 73% `deep`, and the review found three of twenty songs
+under-tagged: Two Princes, Hanging by a Moment and Thunderstruck were all a tier
+lower than they should have been. Extrapolated, a meaningful share of that 73%
+belongs in `familiar`.
+
+The cause is that `deep` is the safe-feeling default when a song is not
+obviously huge. It is not safe. A song wrongly marked `deep` disappears from
+every casual and confident game, which is worse than being drawn slightly too
+often. **When hesitating between `familiar` and `deep`, ask whether a
+forty-something who followed music at the time would place it. If yes, it is
+`familiar`.**
+
 ### The tier saturates
 
 There are only so many genuinely universal songs — on the order of 1,500. Do not
@@ -87,8 +101,33 @@ Added to as the owner corrects tagging. Each of these overrides intuition.
    streaming says little about whether this particular family can place it. Tag
    recent pop conservatively.
 
-7. **Participatory life crosses generations. Media placement does not.** This is
-   the sharpest predictor found so far, and it decides most `even` calls.
+8. **What decides `even` is whether the family experienced it *together*.** This
+   supersedes the mechanism in rule 7, though not its conclusions.
+
+   Rule 7 said participation crosses and media placement does not. Batch 004
+   broke that in both directions. Mamma Mia is pure media placement and it
+   crossed. September, Footloose and I Got You are all participatory dancefloor
+   songs and none of them did.
+
+   The rule that fits every case so far is about *context*, not medium. A song
+   crosses if it happens in a room the children are in:
+
+   - **Crosses**: stadium and sport chants, family films, anything watched or
+     sung together at home. We Will Rock You, We Are the Champions,
+     Thunderstruck, Chelsea Dagger, Mamma Mia, The Best.
+   - **Does not cross**: weddings, clubs, karaoke nights, parties from your own
+     era. September, Footloose, I Got You, All the Small Things.
+
+   Ask "were the children in the room", not "is the song participatory".
+
+9. **Do not generalise from a band to its catalogue.** Muse's Hysteria came back
+   `even` because the children found the band themselves. The identical
+   inference applied to Arctic Monkeys' Fluorescent Adolescent was wrong and it
+   stayed `adults`. One song crossing says nothing about the next.
+
+7. **Participatory life crosses generations. Media placement does not.**
+   *Superseded by rule 8. Kept for the reasoning, which still holds for media
+   placement even though the participation half was wrong.*
 
    In the batch 003 review, every `even` justified by a film, soundtrack, TV
    revival or "the kids still stream it" came back `adults`: Running Up That
