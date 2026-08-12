@@ -58,9 +58,15 @@
         </div>
       </div>
 
+      <!-- Faders rather than switches, for the same reason as the genres: the
+           preference is "lean nineties", which an on/off control cannot say.
+           The number is the share of the draw each decade is currently getting,
+           not the fader's own position, because that is the question actually
+           being asked. Pulled fully to Off a decade does leave the deck. -->
       <div class="filter-group">
-        <h2>Decades</h2>
-        <div id="decade-options" class="chips"></div>
+        <h2>Decade mix</h2>
+        <p class="filter-hint">Percentages are each decade's share of the draw.</p>
+        <div id="decade-mixer" class="mixer"></div>
       </div>
 
       <!-- A mixer rather than switches. Switches cannot express "mostly rock,

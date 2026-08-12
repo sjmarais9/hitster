@@ -319,6 +319,13 @@ h1 {
   color: var(--muted);
 }
 
+/* Sits directly under a heading, so it loses the gap the group would give it. */
+.filter-hint {
+  margin: -0.5rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -401,8 +408,8 @@ h1 {
   cursor: pointer;
 }
 
-/* The genre mixer. Label and value on one line, fader beneath, so nine of them
-   stack without becoming a wall of text. */
+/* The mixers, genre and decade alike. Label and value on one line, fader
+   beneath, so nine of them stack without becoming a wall of text. */
 .mixer {
   display: flex;
   flex-direction: column;

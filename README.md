@@ -75,16 +75,26 @@ because the tags are fallible — four review rounds found correction rates
 between 25% and 55% — and a weighted system degrades gracefully where a filter
 makes a mis-tagged song vanish from every game.
 
-Three dimensions multiply together:
+Four dimensions multiply together:
 
 | Control | What it does | Can it exclude? |
 |---|---|---|
 | **Familiarity** — three buttons | Sharpens or flattens the preference for well-known songs | Never |
 | **Crowd** — a slider, adults to kids | Sets the resulting mix, not just a preference | Only at the exact ends, where the label says so |
 | **Genre** — a mixer, one fader each | Raises or lowers a genre family | Only at `Off`, which is labelled |
+| **Decade** — a mixer, one fader each | Raises or lowers an era | Only at `Off`, which is labelled |
 
-Only **decade** genuinely filters, because "no 1960s tonight" is a statement
-about what the table wants to hear rather than a difficulty setting.
+Decade is the only one where `Off` removes songs from the deck outright rather
+than weighting them to nothing, because the deck count on screen should say how
+many songs are really in play. "No 1960s tonight" is a decision made before the
+game starts; a muted genre is a dial that can be moved mid-session without the
+unplayed set shifting under whoever is holding the phone.
+
+The decade faders show each era's **share of the draw** rather than their own
+position, because "1.4×" does not answer the question being asked. That share
+moves when the genre mixer and the crowd slider move too, since neither genre
+nor age is spread evenly across the eras — so the number is recomputed from the
+same weights the draw uses, and a test pins it to what 40,000 draws actually do.
 
 The familiarity weight blends two disagreeing sources: our own `familiarity`
 tag, which knows this household but is one person's judgement, and a measured
@@ -94,10 +104,11 @@ ahead — a song the family knows but no playlist has heard of still outranks a
 global hit they cannot place — while canonicity moves about 6% of songs across a
 tier boundary and, more usefully, separates songs the tags treat as identical.
 
-The crowd slider is normalised by population; the genre mixer deliberately is
-not. The adults/kids imbalance is an artefact worth correcting. Genre family
-sizes are real: 1,064 rock songs against 12 African ones, and normalising would
-make a flat mixer give both the same airtime.
+The crowd slider is normalised by population; both mixers deliberately are not.
+The adults/kids imbalance is an artefact worth correcting. Genre family sizes
+are real — 1,064 rock songs against 12 African ones — and so are decade sizes,
+where the 1950s holds fourteen songs. Normalising either would give a flat mixer
+the job of handing those fourteen an eighth of the night.
 
 ## Installing it on the phone
 

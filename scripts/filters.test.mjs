@@ -5,7 +5,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { apply, describe, DEFAULTS, LEVELS, CROWD, DECADES, GENRE_FAMILIES, familyOf } from '../src/filters.js';
+import {
+  apply, describe, migrate, DEFAULTS, LEVELS, CROWD, DECADES, GENRE_FAMILIES, familyOf,
+} from '../src/filters.js';
 
 const song = (over = {}) => ({
   artist: 'A', title: 'B', year: 1995, decade: '1990s',
@@ -26,9 +28,21 @@ test('defaults let everything through', () => {
   assert.equal(apply(POOL, DEFAULTS).length, POOL.length);
 });
 
-test('only decade excludes', () => {
-  const result = apply(POOL, { ...DEFAULTS, decades: ['1970s', '2020s'] });
+test('only a decade pulled to Off excludes', () => {
+  const result = apply(POOL, {
+    ...DEFAULTS,
+    decadeLevels: { ...DEFAULTS.decadeLevels, '1990s': 0, '1980s': 0 },
+  });
   assert.deepEqual(titles(result), ['hiphop-20s', 'soul-70s']);
+});
+
+test('a decade merely turned down stays in the deck', () => {
+  // The whole point of a fader: quieter, not gone. Only 0 removes.
+  const result = apply(POOL, {
+    ...DEFAULTS,
+    decadeLevels: { ...DEFAULTS.decadeLevels, '1990s': 0.1 },
+  });
+  assert.equal(result.length, POOL.length);
 });
 
 test('the genre mixer never removes songs from the deck', () => {
@@ -70,10 +84,11 @@ test('describe stays quiet when nothing is narrowed', () => {
 });
 
 test('describe names what was changed', () => {
+  const onlyNineties = Object.fromEntries(DECADES.map((d) => [d, d === '1990s' ? 1 : 0]));
   const text = describe({
     ...DEFAULTS,
     crowd: 0.9,
-    decades: ['1990s'],
+    decadeLevels: onlyNineties,
     genreLevels: { ...DEFAULTS.genreLevels, folk: 0 },
   });
   assert.match(text, /mostly kids/);
@@ -82,19 +97,37 @@ test('describe names what was changed', () => {
 });
 
 test('describe reports a moved fader as mixed', () => {
-  const text = describe({ ...DEFAULTS, genreLevels: { ...DEFAULTS.genreLevels, rock: 1.6 } });
-  assert.match(text, /mixed/);
+  assert.match(describe({ ...DEFAULTS, genreLevels: { ...DEFAULTS.genreLevels, rock: 1.6 } }), /mixed/);
+  assert.match(describe({ ...DEFAULTS, decadeLevels: { ...DEFAULTS.decadeLevels, '1990s': 1.6 } }), /mixed/);
 });
 
-test('a saved selection from before the mixer still works', () => {
+test('a saved selection from before the mixers still works', () => {
   // load() merges over DEFAULTS, but an old saved object carries `genres` and
   // no `genreLevels`. Neither should break anything.
   const legacy = { level: 'casual', crowd: 0.5, decades: [...DECADES], genres: ['rock', 'pop'] };
-  assert.equal(apply(POOL, { ...DEFAULTS, ...legacy }).length, POOL.length);
-  assert.ok(describe({ ...DEFAULTS, ...legacy }).length > 0);
+  assert.equal(apply(POOL, { ...DEFAULTS, ...migrate({ ...legacy }) }).length, POOL.length);
+  assert.ok(describe({ ...DEFAULTS, ...migrate({ ...legacy }) }).length > 0);
+});
+
+test('switched-off decades survive the move to faders', () => {
+  // Someone who had turned the 1960s off before the upgrade must not find it
+  // quietly switched back on, which is exactly what a plain merge would do.
+  const legacy = { level: 'casual', crowd: 0.5, decades: DECADES.filter((d) => d !== '1960s') };
+  const migrated = migrate({ ...legacy });
+
+  assert.equal(migrated.decadeLevels['1960s'], 0, 'an unselected decade should land at Off');
+  assert.equal(migrated.decadeLevels['1990s'], 1, 'a selected one should land flat');
+  assert.equal(migrated.decades, undefined, 'the old key should not linger');
+});
+
+test('migrate leaves a current selection alone', () => {
+  const current = { level: 'casual', decadeLevels: { ...DEFAULTS.decadeLevels, '1990s': 1.6 } };
+  assert.equal(migrate({ ...current }).decadeLevels['1990s'], 1.6);
 });
 
 test('every decade key is usable', () => {
   assert.equal(DECADES.length, 8);
-  for (const decade of DECADES) apply(POOL, { ...DEFAULTS, decades: [decade] });
+  for (const decade of DECADES) {
+    apply(POOL, { ...DEFAULTS, decadeLevels: { ...DEFAULTS.decadeLevels, [decade]: 0 } });
+  }
 });

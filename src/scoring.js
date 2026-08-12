@@ -1,9 +1,11 @@
 // How a song's chance of being drawn is decided.
 //
-// Two dimensions, computed independently and multiplied:
+// Four dimensions, computed independently and multiplied:
 //
 //   familiarity  how likely this crowd is to know the song
 //   skew         whether it favours the adults or the children
+//   genre        the mixer
+//   decade       the other mixer
 //
 // Both are weights rather than filters. A song is never excluded for being
 // slightly too obscure or slightly too grown-up, only made less likely. That
@@ -99,15 +101,26 @@ export const GENRE_FAMILIES = {
   other: { label: 'Everything else', match: null },
 };
 
+// Nine families, each a regex over every genre a song carries, is up to ninety
+// tests per song. Fine once; the live mix readout recomputes on every drag of
+// every fader, and at ten thousand songs that was enough to make the faders
+// stutter on a phone. A song's family cannot change while the app is running.
+const familyCache = new WeakMap();
+
 /**
  * One family per song, first match wins. Disjoint on purpose: a song counted in
  * two families would be double-weighted and quietly over-drawn.
  */
 export function familyOf(song) {
+  const cached = familyCache.get(song);
+  if (cached) return cached;
+
+  let found = 'other';
   for (const [key, family] of Object.entries(GENRE_FAMILIES)) {
-    if (family.match && song.genres?.some((g) => family.match.test(g))) return key;
+    if (family.match && song.genres?.some((g) => family.match.test(g))) { found = key; break; }
   }
-  return 'other';
+  familyCache.set(song, found);
+  return found;
 }
 
 function genreWeights(deck, levels) {
@@ -120,18 +133,72 @@ function genreWeights(deck, levels) {
   });
 }
 
+// --- decade ------------------------------------------------------------------
+
+export const DECADES = ['1950s', '1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
+
+// Decades were on/off switches until the generator changed what the pool looked
+// like. Every batch written by hand sat at about 24% 1990s against 18% 2000s,
+// which is the mix this table asked for. Generated batch 006 came back at 18.6%
+// against 24.4% - not a judgement it made, but one it inherited from Deezer,
+// whose playlists over-represent recent music. At 5,793 of 7,513 songs its bias
+// simply became the pool's.
+//
+// A fader is the right place to correct that. Regenerating to hit a target mix
+// would mean discarding good songs for having the wrong date, and would have to
+// be done again every time the pool grew.
+//
+// Not normalised by decade size, for the same reason the genre mixer is not:
+// the 1950s holds fourteen songs, and a flat normalised mixer would hand them
+// an eighth of the night. A fader raises how likely each song of a decade is,
+// and cannot conjure a mix the pool has no songs for.
+function decadeWeights(deck, levels) {
+  return deck.map((song) => {
+    const level = levels?.[song.decade] ?? 1;
+    return level > 0 ? level : 0;
+  });
+}
+
 // --- combining ---------------------------------------------------------------
 
 /**
  * Relative draw weight for every song in the deck.
  * `level` names an entry in LEVELS; `crowd` is the slider position, 0 to 1.
  */
-export function weightsFor(deck, { level = 'everything', crowd = 0.5, genreLevels } = {}) {
+export function weightsFor(deck, {
+  level = 'everything', crowd = 0.5, genreLevels, decadeLevels,
+} = {}) {
   const k = LEVELS[level]?.k ?? 0;
   const skew = skewWeights(deck, crowd);
   const genre = genreWeights(deck, genreLevels);
+  const decade = decadeWeights(deck, decadeLevels);
 
-  return deck.map((song, i) => scoreOf(song) ** k * skew[i] * genre[i]);
+  return deck.map((song, i) => scoreOf(song) ** k * skew[i] * genre[i] * decade[i]);
+}
+
+/**
+ * Each group's expected share of the draw under the current settings.
+ *
+ * The faders are multipliers, so their own readout ("1.4×") answers a question
+ * nobody at the table is asking. What is actually wanted is whether the
+ * nineties are back up to a quarter of the night yet, and that depends on the
+ * other faders too - weighting rock up pulls the decades along with it, because
+ * genre and era are not independent.
+ *
+ * Computed from the same weights the draw uses, so the number on screen cannot
+ * drift from what the deck goes on to do.
+ */
+export function projectedShares(deck, options, groupOf) {
+  const weights = weightsFor(deck, options);
+  const total = weights.reduce((a, b) => a + b, 0);
+
+  const shares = {};
+  if (!(total > 0)) return shares;
+  deck.forEach((song, i) => {
+    const group = groupOf(song);
+    shares[group] = (shares[group] ?? 0) + weights[i] / total;
+  });
+  return shares;
 }
 
 /**

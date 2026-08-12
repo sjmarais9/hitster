@@ -72,7 +72,20 @@ test('every filter combination still leaves a drawable deck', async () => {
     { label: 'casual', f: { ...filters.DEFAULTS, level: 'casual' } },
     { label: 'adults only', f: { ...filters.DEFAULTS, crowd: 0 } },
     { label: 'kids only', f: { ...filters.DEFAULTS, crowd: 1 } },
-    { label: 'one decade', f: { ...filters.DEFAULTS, decades: ['1990s'] } },
+    {
+      label: 'one decade',
+      f: {
+        ...filters.DEFAULTS,
+        decadeLevels: Object.fromEntries(filters.DECADES.map((d) => [d, d === '1990s' ? 1 : 0])),
+      },
+    },
+    {
+      label: 'nineties leaned',
+      f: {
+        ...filters.DEFAULTS,
+        decadeLevels: { ...filters.DEFAULTS.decadeLevels, '1990s': 1.6, '2000s': 0.7 },
+      },
+    },
     {
       label: 'rock boosted',
       f: { ...filters.DEFAULTS, genreLevels: { ...filters.DEFAULTS.genreLevels, rock: 2 } },
@@ -96,16 +109,24 @@ test('every filter combination still leaves a drawable deck', async () => {
   }
 });
 
-test('a saved selection from before the mixer does not break the draw', async () => {
+test('a saved selection from before the mixers does not break the draw', async () => {
   store.clear();
   const pool = await loadPool();
-  // The shape localStorage would hold from the chip-based version.
-  const legacy = { level: 'confident', crowd: 'everyone', decades: filters.DECADES, genres: ['rock'] };
-  const merged = { ...filters.DEFAULTS, ...legacy };
 
-  const deck = filters.apply(pool, merged);
-  assert.ok(deck.length > 0, 'legacy settings emptied the deck');
-  assert.ok(draw(deck, merged), 'legacy settings broke the draw');
+  // Every shape localStorage could be holding from an earlier version: the
+  // original chips, and the middle version that had a genre mixer but decade
+  // switches. Both go through migrate(), which is what load() does for real.
+  const legacy = [
+    { level: 'confident', crowd: 'everyone', decades: filters.DECADES, genres: ['rock'] },
+    { level: 'casual', crowd: 0.5, decades: ['1980s', '1990s'], genreLevels: { rock: 1.4 } },
+  ];
+
+  for (const saved of legacy) {
+    const merged = { ...filters.DEFAULTS, ...filters.migrate({ ...saved }) };
+    const deck = filters.apply(pool, merged);
+    assert.ok(deck.length > 0, 'legacy settings emptied the deck');
+    assert.ok(draw(deck, merged), 'legacy settings broke the draw');
+  }
 });
 
 test('describe never throws on any reachable settings shape', () => {
@@ -114,6 +135,9 @@ test('describe never throws on any reachable settings shape', () => {
     { ...filters.DEFAULTS, crowd: 0 },
     { ...filters.DEFAULTS, genreLevels: {} },
     { ...filters.DEFAULTS, genreLevels: undefined },
+    { ...filters.DEFAULTS, decadeLevels: {} },
+    { ...filters.DEFAULTS, decadeLevels: undefined },
+    // Un-migrated legacy, in case anything ever reaches describe() before load().
     { ...filters.DEFAULTS, decades: ['1990s'] },
   ];
   for (const shape of shapes) {

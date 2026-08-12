@@ -2,6 +2,7 @@ import { beginLogin, isLoggedIn, logout } from './auth.js';
 import { connect } from './player.js';
 import { loadPool, draw, resetSession } from './game.js';
 import { keepAwake } from './wakelock.js';
+import { projectedShares } from './scoring.js';
 import * as filters from './filters.js';
 
 const el = (id) => document.getElementById(id);
@@ -79,6 +80,8 @@ function refreshDeck() {
   el('deck-summary').textContent = filters.describe(chosen);
   // Nothing to draw from is not a game worth starting.
   el('begin').disabled = route === null || deck.length === 0;
+  // Every share is a share *of the deck*, so they all move when it does.
+  renderShares();
 }
 
 /**
@@ -123,21 +126,6 @@ function radioChips(container, options, selected, onPick) {
     })));
 }
 
-/** Many of a set, with the last one refusing to turn itself off. */
-function toggleChips(container, keys, labelFor, active, onChange) {
-  container.replaceChildren(...keys.map((key) =>
-    chip({
-      label: labelFor(key),
-      pressed: active.includes(key),
-      onToggle: () => {
-        const next = active.includes(key) ? active.filter((k) => k !== key) : [...active, key];
-        // Leaving nothing selected can only produce an empty deck, so the last
-        // one stays on rather than presenting a broken state.
-        if (next.length > 0) onChange(next);
-      },
-    })));
-}
-
 function buildChips() {
   radioChips(el('level-options'), filters.LEVELS, chosen.level, (key) => { chosen.level = key; });
 
@@ -145,56 +133,113 @@ function buildChips() {
   slider.value = String(chosen.crowd ?? 0.5);
   el('crowd-label').textContent = filters.CROWD.labelFor(chosen.crowd ?? 0.5);
 
-  toggleChips(el('decade-options'), filters.DECADES, (d) => d, chosen.decades,
-    (next) => { chosen.decades = next; });
-
-  buildMixer();
+  buildDecadeMixer();
+  buildGenreMixer();
 }
 
-/** One fader per genre family. Zero is Off and genuinely excludes; the rest
- *  only changes how often a genre comes up. */
-function buildMixer() {
-  const container = el('genre-mixer');
-  const levels = chosen.genreLevels ?? {};
+/**
+ * One fader for one group. Zero is Off; every other position only changes how
+ * often that group comes up.
+ *
+ * Returns the element the value is written into, so a caller that wants to show
+ * something livelier than the fader's own position can keep hold of it.
+ */
+function fader({ id, label, level, onInput }) {
+  const row = document.createElement('div');
+  row.className = 'mixer-row';
 
-  container.replaceChildren(...Object.entries(filters.GENRE_FAMILIES).map(([key, family]) => {
-    const row = document.createElement('div');
-    row.className = 'mixer-row';
+  const name = document.createElement('label');
+  name.className = 'mixer-label';
+  name.textContent = label;
+  name.htmlFor = `fader-${id}`;
 
-    const name = document.createElement('label');
-    name.className = 'mixer-label';
-    name.textContent = family.label;
-    name.htmlFor = `fader-${key}`;
+  const value = document.createElement('span');
+  value.className = 'mixer-value';
 
-    const value = document.createElement('span');
-    value.className = 'mixer-value';
+  const input = document.createElement('input');
+  input.type = 'range';
+  input.id = `fader-${id}`;
+  input.className = 'slider';
+  input.min = '0';
+  input.max = '2';
+  input.step = '0.1';
+  input.value = String(level);
 
-    const fader = document.createElement('input');
-    fader.type = 'range';
-    fader.id = `fader-${key}`;
-    fader.className = 'slider';
-    fader.min = '0';
-    fader.max = '2';
-    fader.step = '0.1';
-    fader.value = String(levels[key] ?? 1);
+  input.addEventListener('input', () => onInput(Number(input.value)));
+
+  row.append(name, value, input);
+  return { row, value };
+}
+
+/** Where each decade's live share readout is written. */
+let shareLabels = new Map();
+
+function buildDecadeMixer() {
+  shareLabels = new Map();
+
+  el('decade-mixer').replaceChildren(...filters.DECADES.map((decade) => {
+    const { row, value } = fader({
+      id: decade,
+      label: decade,
+      level: chosen.decadeLevels?.[decade] ?? 1,
+      onInput: (level) => {
+        chosen.decadeLevels = { ...chosen.decadeLevels, [decade]: level };
+        filters.save(chosen);
+        // Off is the one fader position that removes songs outright, so the
+        // deck count has to follow it. refreshDeck redraws the shares too.
+        refreshDeck();
+      },
+    });
+    shareLabels.set(decade, value);
+    return row;
+  }));
+}
+
+function buildGenreMixer() {
+  el('genre-mixer').replaceChildren(...Object.entries(filters.GENRE_FAMILIES).map(([key, family]) => {
+    const { row, value } = fader({
+      id: key,
+      label: family.label,
+      level: chosen.genreLevels?.[key] ?? 1,
+      onInput: (level) => {
+        chosen.genreLevels = { ...chosen.genreLevels, [key]: level };
+        render();
+        filters.save(chosen);
+        // No refreshDeck: a muted genre stays in the deck, weighted to nothing,
+        // so the mixer can be moved mid-session without the unplayed set
+        // shifting under the player. But it does move the decades.
+        renderShares();
+      },
+    });
 
     const render = () => {
-      const v = Number(fader.value);
+      const v = chosen.genreLevels?.[key] ?? 1;
       value.textContent = v === 0 ? 'Off' : v === 1 ? '—' : `${v.toFixed(1)}×`;
       value.classList.toggle('is-off', v === 0);
     };
     render();
 
-    fader.addEventListener('input', () => {
-      chosen.genreLevels = { ...chosen.genreLevels, [key]: Number(fader.value) };
-      render();
-      filters.save(chosen);
-      // No refreshDeck: the mixer changes odds, not which songs are eligible.
-    });
-
-    row.append(name, value, fader);
     return row;
   }));
+}
+
+/**
+ * The live mix readout.
+ *
+ * A fader position is a multiplier, and "1.4×" does not answer the question
+ * being asked, which is whether the nineties are back up to a quarter of the
+ * night. Showing the resulting share instead turns guesswork into aiming - and
+ * it has to be recomputed when the genre mixer moves too, because weighting up
+ * rock drags the decades along with it.
+ */
+function renderShares() {
+  const shares = projectedShares(deck, chosen, (song) => song.decade);
+
+  for (const [decade, node] of shareLabels) {
+    const off = (chosen.decadeLevels?.[decade] ?? 1) <= 0;
+    node.textContent = off ? 'Off' : `${Math.round((shares[decade] ?? 0) * 100)}%`;
+    node.classList.toggle('is-off', off);
+  }
 }
 
 /** Puts the next card on the table, face down and silent. */
@@ -338,6 +383,9 @@ el('crowd-slider').addEventListener('input', (event) => {
   el('crowd-label').textContent = filters.CROWD.labelFor(chosen.crowd);
   filters.save(chosen);
   // No refreshDeck: the slider changes the odds, not which songs are eligible.
+  // It does move the decades, though - the children's songs are not spread
+  // evenly across the eras.
+  renderShares();
 });
 el('open-filters').addEventListener('click', () => show('filters'));
 el('close-filters').addEventListener('click', () => show('start'));

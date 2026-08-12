@@ -5,7 +5,9 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { scoreOf, weightsFor, pickWeighted, TRUST, LEVELS } from '../src/scoring.js';
+import {
+  scoreOf, weightsFor, pickWeighted, projectedShares, TRUST, LEVELS,
+} from '../src/scoring.js';
 
 const song = (over = {}) => ({
   artist: 'A', title: 'B', year: 1995, decade: '1990s', genres: ['rock'],
@@ -169,6 +171,90 @@ test('pickWeighted survives an all-zero weight vector', () => {
   const deck = [song({ title: 'a' }), song({ title: 'b' })];
   const picked = pickWeighted(deck, [0, 0], seeded(3));
   assert.ok(picked, 'should fall back to uniform rather than returning nothing');
+});
+
+// --- the decade mixer --------------------------------------------------------
+
+// A miniature of the real problem: the generator left the 2000s ahead of the
+// 1990s, 24% to 19%, when the table wants the reverse.
+const eras = () => [
+  ...Array.from({ length: 19 }, (_, i) => song({ title: `n${i}`, decade: '1990s' })),
+  ...Array.from({ length: 24 }, (_, i) => song({ title: `o${i}`, decade: '2000s' })),
+  ...Array.from({ length: 57 }, (_, i) => song({ title: `x${i}`, decade: '1980s' })),
+];
+
+const shareOf = (dist, decade) => Object.entries(dist)
+  .filter(([title]) => title.startsWith(decade === '1990s' ? 'n' : 'o'))
+  .reduce((a, [, v]) => a + v, 0);
+
+test('a flat decade mixer leaves the pool alone', () => {
+  const dist = distribution(eras(), { level: 'everything', crowd: 0.5 });
+  assert.ok(Math.abs(shareOf(dist, '1990s') - 0.19) < 0.03,
+    `untouched faders must not rebalance anything, 1990s got ${shareOf(dist, '1990s')}`);
+});
+
+test('a decade fader moves the mix it is pointed at', () => {
+  // The actual fix: nineties up, noughties down, and the pool composition never
+  // touched. 19 songs at 1.6x against 24 at 0.7x should put the 1990s ahead.
+  const dist = distribution(eras(), {
+    level: 'everything',
+    crowd: 0.5,
+    decadeLevels: { '1990s': 1.6, '2000s': 0.7 },
+  });
+  assert.ok(shareOf(dist, '1990s') > shareOf(dist, '2000s'),
+    `1990s ${shareOf(dist, '1990s')} should now beat 2000s ${shareOf(dist, '2000s')}`);
+});
+
+test('a decade fader is not normalised, so it cannot invent songs', () => {
+  // Fourteen 1950s songs against a thousand others. A normalised mixer would
+  // hand those fourteen an eighth of the night; this one must not.
+  const deck = [
+    ...Array.from({ length: 14 }, (_, i) => song({ title: `fifties${i}`, decade: '1950s' })),
+    ...Array.from({ length: 986 }, (_, i) => song({ title: `rest${i}`, decade: '1990s' })),
+  ];
+  const dist = distribution(deck, { level: 'everything', crowd: 0.5 });
+  const fifties = Object.entries(dist)
+    .filter(([t]) => t.startsWith('fifties')).reduce((a, [, v]) => a + v, 0);
+  assert.ok(fifties < 0.05, `a flat mixer must mirror the pool, 1950s got ${fifties}`);
+});
+
+test('a decade at Off draws nothing', () => {
+  const deck = [song({ title: 'a', decade: '1990s' }), song({ title: 'b', decade: '1960s' })];
+  const off = distribution(deck, {
+    level: 'everything', crowd: 0.5, decadeLevels: { '1960s': 0 },
+  }, 20000);
+  assert.equal(off.b, 0, 'Off must genuinely exclude, or the label lies');
+});
+
+// --- the live mix readout ----------------------------------------------------
+
+test('projectedShares sums to one', () => {
+  const shares = projectedShares(eras(), { level: 'casual', crowd: 0.3 }, (s) => s.decade);
+  const total = Object.values(shares).reduce((a, b) => a + b, 0);
+  assert.ok(Math.abs(total - 1) < 1e-9, `shares should account for the whole draw, got ${total}`);
+});
+
+test('the readout matches what the deck actually goes on to do', () => {
+  // The number on screen is a promise about the next twenty thousand draws.
+  // This is the test that stops it becoming decorative.
+  const options = {
+    level: 'confident',
+    crowd: 0.4,
+    decadeLevels: { '1990s': 1.6, '2000s': 0.7 },
+    genreLevels: { rock: 1.3 },
+  };
+  const predicted = projectedShares(eras(), options, (s) => s.decade);
+  const actual = distribution(eras(), options, 40000);
+
+  for (const decade of ['1990s', '2000s']) {
+    const observed = shareOf(actual, decade);
+    assert.ok(Math.abs(predicted[decade] - observed) < 0.02,
+      `${decade}: predicted ${predicted[decade]}, drew ${observed}`);
+  }
+});
+
+test('projectedShares survives a deck nothing can be drawn from', () => {
+  assert.deepEqual(projectedShares([], {}, (s) => s.decade), {});
 });
 
 test('every level is usable', () => {
