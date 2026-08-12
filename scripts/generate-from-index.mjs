@@ -82,6 +82,52 @@ const DECADE_YEARS = {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const readJson = async (f) => JSON.parse(await readFile(path.resolve(ROOT, f), 'utf8'));
 
+// Restricts a run to recent candidates, for recovering songs MusicBrainz could
+// not date. `--era recent` skips anything the playlists place before 2000.
+const ERA = (() => {
+  const i = args.indexOf('--era');
+  return i === -1 ? null : args[i + 1];
+})();
+
+const RECENT = new Set(['2000s', '2010s', '2020s']);
+
+/**
+ * Deezer's release date, used only as a fallback and only for recent songs.
+ *
+ * Measured against 60 songs with known years, Deezer is unusable before 1990
+ * and good after 2000:
+ *
+ *   1960s 0/9    2000s 6/8
+ *   1970s 3/9    2010s 7/8
+ *   1980s 2/8    2020s 8/8
+ *   1990s 1/8
+ *
+ * The failures are not errors, they are remaster pressings - Johnny B. Goode
+ * comes back as 2017 - which is exactly what the project spec warned about on
+ * day one. So it is called only where it has been shown to work, and its answer
+ * still has to pass the same decade cross-check as MusicBrainz's.
+ */
+async function deezerYear(artist, title) {
+  const q = `track:"${title.replace(/"/g, '')}" artist:"${artist.replace(/"/g, '')}"`;
+  try {
+    const found = await (await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(q)}&limit=5`)).json();
+    if (found.error || !found.data?.length) return null;
+
+    const wantA = normalise(artist);
+    const wantT = normalise(title);
+    const match = found.data.find((t) =>
+      normalise(t.title ?? '') === wantT && normalise(t.artist?.name ?? '') === wantA);
+    if (!match) return null;
+
+    await sleep(220);
+    const full = await (await fetch(`https://api.deezer.com/track/${match.id}`)).json();
+    const year = Number(String(full?.release_date ?? full?.album?.release_date ?? '').slice(0, 4));
+    return Number.isFinite(year) && year > 1900 && year < 2030 ? year : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Original release year from MusicBrainz release-groups, or null. */
 async function yearOf(artist, title) {
   const q = `artist:"${artist.replace(/"/g, '')}" AND releasegroup:"${title.replace(/"/g, '')}"`;
@@ -164,7 +210,11 @@ async function main() {
 
   const candidates = Object.entries(index)
     .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(e.title) && !known.has(key)
-      && leansToward(e, GENRE))
+      && leansToward(e, GENRE)
+      // A recovery pass only wants the songs Deezer can actually date. Without
+      // this it would re-ask MusicBrainz about 9,516 candidates to reach the
+      // 3,133 worth asking Deezer about.
+      && (ERA !== 'recent' || RECENT.has(crowdDecade(e))))
     .sort((a, b) => b[1].n - a[1].n)          // most canonical first
     .slice(0, LIMIT === Infinity ? undefined : LIMIT);
 
@@ -177,7 +227,7 @@ async function main() {
   const percentile = new Map();
   ranked.forEach(([key], i) => percentile.set(key, (i / Math.max(1, ranked.length - 1)) * 100));
 
-  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0 };
+  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaDeezer: 0 };
   let sinceCheckpoint = 0;
 
   async function save() {
@@ -196,8 +246,18 @@ async function main() {
     const crowd = crowdDecade(entry);
     if (!crowd) { reasons.noCrowdDecade++; continue; }
 
-    const year = await yearOf(entry.artist, entry.title);
+    let year = await yearOf(entry.artist, entry.title);
     await sleep(PAUSE_MS);
+
+    // MusicBrainz has no release-group for a great many songs - it dropped
+    // 5,933 candidates on the first pass, and unevenly: African music was lost
+    // at 96%, reggae and funk at about 80%. Deezer covers those far better, but
+    // only tells the truth about recent releases, so it is asked only then.
+    if (year === null && RECENT.has(crowd)) {
+      year = await deezerYear(entry.artist, entry.title);
+      if (year !== null) reasons.viaDeezer++;
+      await sleep(220);
+    }
 
     if (year === null) { reasons.noYear++; continue; }
 
@@ -232,6 +292,7 @@ async function main() {
   console.log(`rejected, no year:   ${reasons.noYear}`);
   console.log(`rejected, decade clash: ${reasons.decadeClash}`);
   console.log(`skipped, no clear era:  ${reasons.noCrowdDecade}`);
+  if (reasons.viaDeezer) console.log(`\nrescued by Deezer:      ${reasons.viaDeezer}  (songs MusicBrainz had no record of)`);
   console.log(`\nWrote ${path.relative(ROOT, OUT)} with ${produced.length} songs`);
 }
 
@@ -239,3 +300,4 @@ main().catch((err) => {
   console.error(`\n${err.message}`);
   process.exit(1);
 });
+
