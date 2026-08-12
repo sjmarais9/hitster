@@ -1,10 +1,12 @@
 {
-    "name":  "hitster",
-    "private":  true,
-    "type":  "module",
-    "description":  "Digital card deck for the music board game Hitster.",
-    "scripts":  {
-                    "import":  "node scripts/import-songs.mjs",
-                    "test":  "node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/smoke.test.mjs"
-                }
+  "name": "hitster",
+  "private": true,
+  "type": "module",
+  "description": "Digital card deck for the music board game Hitster.",
+  "scripts": {
+    "import": "node scripts/import-songs.mjs",
+    "stats": "node scripts/stats.mjs",
+    "stamp": "node scripts/stamp.mjs",
+    "test": "node scripts/stamp.mjs --check && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/smoke.test.mjs"
+  }
 }

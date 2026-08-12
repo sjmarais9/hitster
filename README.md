@@ -158,6 +158,43 @@ changes; the output is committed.
 While a card is on the table the app holds a screen wake lock, so the phone does
 not dim mid-song. It is released automatically whenever the tab is backgrounded.
 
+### Why deploys need a version stamp
+
+GitHub Pages serves everything with `Cache-Control: max-age=600` and gives no
+way to change that. Nothing here was versioned, so a phone with the app on its
+home screen kept running the old CSS and the old modules — a push would land and
+simply not appear.
+
+Worse than merely stale: each ES module is cached independently and expires at
+its own moment, so the app could end up running a new `app.js` against an old
+`scoring.js`, a combination that was never tested and need not work at all.
+
+So every asset URL carries `?v=<hash>`, where the hash covers `src/`, `css/` and
+both HTML files. `index.html` is still cached for up to ten minutes, but once it
+is refetched, everything it points at is refetched *with* it, as a matched set.
+
+```
+npm run stamp     rewrite the stamps
+npm test          fails if anything is unstamped
+```
+
+`.githooks/pre-commit` runs the stamp automatically and re-stages whatever it
+touched, so this is not something to remember. Enable it once per clone:
+
+```
+git config core.hooksPath .githooks
+```
+
+The stamp is a hash of the source rather than a timestamp, so an unchanged tree
+restamps to the same value and the hook stays a no-op until code actually
+changes. No service worker: those address this problem by taking on a harder
+version of it.
+
+**If a phone is still showing an old build**, it is holding an `index.html` from
+within the last ten minutes. Pull down to refresh in Chrome, or open the site in
+a tab (rather than from the home screen icon) and reload — the stamps do the
+rest.
+
 ## Song data
 
 `data/songs.json` is the playable pool. Batches live alongside it as

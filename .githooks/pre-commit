@@ -1,0 +1,21 @@
+#!/bin/sh
+# Re-stamp asset URLs before every commit.
+#
+# The stamp is a hash of the source, so this is a no-op unless something
+# actually changed. Without it a deploy can land on a phone that goes on
+# serving the previous CSS and modules from its cache for another ten minutes -
+# or indefinitely, for anyone with the app on their home screen.
+#
+# Enabled with:  git config core.hooksPath .githooks
+
+node scripts/stamp.mjs || exit 1
+
+# Only re-stage files that were already part of this commit. Stamping a file the
+# author deliberately left out of the index would drag it in behind their back.
+for file in $(git diff --name-only); do
+  if git diff --cached --name-only | grep -qx "$file"; then
+    git add "$file"
+  fi
+done
+
+exit 0

@@ -5,8 +5,8 @@
 // night should not leave a live Spotify session behind on the device.
 // Refreshing is handled transparently so an hour-long game is not interrupted.
 
-import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js';
-import { createVerifier, createState, challengeFor } from './pkce.js';
+import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=266539d4';
+import { createVerifier, createState, challengeFor } from './pkce.js?v=266539d4';
 
 const VERIFIER_KEY = 'hitster.pkce_verifier';
 const STATE_KEY = 'hitster.oauth_state';
