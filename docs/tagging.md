@@ -1,11 +1,40 @@
 # Tagging guide: familiarity and skew
 
 How every song in the pool gets its `familiarity` and `skew` values. These are
-**our** values, assigned when the song is generated, exactly like `year`. No
-Spotify field ever overwrites them.
+**our** values, assigned when the song is generated, exactly like `year`.
 
 This file exists because the pool is built across dozens of batches and many
 sessions. Anything not written down here will drift.
+
+## What changed, and what it means for these rules
+
+These tags are no longer the whole story, and reading this document as if they
+were will lead you wrong.
+
+**They are weights, not filters.** Familiarity and skew no longer decide whether
+a song can be drawn. They shape how likely it is. A song tagged `deep` still
+appears in a casual game, roughly 350 times less often than the best card but
+never zero. That changes the cost of a mistake enormously: a mis-tag used to
+make a song invisible, and now only makes it rarer.
+
+**They are blended with a measured score.** Every song also carries
+`canonicity`, a 0-100 within-decade percentile from Deezer playlist appearances
+and Last.fm listener counts. The sampler mixes the two at `TRUST = 0.6` in
+`src/scoring.js` - local knowledge stays ahead, but the measurement genuinely
+bites and, more usefully, separates songs these tags treat as identical. All 772
+`deep` songs used to be the same card.
+
+**So tag carefully, but not fearfully.** The rules below still matter, because
+0.6 of the weight is still this judgement and no external source knows what a
+South African family knows. But an imperfect tag is now a smaller problem than
+it was when these rules were written, and agonising over a borderline call is no
+longer worth the time it once was.
+
+**Generated batches are seeded, not judged.** From batch 006 on, songs come from
+`scripts/generate-from-index.mjs`, which sets `familiarity` from canonicity and
+`skew` from year. Those are starting points that have never been reviewed. The
+rules below describe how a *person* should tag; the generator approximates them
+badly and knowingly.
 
 ## The audience
 
@@ -193,6 +222,13 @@ Added to as the owner corrects tagging. Each of these overrides intuition.
   measures current streaming rather than familiarity - inflating meme revivals,
   deflating songs everyone knows but nobody streams - so it was only ever
   intended as a disagreement signal, never as an authority.
+
+- **Canonicity is not familiarity either, and the gap is the point.** The
+  measured score says how well the world knows a song. These tags say how well
+  this household does. Where they disagree, both are right about different
+  things. September sits at canonicity 99 and is tagged `deep`, because the
+  family cannot place it. Vulindlela sits at canonicity 0 and is tagged
+  `standard`, because they certainly can. A single field could express neither.
 - **TikTok revivals** genuinely do move older songs from `adults` to `even`.
   Check whether a song has had a second life before assuming the children have
   not heard it.
@@ -249,6 +285,18 @@ residual rate of individually wrong tags is the price of reaching 10,000 songs.
 A wrong `familiarity` makes a card easier or harder than the filter promised; it
 does not break a round the way a wrong `year` would. Errors are expected to be
 found in play rather than in review.
+
+**Since decided, two things have reduced the cost further.** Weighted sampling
+means a mis-tag makes a song rarer rather than invisible, and canonicity carries
+40% of the familiarity weight from a source that has never met the family. A
+wrong tag is now a nudge rather than a disappearance.
+
+That argues for reviewing *less*, not more. The remaining value of a review
+round is correcting the household-specific things no measurement can see - the
+South African weighting, the rock bias, what the children actually know - rather
+than general familiarity, which the data now handles. Future reviews should be
+weighted toward songs where our tag and canonicity disagree most, since that is
+where one of the two is wrong and the data cannot say which.
 
 ## Distribution targets
 
