@@ -403,7 +403,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -456,7 +456,7 @@
       "genres": [
         "glam rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -482,7 +482,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -696,7 +696,7 @@
         "rock",
         "soft rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -722,7 +722,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -748,7 +748,7 @@
       "genres": [
         "progressive rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -813,7 +813,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -826,7 +826,7 @@
       "genres": [
         "disco"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -840,7 +840,7 @@
         "disco",
         "soft rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -880,7 +880,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1073,7 +1073,7 @@
         "progressive rock",
         "pop rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1086,7 +1086,7 @@
       "genres": [
         "punk"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1180,7 +1180,7 @@
       "genres": [
         "heavy metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1248,7 +1248,7 @@
       "genres": [
         "funk"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1261,7 +1261,7 @@
       "genres": [
         "new wave"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1274,7 +1274,7 @@
       "genres": [
         "new wave"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1302,7 +1302,7 @@
         "funk rock",
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1315,7 +1315,7 @@
       "genres": [
         "heavy metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1356,7 +1356,7 @@
         "reggae",
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1382,7 +1382,7 @@
       "genres": [
         "new wave"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1396,7 +1396,7 @@
         "new wave",
         "synth-pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1423,7 +1423,7 @@
         "pop",
         "dance pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1450,7 +1450,7 @@
       "genres": [
         "heavy metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1477,7 +1477,7 @@
       "genres": [
         "new wave"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1586,7 +1586,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1613,7 +1613,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1626,7 +1626,7 @@
       "genres": [
         "heavy metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1639,7 +1639,7 @@
       "genres": [
         "thrash metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1653,7 +1653,7 @@
         "hard rock",
         "glam metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1694,7 +1694,7 @@
       "genres": [
         "synth-pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1735,7 +1735,7 @@
         "pop",
         "dance pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1748,7 +1748,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1761,7 +1761,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1855,7 +1855,7 @@
         "soul",
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1939,7 +1939,7 @@
         "rock",
         "pop rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1952,7 +1952,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1979,7 +1979,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -1993,7 +1993,7 @@
         "pop",
         "soul"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2073,7 +2073,7 @@
         "pop",
         "jazz"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2086,7 +2086,7 @@
       "genres": [
         "synth-pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2140,7 +2140,7 @@
         "pop",
         "dance pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2181,7 +2181,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2246,7 +2246,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2259,7 +2259,7 @@
       "genres": [
         "synth-pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2324,7 +2324,7 @@
       "genres": [
         "pop rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2337,7 +2337,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2404,7 +2404,7 @@
       "genres": [
         "indie rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2498,7 +2498,7 @@
       "genres": [
         "grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "standard",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2511,7 +2511,7 @@
       "genres": [
         "grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2525,7 +2525,7 @@
         "grunge",
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2551,7 +2551,7 @@
       "genres": [
         "heavy metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2564,7 +2564,7 @@
       "genres": [
         "hard rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2617,7 +2617,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2630,7 +2630,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2657,7 +2657,7 @@
         "pop",
         "soul"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2670,7 +2670,7 @@
       "genres": [
         "pop rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2723,7 +2723,7 @@
       "genres": [
         "grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2736,7 +2736,7 @@
       "genres": [
         "alternative metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2775,7 +2775,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2788,7 +2788,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2801,7 +2801,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2841,7 +2841,7 @@
       "genres": [
         "hip hop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2867,7 +2867,7 @@
       "genres": [
         "r&b"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2881,7 +2881,7 @@
         "reggae",
         "hip hop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2934,7 +2934,7 @@
       "genres": [
         "grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2947,7 +2947,7 @@
       "genres": [
         "grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -2960,7 +2960,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3028,7 +3028,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3041,7 +3041,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3094,7 +3094,7 @@
       "genres": [
         "punk rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3107,7 +3107,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3173,7 +3173,7 @@
         "big beat",
         "electronic"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3252,7 +3252,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3279,7 +3279,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3292,7 +3292,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3305,7 +3305,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3331,7 +3331,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3344,7 +3344,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3357,7 +3357,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3438,7 +3438,7 @@
         "house",
         "electronic"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3570,7 +3570,7 @@
         "big beat",
         "electronic"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3610,7 +3610,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3623,7 +3623,7 @@
       "genres": [
         "britpop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3688,7 +3688,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3714,7 +3714,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3753,7 +3753,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3766,7 +3766,7 @@
       "genres": [
         "eurodance"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3872,7 +3872,7 @@
       "genres": [
         "rap metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3926,7 +3926,7 @@
         "electronic",
         "downtempo"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -3992,7 +3992,7 @@
       "genres": [
         "alternative metal"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4018,7 +4018,7 @@
       "genres": [
         "punk rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4031,7 +4031,7 @@
       "genres": [
         "rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4044,7 +4044,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4057,7 +4057,7 @@
       "genres": [
         "garage rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4070,7 +4070,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4097,7 +4097,7 @@
       "genres": [
         "r&b"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4123,7 +4123,7 @@
       "genres": [
         "garage rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4150,7 +4150,7 @@
       "genres": [
         "pop punk"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4176,7 +4176,7 @@
       "genres": [
         "post-grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4229,7 +4229,7 @@
         "house",
         "electronic"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4337,7 +4337,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4389,7 +4389,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4443,7 +4443,7 @@
         "indie rock",
         "garage rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4456,7 +4456,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4482,7 +4482,7 @@
       "genres": [
         "post-grunge"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4548,7 +4548,7 @@
       "genres": [
         "indie rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4561,7 +4561,7 @@
       "genres": [
         "indie rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4601,7 +4601,7 @@
       "genres": [
         "reggaeton"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4710,7 +4710,7 @@
       "genres": [
         "hip hop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4803,7 +4803,7 @@
       "genres": [
         "soul"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4965,7 +4965,7 @@
         "soul",
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -4979,7 +4979,7 @@
         "r&b",
         "hip hop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -5288,7 +5288,7 @@
       "genres": [
         "alternative rock"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null
@@ -5865,7 +5865,7 @@
       "genres": [
         "pop"
       ],
-      "familiarity": "deep",
+      "familiarity": "familiar",
       "skew": "adults",
       "spotify_uri": null,
       "market_checked": null

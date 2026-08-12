@@ -137,6 +137,9 @@ async function main() {
       genres: song.genres,
       familiarity: song.familiarity ?? null,
       skew: song.skew ?? null,
+      // Present but null on anything imported before album capture existed.
+      // Backfilling needs --recheck, which costs a full re-resolve.
+      album: existing.album ?? null,
     };
     if (JSON.stringify(updated) !== JSON.stringify(existing)) {
       resolved.set(keyOf(song), updated);
@@ -236,6 +239,11 @@ async function main() {
         familiarity: song.familiarity ?? null,
         skew: song.skew ?? null,
         spotify_uri: best.track.uri,
+        // Spotify's, not ours, and the only field in the pool that is. The
+        // matcher takes whatever pressing Spotify surfaces, so this is often a
+        // reissue, remaster or compilation rather than the original album.
+        // Descriptive only - nothing should key off it.
+        album: best.track.album?.name ?? null,
         market_checked: MARKET,
       });
 

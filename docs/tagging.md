@@ -39,6 +39,35 @@ Worked examples, agreed with the owner:
 - `deep` — Hit the Road Jack, Good Vibrations, Bad Moon Rising, What's Going On,
   London Calling, Nuthin' but a 'G' Thang, Scatterlings of Africa
 
+### Where the familiar/deep line actually sits
+
+Established by putting 20 `deep` songs from batch 004 in front of the owner.
+Use this before reaching for `deep`:
+
+| | |
+|---|---|
+| Mainstream rock and metal, roughly **1984-2003** | `familiar`, occasionally `standard` |
+| Indie, underground, post-punk, shoegaze | `deep` |
+| Anything **pre-1980** | `deep` unless a genuine mega-hit |
+| Pop, hip hop, r&b, dance, any era | `deep` unless a genuine mega-hit |
+
+Worked examples from the review. The pairs matter more than the singles,
+because they show the line rather than a point:
+
+- Same year, opposite calls: Metallica's *Creeping Death* (1984) is `familiar`,
+  The Smiths' *How Soon Is Now?* (1984) is `deep`. Mainstream metal versus indie.
+- Same year again: Pearl Jam's *Even Flow* (1991) is `standard`, Red Hot Chili
+  Peppers' *Suck My Kiss* (1991) is `deep`. Both rock, but one is an album
+  everyone owned and the other is a deeper cut.
+- Album fame does not carry: a *Thriller* track stayed `deep` while a Black
+  Album track went `familiar`. The band's standing with this household decides
+  it, not the album's.
+
+**Three mechanical rules were tried on this and all failed** - genre alone,
+formative-years window alone, and genre plus era with an artist-frequency
+proxy. Each landed near 50% accuracy. The line is real but it is not
+computable; judge song by song.
+
 ### `deep` is over-used, and it is the standing error
 
 Batch 004 came out 73% `deep`, and the review found three of twenty songs
