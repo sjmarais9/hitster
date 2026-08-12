@@ -246,15 +246,32 @@ function genresOf(entry) {
 }
 
 /**
- * Seeds, not judgements. familiarity is set from measured canonicity, and skew
- * from the year, using the relationship measured across the existing pool:
- * essentially no pre-2000 song is kids-skewed, 2010s is about half, 2020s most.
- * Both are starting points the review and the sampler can move.
+ * Seeds, not judgements. Both are starting points the review and the sampler
+ * can move.
+ *
+ * skew used to come from the year alone - pre-2005 adults, then even, then kids
+ * from 2015. That was measured across the existing pool and faithfully
+ * reproduced a mistake in it: the hand-tagging had read `kids` as "music from
+ * the children's era" rather than "music the children know", leaving every
+ * decade before 2000 at 99% adults. Since the crowd slider is normalised by
+ * population, Balanced then had to find half the night from a side of the pool
+ * containing nothing older than Hey Ya, and the 1990s fell to 13.4% of the draw.
+ *
+ * Canonicity fixes it without pretending to know the family: a pre-2005 song in
+ * the top third of its decade is one that crossed generations, which is what
+ * rule 8 in docs/tagging.md means by shared. Everything below that bar stays
+ * with the grown-ups.
  */
 const familiarityFor = (percentile) =>
   (percentile >= 85 ? 'standard' : percentile >= 45 ? 'familiar' : 'deep');
 
-const skewFor = (year) => (year < 2005 ? 'adults' : year < 2015 ? 'even' : 'kids');
+const SHARED = 65;
+
+const skewFor = (year, percentile) => {
+  if (year >= 2015) return 'kids';
+  if (year >= 2005) return 'even';
+  return percentile >= SHARED ? 'even' : 'adults';
+};
 
 async function main() {
   const index = (await readJson('data/canonicity.json')).tracks ?? {};
@@ -376,7 +393,7 @@ async function main() {
       decade: `${Math.floor(year / 10) * 10}s`,
       genres: genresOf(entry),
       familiarity: familiarityFor(percentile.get(key) ?? 50),
-      skew: skewFor(year),
+      skew: skewFor(year, percentile.get(key) ?? 50),
       spotify_uri: null,
       market_checked: null,
       canonicity: Math.round(percentile.get(key) ?? 50),

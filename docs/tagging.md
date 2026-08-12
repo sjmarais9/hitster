@@ -131,6 +131,35 @@ Which half of the table has the advantage. Three values: `even`, `adults`,
 `adults`. Deliberately include `deep` + `kids` songs, or the children only ever
 lose to their parents' back catalogue.
 
+### The mistake this field spent five batches making
+
+`skew` was read as *which era the song comes from* rather than *who at this
+table knows it*. The result: every decade before 2000 was tagged about 99%
+`adults`, and of 1,341 songs tagged `kids`, not one predated 2000.
+
+That is wrong on its face — a fourteen-year-old in this house can place
+*Stairway to Heaven* — but it did real damage, because the crowd slider is
+normalised by population. Balanced has to find half the night from the
+children's side, and with nothing older than *Hey Ya* on that side it forced the
+night into the 2010s and 2020s: 42.6% of the draw in two decades, and the 1990s
+squeezed to 13.4%. "Balanced" was not a balanced night. It was two separate
+games, the grown-ups getting pre-2000 and the children getting the last fifteen
+years.
+
+Worse, the generator measured that relationship across the existing pool,
+believed it, and applied `year < 2005 ? 'adults' : ...` to 5,668 more songs. A
+seed learned from tagged data inherits the tagging's mistakes at scale.
+
+**The correction, and the rule going forward:** a pre-2005 song in the top third
+of its decade by canonicity is `even`, not `adults`. The songs that cross
+generations are the ones everyone knows, which is what rule 8 means by shared.
+`node scripts/reseed-skew.mjs` applies it and is idempotent; `skewFor` in the
+generator now uses the same bar.
+
+It is a seed, not a judgement — a well-known song the children genuinely have
+not met should still be corrected to `adults` in review. But the default now
+errs toward sharing, which is the right direction for a game played together.
+
 ## Rules learned
 
 Added to as the owner corrects tagging. Each of these overrides intuition.
