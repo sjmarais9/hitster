@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=4412408a';
-import { connect } from './player.js?v=4412408a';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=4412408a';
-import { keepAwake } from './wakelock.js?v=4412408a';
-import { projectedShares } from './scoring.js?v=4412408a';
-import * as filters from './filters.js?v=4412408a';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=721fe482';
+import { connect } from './player.js?v=721fe482';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=721fe482';
+import { keepAwake } from './wakelock.js?v=721fe482';
+import { projectedShares } from './scoring.js?v=721fe482';
+import * as filters from './filters.js?v=721fe482';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -34,10 +34,12 @@ function show(screen) {
   for (const [name, node] of Object.entries(screens)) {
     node.classList.toggle('hidden', name !== screen);
   }
-  // The table is sized to fit exactly, so nothing there should ever scroll -
-  // and a card dragged half off the screen mid-round is a spoiler as much as an
-  // annoyance. The deck is the opposite: it is a long page and must scroll.
-  document.body.classList.toggle('locked', screen === 'table');
+  // Neither the table nor the menu should ever scroll: the table because a card
+  // dragged half off the screen mid-round is a spoiler as much as an annoyance,
+  // the menu because it is four items and a title. The deck is the opposite -
+  // it is a long page and must scroll. A short-viewport media query lets the
+  // lock go on screens too small for the content, so nothing is ever stranded.
+  document.body.classList.toggle('locked', screen === 'table' || screen === 'start');
   if (screen === 'start') refreshStart();
 }
 

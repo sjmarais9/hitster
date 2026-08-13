@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=4412408a') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=721fe482') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=4412408a') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=721fe482') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -79,7 +79,12 @@ button {
 
 html, body {
   margin: 0;
-  min-height: 100dvh;
+  /* svh, not dvh, for the reason spelled out on #table below: dvh is the
+     viewport right now and grows when Chrome hides its toolbar, so a document
+     floored at 100dvh can end up taller than what is actually on screen - which
+     is a page that scrolls despite its content fitting. svh is the smallest the
+     viewport ever gets, so this floor can never exceed it. */
+  min-height: 100svh;
   background: var(--bg);
   color: var(--text);
   font: 400 1.125rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -95,13 +100,22 @@ body.centred {
   place-items: center;
 }
 
-/* Belt and braces for the table screen. The sizing above should already make
-   it fit, but height arithmetic depends on how a browser reports its viewport,
-   and this does not: with nothing to scroll to, nothing scrolls. Set only on
-   the table, never on the deck, which genuinely needs to scroll. */
+/* Belt and braces. The sizing should already make these screens fit, but height
+   arithmetic depends on how a browser reports its viewport, and this does not:
+   with nothing to scroll to, nothing scrolls. Set on the table and the menu,
+   never on the deck, which genuinely needs to scroll. */
 body.locked {
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+/* Except where it genuinely cannot fit - landscape on a phone, mostly. Locking
+   there would put Log out somewhere unreachable, which is worse than a screen
+   that scrolls. */
+@media (max-height: 30rem) {
+  body.locked {
+    overflow: auto;
+  }
 }
 
 .panel {
@@ -258,8 +272,12 @@ h1 {
 /* The wordmark is the tallest thing on this screen, so it is the one that has
    to give when the screen is short - otherwise the buttons below it go off the
    bottom and the menu starts scrolling. */
+#start {
+  gap: 1rem;
+}
+
 #start .wordmark {
-  font-size: clamp(2.75rem, min(23vw, 14svh), 7rem);
+  font-size: clamp(2.5rem, min(23vw, 13svh), 7rem);
 }
 
 /* The card. Reveal is meant to feel like turning a card over, so it flips
