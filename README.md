@@ -211,6 +211,43 @@ within the last ten minutes. Pull down to refresh in Chrome, or open the site in
 a tab (rather than from the home screen icon) and reload — the stamps do the
 rest.
 
+## Sharing it
+
+The site is public — anyone can open it. What is not public is Spotify access,
+and that is what decides which of these three cases applies.
+
+**Playing with the owner needs nothing.** The game runs on the owner's account,
+on the owner's phone, passed around the table exactly as the physical game is.
+Nobody else logs in, and nobody else needs Premium. This is what the app was
+built for and it already works.
+
+**A friend hosting their own game night needs two things:**
+
+1. **Spotify Premium.** The Web Playback SDK will not stream without it, and
+   there is no way around that inside Spotify.
+2. **A place on this app's allowlist.** The app is in development mode, so only
+   accounts added by hand can log in — everyone else is refused at the consent
+   screen. Add them in the [dashboard](https://developer.spotify.com/dashboard)
+   under **Settings → User Management**, using the email on their Spotify
+   account.
+
+Development mode caps how many users can be listed. **The dashboard's User
+Management page is the authority on that number**; it has changed more than once
+and is worth reading rather than assuming. `docs/spotify-quota-request.md`
+records it as five, from research at the time. Extended quota would lift the cap
+and is permanently closed to us — same doc explains why.
+
+**A friend who wants their own copy** forks the repo and runs it as their own
+app, which sidesteps this app's cap entirely by using their own. Two changes:
+
+- `CLIENT_ID` in `src/config.js`, set to their own Spotify app
+- Their redirect URI registered in their dashboard, as
+  `https://<user>.github.io/<repo>/callback`
+
+`basePath()` derives from `location`, so nothing else needs touching. The song
+pool travels with the repo, which is the part that took weeks — but it travels
+as a snapshot, and later work here will not reach them unless they pull.
+
 ## Song data
 
 `data/songs.json` is the playable pool. Batches live alongside it as
