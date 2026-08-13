@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=0e04e0c5';
-import { connect } from './player.js?v=0e04e0c5';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=0e04e0c5';
-import { keepAwake } from './wakelock.js?v=0e04e0c5';
-import { projectedShares } from './scoring.js?v=0e04e0c5';
-import * as filters from './filters.js?v=0e04e0c5';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=105ce954';
+import { connect } from './player.js?v=105ce954';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=105ce954';
+import { keepAwake } from './wakelock.js?v=105ce954';
+import { projectedShares } from './scoring.js?v=105ce954';
+import * as filters from './filters.js?v=105ce954';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -335,9 +335,10 @@ function thumbOnly(input) {
     const { box, thumb, min, max, travel } = geometry();
     const position = max === min ? 0 : (Number(input.value) - min) / (max - min);
     const centre = box.left + thumb / 2 + position * travel;
-    // Half the thumb plus a little, because fingers are not precise and the
-    // alternative is a control that feels broken.
-    return Math.abs(clientX - centre) <= thumb / 2 + 6;
+    // Half the cap, plus a generous margin. The cap is drawn narrow because
+    // that is what a fader looks like; the thing you have to hit should not
+    // also be narrow. Roughly a 46px target around a 22px cap.
+    return Math.abs(clientX - centre) <= thumb / 2 + 12;
   }
 
   function valueAt(clientX) {

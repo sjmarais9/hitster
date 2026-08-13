@@ -569,6 +569,12 @@ h1 {
 .slider-shell {
   display: block;
   touch-action: pan-y;
+  /* The input has pointer-events: none, so the cursor has to live out here. */
+  cursor: grab;
+}
+
+.slider-shell:active {
+  cursor: grabbing;
 }
 
 .mixer-row .slider-shell {
@@ -576,9 +582,12 @@ h1 {
 }
 
 .slider {
-  /* Larger than it was, because it is now the only part that responds and a
-     miss does nothing at all rather than setting a rough value. */
-  --thumb: 36px;
+  /* --thumb is the cap's width and must match what is actually painted: the
+     browser derives the travel from it, and thumbOnly() derives the hit test
+     from it, so a mismatch puts the cap and its target in different places. */
+  --thumb: 22px;
+  --thumb-h: 34px;
+  --slot: 0.5rem;
 
   width: 100%;
   height: 2.5rem;
@@ -589,46 +598,73 @@ h1 {
   pointer-events: none;
 }
 
+/* The slot a fader runs in: a channel milled into the panel, not a line drawn
+   on it. Dark at the quiet end and warming toward the loud one, so a glance
+   reads level without reading the number. */
 .slider::-webkit-slider-runnable-track {
-  height: 0.5rem;
-  border-radius: 0.25rem;
-  background: linear-gradient(90deg, #2c3242, var(--accent));
+  height: var(--slot);
+  border-radius: calc(var(--slot) / 2);
+  background: linear-gradient(90deg,
+    #10131a 0%,
+    #1b212c 55%,
+    color-mix(in srgb, var(--accent) 30%, #1b212c) 100%);
+  box-shadow:
+    inset 0 2px 3px rgb(0 0 0 / 0.7),
+    inset 0 -1px 0 rgb(255 255 255 / 0.06);
 }
 
 .slider::-moz-range-track {
-  height: 0.5rem;
-  border-radius: 0.25rem;
-  background: linear-gradient(90deg, #2c3242, var(--accent));
+  height: var(--slot);
+  border-radius: calc(var(--slot) / 2);
+  background: linear-gradient(90deg,
+    #10131a 0%,
+    #1b212c 55%,
+    color-mix(in srgb, var(--accent) 30%, #1b212c) 100%);
+  box-shadow:
+    inset 0 2px 3px rgb(0 0 0 / 0.7),
+    inset 0 -1px 0 rgb(255 255 255 / 0.06);
 }
 
-/* The thumb is the only part that responds now, so it is given a ring to make
-   it look like the thing to grab rather than a dot on a line. */
+/* The cap, built the way a real one is. Narrow across the travel and tall
+   across the slot, so the eye reads a position rather than a blob, with the
+   white index line down the centre that is the whole point of the shape - it
+   is what you actually line up against a mark. Ridges run perpendicular to
+   travel, which is the direction a finger needs grip in.
+
+   Three background layers, painted front to back: index line, ridges, then the
+   moulded body. */
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: var(--thumb);
-  height: var(--thumb);
-  /* Centred on the track, derived rather than hard-coded so changing --thumb
-     alone keeps it aligned. */
-  margin-top: calc((0.5rem - var(--thumb)) / 2);
+  height: var(--thumb-h);
+  /* Centred on the slot, derived so changing either size keeps it aligned. */
+  margin-top: calc((var(--slot) - var(--thumb-h)) / 2);
   border: 0;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.45);
-  cursor: grab;
+  border-radius: 3px;
+  background:
+    linear-gradient(#f2f4f8, #f2f4f8) center / 2px 58% no-repeat,
+    repeating-linear-gradient(rgb(0 0 0 / 0) 0 3px, rgb(0 0 0 / 0.22) 3px 4px),
+    linear-gradient(103deg, #525a6d 0%, #333947 48%, #262b36 52%, #444b5c 100%);
+  box-shadow:
+    0 3px 6px rgb(0 0 0 / 0.55),
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 -1px 0 rgb(0 0 0 / 0.45);
 }
 
 .slider::-moz-range-thumb {
   width: var(--thumb);
-  height: var(--thumb);
+  height: var(--thumb-h);
   border: 0;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4), 0 2px 6px rgb(0 0 0 / 0.45);
-  cursor: grab;
+  border-radius: 3px;
+  background:
+    linear-gradient(#f2f4f8, #f2f4f8) center / 2px 58% no-repeat,
+    repeating-linear-gradient(rgb(0 0 0 / 0) 0 3px, rgb(0 0 0 / 0.22) 3px 4px),
+    linear-gradient(103deg, #525a6d 0%, #333947 48%, #262b36 52%, #444b5c 100%);
+  box-shadow:
+    0 3px 6px rgb(0 0 0 / 0.55),
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 -1px 0 rgb(0 0 0 / 0.45);
 }
-
-.slider:active::-webkit-slider-thumb { cursor: grabbing; }
-.slider:active::-moz-range-thumb { cursor: grabbing; }
 
 /* The mixers, genre and decade alike. Label and value on one line, fader
    beneath, so nine of them stack without becoming a wall of text. */
