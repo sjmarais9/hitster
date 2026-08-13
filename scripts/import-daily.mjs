@@ -171,6 +171,65 @@ if (!hitQuota) {
 }
 
 const pool = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] });
-console.log(`\n=== pool is now ${(pool.songs ?? []).length} playable songs ===`);
+const size = (pool.songs ?? []).length;
+console.log(`\n=== pool is now ${size} playable songs ===`);
+
+await publish(size);
 
 process.exit(hitQuota ? EXIT_RATE_LIMITED : 0);
+
+/**
+ * Commits the pool and pushes it, because that is the only way a resolved song
+ * reaches the phone.
+ *
+ * Without this the import was doing all its work into a file nobody served: the
+ * app fetches data/songs.json from GitHub Pages, so the deck only ever grew
+ * when somebody happened to commit for an unrelated reason. Two days of
+ * unattended importing sat on disk while the app kept showing the count from
+ * whenever that last happened.
+ *
+ * Stages only the two files it owns. `git add -A` here would sweep up whatever
+ * else was in the working tree at 3am, which is not a scheduled task's business.
+ *
+ * Never fails the run. A push can fail for reasons that have nothing to do with
+ * the import - no network, expired credentials - and the commit stays put for
+ * the next run to carry.
+ */
+async function publish(count) {
+  const OURS = ['data/songs.json', 'data/review.json'];
+
+  const git = (...args) => new Promise((resolve) => {
+    const child = spawn('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    child.stdout.on('data', (d) => { out += d; });
+    child.stderr.on('data', (d) => { out += d; });
+    child.on('close', (code) => resolve({ code: code ?? 1, out: out.trim() }));
+    child.on('error', () => resolve({ code: 1, out: 'could not run git' }));
+  });
+
+  const status = await git('status', '--porcelain', '--', ...OURS);
+  if (status.code !== 0) {
+    console.log(`\nCould not check git status, leaving the pool uncommitted: ${status.out}`);
+    return;
+  }
+  if (!status.out) {
+    console.log('\nPool unchanged since the last run, nothing to publish.');
+    return;
+  }
+
+  await git('add', '--', ...OURS);
+  const commit = await git('commit', '-m',
+    `Import: the pool reaches ${count} playable songs\n\n` +
+    'Written by scripts/import-daily.mjs on its scheduled run. Only the pool and\n' +
+    'the review file are touched.');
+
+  if (commit.code !== 0) {
+    console.log(`\nCommit failed, pool left staged: ${commit.out}`);
+    return;
+  }
+
+  const push = await git('push', 'origin', 'HEAD');
+  console.log(push.code === 0
+    ? `\nPublished. The app will serve ${count} songs within ten minutes.`
+    : `\nCommitted but not pushed (${push.out.split('\n').pop()}). The next run will carry it.`);
+}

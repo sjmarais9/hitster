@@ -1,12 +1,18 @@
 {
   "meta": {
-    "count": 3,
+    "count": 1,
     "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
   },
-  "year_suspects": [],
+  "year_suspects": [
+    {
+      "artist": "All Time Low",
+      "title": "Dear Maria, Count Me In",
+      "our_year": 2009,
+      "spotify_earliest_year": 2007,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    }
+  ],
   "songs": [
-    { "artist": "Elvis Costello", "title": "Pump It Up", "year": 1978, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:3oyc1mIdCBGaU55wX7otqM","title":"Pump It Up - 2021 Remaster","artists":["Elvis Costello & The Attractions"],"album":"This Year's Model (2021 Remaster)","spotify_release_year":1978,"verdict":"probable"}] },
-    { "artist": "Ian Dury and The Blockheads", "title": "Hit Me with Your Rhythm Stick", "year": 1978, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:2gzbLcxWkBUvxoQU50VsjT","title":"Hit Me with Your Rhythm Stick - Live","artists":["Ian Dury","The Blockheads"],"album":"Live! Warts 'N' Audience…Plus!","spotify_release_year":1991,"verdict":"probable"}] },
-    { "artist": "Stimela", "title": "Whispers in the Deep", "year": 1986, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:2l6oKzoQV4RFrZmuQw2Hc1","title":"Phinda Mzala (Whispers in the Deep)","artists":["Stimela"],"album":"Look, Listen and Decide","spotify_release_year":1986,"verdict":"reject"}] }
+    { "artist": "Ke$ha", "title": "TiK ToK", "year": 2009, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:0HPD5WQqrq7wPWR7P7Dw1i","title":"TiK ToK","artists":["Kesha"],"album":"Animal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] }
   ]
 }
