@@ -62,10 +62,14 @@ function encodePng(size, rgba) {
 
 // --- the icon itself ---------------------------------------------------------
 
+// The label is aged paper, matching the record on the table. It was Spotify
+// green, which is the one colour a record label has never been - the same
+// mistake the app itself made until the label became paper.
 const BACKGROUND = [0x0d, 0x0f, 0x14];
 const DISC = [0x14, 0x16, 0x1d];
 const GROOVE = [0x19, 0x1c, 0x25];
-const LABEL = [0x1d, 0xb9, 0x54];
+const LABEL = [0xde, 0xd0, 0xad];
+const LABEL_RING = [0x8a, 0x79, 0x53];
 
 // Maskable icons can be cropped to a circle of 80% of the width, so the record
 // has to stay inside that. 0.38 of the size as a radius leaves a little room.
@@ -96,6 +100,8 @@ function render(size) {
           let colour;
           if (distance > rDisc) colour = BACKGROUND;
           else if (distance < rHole) colour = BACKGROUND;
+          // The printed ring a 45 has, set in from the edge of the label.
+          else if (distance > rLabel * 0.82 && distance < rLabel * 0.88) colour = LABEL_RING;
           else if (distance < rLabel) colour = LABEL;
           else colour = Math.floor(distance / grooveWidth) % 2 ? GROOVE : DISC;
 
