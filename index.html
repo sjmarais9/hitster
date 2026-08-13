@@ -7,9 +7,9 @@
   <!-- The tab title never changes. It must never leak the drawn song. -->
   <title>Hitster</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png?v=a930c0cd" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=a930c0cd">
-  <link rel="stylesheet" href="css/style.css?v=a930c0cd">
+  <link rel="icon" href="icons/icon-192.png?v=0e04e0c5" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=0e04e0c5">
+  <link rel="stylesheet" href="css/style.css?v=0e04e0c5">
 </head>
 <body class="centred">
   <main class="panel">
@@ -21,13 +21,12 @@
     </section>
 
     <section id="start" class="hidden">
-      <h1>Hitster</h1>
-      <p class="lede">Turn the volume up before you start.</p>
+      <h1 class="wordmark">Hitster</h1>
       <!-- This tap is load-bearing: it is the user gesture that buys permission
            to play audio for the rest of the session. -->
       <button id="begin" class="button" type="button" disabled>Preparing…</button>
       <button id="open-filters" class="button secondary" type="button">
-        <span>Deck</span>
+        <span>Tune the Deck</span>
         <span id="deck-summary" class="deck-summary"></span>
       </button>
       <!-- Only offered once a game is actually under way. Leaving the table
@@ -40,7 +39,7 @@
     <!-- Chrome is fine here. This screen is used before a game starts, not
          while the phone is being passed around. -->
     <section id="filters" class="hidden">
-      <h1>Deck</h1>
+      <h1>Tune the Deck</h1>
       <p id="deck-count" class="status"></p>
 
       <!-- A volume knob, because that is what it is: how much of the catalogue
@@ -120,6 +119,11 @@
             <p id="card-artist" class="card-artist"></p>
             <h2 id="card-title" class="card-title"></h2>
             <p id="card-year" class="card-year"></p>
+            <!-- Spotify's, and often a compilation or reissue rather than the
+                 original release - so it sits below the year, quieter, and is
+                 hidden entirely when absent rather than leaving a gap. It is
+                 flavour, never the answer. -->
+            <p id="card-album" class="card-album"></p>
           </div>
         </div>
       </div>
@@ -148,6 +152,6 @@
     <p id="notice" class="status hidden"></p>
   </main>
 
-  <script type="module" src="src/app.js?v=a930c0cd"></script>
+  <script type="module" src="src/app.js?v=0e04e0c5"></script>
 </body>
 </html>

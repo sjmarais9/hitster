@@ -22,7 +22,7 @@ const STORAGE_KEY = 'hitster.filters';
 // probabilistic version of it would just be baffling.
 // Imported as well as re-exported: `export ... from` forwards the binding
 // without introducing it locally, and describe() below needs to read it.
-import { LEVELS } from './scoring.js?v=a930c0cd';
+import { LEVELS } from './scoring.js?v=0e04e0c5';
 
 export { LEVELS };
 
@@ -55,7 +55,7 @@ export const CROWD = {
 // Imported as well as re-exported. `export ... from` forwards a binding without
 // introducing it locally, and DEFAULTS and describe() below both read it. This
 // is the third time that has bitten here.
-import { GENRE_FAMILIES, DECADES, familyOf } from './scoring.js?v=a930c0cd';
+import { GENRE_FAMILIES, DECADES, familyOf } from './scoring.js?v=0e04e0c5';
 
 export { GENRE_FAMILIES, DECADES, familyOf };
 

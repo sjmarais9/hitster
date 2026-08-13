@@ -67,6 +67,15 @@ h1 {
   letter-spacing: -0.02em;
 }
 
+/* The start screen is the one place the name is the whole point rather than a
+   label, and it has room now that the lede has gone. Clamped so it fills a
+   phone without overrunning a narrow one. */
+.wordmark {
+  font-size: clamp(3rem, 15vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
 .lede {
   margin: 0;
   color: var(--muted);
@@ -294,6 +303,25 @@ h1 {
   font-weight: 700;
   line-height: 1;
   color: var(--accent);
+}
+
+/* Quiet, and below the year: it is Spotify's idea of the album, which is often
+   a compilation or a remaster rather than where the song first appeared. Worth
+   showing as flavour, never worth mistaking for the answer.
+
+   Album names run to 103 characters in this pool, so it is held to two lines
+   and clipped rather than allowed to push the year off a small card. */
+.card-album {
+  margin: 0.25rem auto 0;
+  max-width: 20rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 /* Transport controls. Icons rather than words: they are read at a glance from

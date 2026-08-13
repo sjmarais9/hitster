@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=a930c0cd';
-import { connect } from './player.js?v=a930c0cd';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=a930c0cd';
-import { keepAwake } from './wakelock.js?v=a930c0cd';
-import { projectedShares } from './scoring.js?v=a930c0cd';
-import * as filters from './filters.js?v=a930c0cd';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=0e04e0c5';
+import { connect } from './player.js?v=0e04e0c5';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=0e04e0c5';
+import { keepAwake } from './wakelock.js?v=0e04e0c5';
+import { projectedShares } from './scoring.js?v=0e04e0c5';
+import * as filters from './filters.js?v=0e04e0c5';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -85,6 +85,13 @@ function setCard(song) {
   el('card-artist').textContent = song?.artist ?? '';
   el('card-title').textContent = song?.title ?? '';
   el('card-year').textContent = song?.year ?? '';
+
+  // Only about 70% of the pool carries one, and an empty line under the year
+  // reads as something failing to load rather than something absent.
+  const album = el('card-album');
+  album.textContent = song?.album ?? '';
+  album.classList.toggle('hidden', !song?.album);
+
   card.classList.toggle('revealed', Boolean(song));
 }
 
@@ -107,6 +114,24 @@ function render() {
 
   // The record turns only while audio is actually running.
   card.classList.toggle('paused', !playing);
+}
+
+/**
+ * Persists a settings change and repaints everything that reports on it.
+ *
+ * The summary under the Deck button used to be written only by refreshDeck,
+ * which only the decade faders call - so changing a genre, the level or the
+ * crowd left the start screen describing settings that were no longer in force
+ * until something happened to reload the page. Every control routes through
+ * here now, and the summary is written on the way past.
+ */
+function settingsChanged({ deckChanged = false } = {}) {
+  filters.save(chosen);
+  el('deck-summary').textContent = filters.describe(chosen);
+  // Only a decade at Off changes which songs are eligible; everything else
+  // just moves the odds, so there is nothing to rebuild.
+  if (deckChanged) refreshDeck();
+  else renderShares();
 }
 
 /** Rebuilds the filtered deck and updates everything that reports on it. */
@@ -203,10 +228,9 @@ function buildKnob() {
     index = clamped;
     chosen.level = keys[index];
     paint();
-    filters.save(chosen);
-    // No refreshDeck: the level changes the odds, not which songs are eligible.
-    // It does move the decades, since the eras are not equally well known.
-    renderShares();
+    // The level changes the odds, not which songs are eligible. It does move
+    // the decades, since the eras are not equally well known.
+    settingsChanged();
   }
 
   // Drag to turn. Snapping to the nearest stop rather than tracking freely
@@ -407,10 +431,9 @@ function buildDecadeMixer() {
       level: chosen.decadeLevels?.[decade] ?? 1,
       onInput: (level) => {
         chosen.decadeLevels = { ...chosen.decadeLevels, [decade]: level };
-        filters.save(chosen);
         // Off is the one fader position that removes songs outright, so the
-        // deck count has to follow it. refreshDeck redraws the shares too.
-        refreshDeck();
+        // deck itself has to be rebuilt behind this one.
+        settingsChanged({ deckChanged: true });
       },
     });
     decadeLabels.set(decade, value);
@@ -428,11 +451,10 @@ function buildGenreMixer() {
       level: chosen.genreLevels?.[key] ?? 1,
       onInput: (level) => {
         chosen.genreLevels = { ...chosen.genreLevels, [key]: level };
-        filters.save(chosen);
-        // No refreshDeck: a muted genre stays in the deck, weighted to nothing,
-        // so the mixer can be moved mid-session without the unplayed set
-        // shifting under the player.
-        renderShares();
+        // A muted genre stays in the deck, weighted to nothing, so the mixer
+        // can be moved mid-session without the unplayed set shifting under the
+        // player.
+        settingsChanged();
       },
     });
 
@@ -616,11 +638,9 @@ el('begin').addEventListener('click', onBegin);
 el('crowd-slider').addEventListener('input', (event) => {
   chosen.crowd = Number(event.target.value);
   el('crowd-label').textContent = filters.CROWD.labelFor(chosen.crowd);
-  filters.save(chosen);
-  // No refreshDeck: the slider changes the odds, not which songs are eligible.
-  // It does move the decades, though - the children's songs are not spread
-  // evenly across the eras.
-  renderShares();
+  // The slider changes the odds, not which songs are eligible. It does move the
+  // decades, though - the children's songs are not spread evenly across the eras.
+  settingsChanged();
 });
 thumbOnly(el('crowd-slider'));
 

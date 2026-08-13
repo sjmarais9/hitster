@@ -12,8 +12,8 @@
 // Both routes end up calling the same Web API play endpoint with a device_id,
 // so only the device differs.
 
-import { api } from './api.js?v=a930c0cd';
-import { getAccessToken } from './auth.js?v=a930c0cd';
+import { api } from './api.js?v=0e04e0c5';
+import { getAccessToken } from './auth.js?v=0e04e0c5';
 
 const SDK_URL = 'https://sdk.scdn.co/spotify-player.js';
 
