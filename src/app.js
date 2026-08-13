@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=7a53434d';
-import { connect } from './player.js?v=7a53434d';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=7a53434d';
-import { keepAwake } from './wakelock.js?v=7a53434d';
-import { projectedShares } from './scoring.js?v=7a53434d';
-import * as filters from './filters.js?v=7a53434d';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=3d789e05';
+import { connect } from './player.js?v=3d789e05';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=3d789e05';
+import { keepAwake } from './wakelock.js?v=3d789e05';
+import { projectedShares } from './scoring.js?v=3d789e05';
+import * as filters from './filters.js?v=3d789e05';
 
 const el = (id) => document.getElementById(id);
 const screens = {

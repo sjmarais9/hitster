@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=7a53434d') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=3d789e05') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=7a53434d') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=3d789e05') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -215,13 +215,19 @@ h1 {
   gap: 1.25rem;
 }
 
+/* Tighter than the other screens, because every millimetre here goes to the
+   card - which is the whole point of the screen. */
+#table {
+  gap: 0.9rem;
+}
+
 /* The only chrome on the table screen, and deliberately quiet: it must never
    be mistaken for Next in a dim room, but without it the phone's back button
    is the sole way out of a game - and that used to leave the app entirely. */
 .table-bar {
   display: flex;
   justify-content: flex-start;
-  margin-bottom: -0.75rem;
+  margin-bottom: -0.9rem;
 }
 
 .link-button {
@@ -302,9 +308,12 @@ h1 {
   inset: 0;
   display: grid;
   place-content: center;
-  gap: 0.5rem;
-  padding: 1.5rem;
+  align-content: safe center;
+  gap: 0.375rem;
+  padding: 1.15rem;
   border-radius: var(--radius);
+  /* Nothing may spill past the edge of the paper. */
+  overflow: hidden;
   background: var(--surface);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -345,7 +354,7 @@ h1 {
   position: relative;
   /* The floor matters: in landscape the svh term goes negative, and a negative
      width is an invalid declaration that would drop back to auto. */
-  width: clamp(6rem, min(70vw, calc(100svh - 21rem)), 18rem);
+  width: clamp(6rem, min(70vw, calc(100svh - 19.5rem)), 18rem);
   aspect-ratio: 1;
   border-radius: 50%;
   /* Grooves. Concentric rings a couple of pixels apart read as vinyl at any
@@ -467,7 +476,8 @@ h1 {
   font-family: var(--panel-font);
   font-size: 1.0625rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  line-height: 1.2;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: rgb(42 33 24 / 0.72);
 }
@@ -477,8 +487,15 @@ h1 {
   font-family: var(--panel-font);
   font-size: 2rem;
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: 0.01em;
+  line-height: 1.06;
+  letter-spacing: -0.005em;
+  /* Three lines is a very long title. Past that it is clipped rather than
+     allowed to push the year off the card - the year is the answer. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
 .card-year {
@@ -487,7 +504,7 @@ h1 {
   letter-spacing: 0.02em;
   font-size: 4rem;
   font-weight: 700;
-  line-height: 1;
+  line-height: 0.95;
   color: var(--label-ink);
   /* A rule above it, the way a label separates the credits from the catalogue
      number. Cheaper than a real element and it cannot be mistagged. */
@@ -507,8 +524,8 @@ h1 {
   max-width: 20rem;
   font-family: var(--panel-font);
   font-size: 1rem;
-  line-height: 1.3;
-  letter-spacing: 0.04em;
+  line-height: 1.18;
+  letter-spacing: 0.015em;
   color: rgb(42 33 24 / 0.62);
   display: -webkit-box;
   -webkit-box-orient: vertical;
