@@ -151,6 +151,12 @@ async function main() {
       genres: song.genres,
       familiarity: song.familiarity ?? null,
       skew: song.skew ?? null,
+      // Measured, not tagged, but it belongs to the batch entry just the same -
+      // and it is half of what scoreOf blends. Left out of the record the
+      // import built, so 687 songs reached the pool with it silently dropped
+      // and fell back to tag-only scoring. Refreshing from the batch here means
+      // the next run repairs anything already imported without it.
+      canonicity: song.canonicity ?? existing.canonicity ?? null,
       // Present but null on anything imported before album capture existed.
       // Backfilling needs --recheck, which costs a full re-resolve.
       album: existing.album ?? null,
@@ -259,6 +265,11 @@ async function main() {
         // Descriptive only - nothing should key off it.
         album: best.track.album?.name ?? null,
         market_checked: MARKET,
+        // Ours, measured rather than tagged. scoreOf blends it with the
+        // familiarity tag, so a song that arrives without it is scored on the
+        // tag alone - which is exactly the single fallible judgement the
+        // measurement exists to temper.
+        canonicity: song.canonicity ?? null,
       });
 
       // Our years are written from memory and will occasionally be wrong.
