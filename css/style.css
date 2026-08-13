@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=99489147') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=da0baee5') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=99489147') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=da0baee5') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -230,6 +230,23 @@ h1 {
   color: var(--text);
 }
 
+/* Centred and set back from what is above it, so it reads as a footnote to the
+   screen rather than the last item in the stack of things to do. */
+.link-button.quiet {
+  align-self: center;
+  margin-top: -0.5rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+/* The wordmark is the tallest thing on this screen, so it is the one that has
+   to give when the screen is short - otherwise the buttons below it go off the
+   bottom and the menu starts scrolling. */
+#start .wordmark {
+  font-size: clamp(3rem, min(23vw, 15vh), 7rem);
+}
+
 /* The card. Reveal is meant to feel like turning a card over, so it flips
    rather than swapping text. Reduced-motion users get the same result
    instantly, via the global rule at the bottom of this file. */
@@ -237,11 +254,29 @@ h1 {
   perspective: 1200px;
 }
 
-/* Grows with the viewport but never past the point where the transport controls
-   and Next would be pushed off a short screen. */
+/* The table must never scroll. The phone is being passed around, and a card
+   half off the screen is a spoiler risk as much as an annoyance.
+
+   So the section claims exactly the viewport, minus whatever the body's padding
+   took - computed from the same env() expression, so a notched phone subtracts
+   what it actually reserved rather than a guess. The card then absorbs whatever
+   is left after the fixed furniture, which keeps the record as large as the
+   screen can afford instead of a fixed size that has to assume the worst. */
+#table:not(.hidden) {
+  height: calc(100dvh
+    - max(1.25rem, env(safe-area-inset-top))
+    - max(1.25rem, env(safe-area-inset-bottom)));
+}
+
+#table .card {
+  flex: 1 1 auto;
+  /* Without this a flex item refuses to shrink below its content. */
+  min-height: 0;
+}
+
 .card-inner {
   position: relative;
-  height: clamp(19rem, 48vh, 25rem);
+  height: 100%;
   transform-style: preserve-3d;
   transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -287,12 +322,14 @@ h1 {
   filter: brightness(1.15);
 }
 
-/* Sized against three limits at once: a comfortable maximum, the width of a
-   narrow phone, and the height of a short one. */
+/* Height-driven rather than width-driven, so it fills whatever the card ended
+   up with and stops exactly there. Width follows from the aspect ratio, capped
+   for a narrow phone. */
 .vinyl {
   position: relative;
-  width: min(18rem, 70vw, 36vh);
+  height: min(18rem, 70vw, 100%);
   aspect-ratio: 1;
+  max-width: 100%;
   border-radius: 50%;
   /* Grooves. Concentric rings a couple of pixels apart read as vinyl at any
      size without needing an image. */
@@ -389,29 +426,57 @@ h1 {
   text-transform: uppercase;
 }
 
+/* Turning the card over should land on paper, not on another dark panel. Same
+   stock as the record label, with a printed rule set in from the edge the way
+   a sleeve or a jukebox title strip has one, and light falling across it from
+   the same direction as on the label. */
 .card-front {
   transform: rotateY(180deg);
+  background:
+    radial-gradient(circle at 34% 22%,
+      #f0e6cd 0%,
+      #e4d8b8 45%,
+      #c6b58f 100%);
+  color: var(--label-ink);
+  box-shadow:
+    inset 0 0 0 1px rgb(74 58 34 / 0.5),
+    inset 0 0 0 0.45rem rgb(255 255 255 / 0.16),
+    inset 0 0 0 calc(0.45rem + 1px) rgb(74 58 34 / 0.35),
+    inset 0 0 1.6rem rgb(74 58 34 / 0.28);
 }
 
 .card-artist {
   margin: 0;
-  color: var(--muted);
+  font-family: var(--panel-font);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(42 33 24 / 0.72);
 }
 
 .card-title {
   margin: 0;
-  font-size: 1.75rem;
-  line-height: 1.2;
+  font-family: var(--panel-font);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
 }
 
 .card-year {
   margin: 0;
   font-family: var(--panel-font);
   letter-spacing: 0.02em;
-  font-size: 3.75rem;
+  font-size: 4rem;
   font-weight: 700;
   line-height: 1;
-  color: var(--accent);
+  color: var(--label-ink);
+  /* A rule above it, the way a label separates the credits from the catalogue
+     number. Cheaper than a real element and it cannot be mistagged. */
+  border-top: 1px solid rgb(74 58 34 / 0.35);
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
 }
 
 /* Quiet, and below the year: it is Spotify's idea of the album, which is often
@@ -423,9 +488,11 @@ h1 {
 .card-album {
   margin: 0.25rem auto 0;
   max-width: 20rem;
-  font-size: 0.9375rem;
-  line-height: 1.35;
-  color: var(--muted);
+  font-family: var(--panel-font);
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: rgb(42 33 24 / 0.62);
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -452,8 +519,11 @@ h1 {
   padding: 0;
   border: 1px solid #4b5265;
   border-radius: 0.65rem;
-  background: linear-gradient(var(--metal-hi) 0%, var(--metal) 52%, var(--metal-lo) 100%);
-  color: #cdd4e2;
+  /* The same casting and the same lamp as the primary button. They had drifted
+     onto two different metals, which is exactly the sort of difference that
+     reads as a mistake rather than as a distinction. */
+  background: linear-gradient(#606a80 0%, #3c4353 50%, #272c37 100%);
+  color: var(--lit-text);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 0 -2px 0 rgb(0 0 0 / 0.45),
@@ -462,19 +532,10 @@ h1 {
   touch-action: manipulation;
 }
 
-/* The one you reach for, lit the same way the primary button is. */
-.icon-button.primary {
-  background: linear-gradient(#606a80 0%, #3c4353 50%, #272c37 100%);
-  color: var(--lit-text);
-}
-
 .icon-button svg {
   width: 2.125rem;
   height: 2.125rem;
   fill: currentColor;
-}
-
-.icon-button.primary svg {
   filter: drop-shadow(0 0 0.5rem rgb(253 246 230 / 0.45));
 }
 

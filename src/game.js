@@ -1,8 +1,8 @@
 // The deck. Everything else about the game — timelines, tokens, scoring, turn
 // order — stays physical on the table, so this is only ever "which song next".
 
-import { basePath } from './config.js?v=99489147';
-import { weightsFor, pickWeighted } from './scoring.js?v=99489147';
+import { basePath } from './config.js?v=da0baee5';
+import { weightsFor, pickWeighted } from './scoring.js?v=da0baee5';
 
 // Per-tab, so closing the tab starts a fresh game. Survives a reload mid-game,
 // which is the case that actually matters when a phone is being passed around.
