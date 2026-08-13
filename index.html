@@ -7,9 +7,9 @@
   <!-- The tab title never changes. It must never leak the drawn song. -->
   <title>Hitster</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png?v=721fe482" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=721fe482">
-  <link rel="stylesheet" href="css/style.css?v=721fe482">
+  <link rel="icon" href="icons/icon-192.png?v=c381d38a" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=c381d38a">
+  <link rel="stylesheet" href="css/style.css?v=c381d38a">
 </head>
 <body class="centred">
   <main class="panel">
@@ -20,23 +20,30 @@
       <button id="login" class="button" type="button">Log in with Spotify</button>
     </section>
 
+    <!-- Three fixed bands: name, actions, links. Each has its own home and none
+         of them can be moved by what the others are doing, so the wordmark sits
+         in exactly the same place whatever state the session is in. -->
     <section id="start" class="hidden">
       <h1 class="wordmark">Hitster</h1>
-      <!-- This tap is load-bearing: it is the user gesture that buys permission
-           to play audio for the rest of the session. -->
-      <button id="begin" class="button" type="button" disabled>Preparing…</button>
-      <button id="open-filters" class="button secondary" type="button">
-        <span>Tune the Deck</span>
-        <span id="deck-summary" class="deck-summary"></span>
-      </button>
-      <!-- Only offered once a game is actually under way. Leaving the table
-           keeps the session, so that this is the one thing that discards it and
-           it is never done by accident. -->
-      <button id="new-game" class="button secondary hidden" type="button">Start a new game</button>
-      <!-- Small and last. It is reached for about once a year, and as a full
-           button it was the fourth of four and pushed the screen into
-           scrolling. -->
-      <button id="logout" class="link-button quiet" type="button">Log out</button>
+
+      <!-- Always exactly two. Every action that comes and goes lives in the
+           links band below, where appearing and disappearing costs nothing. -->
+      <div class="menu-actions">
+        <!-- This tap is load-bearing: it is the user gesture that buys
+             permission to play audio for the rest of the session. -->
+        <button id="begin" class="button" type="button" disabled>Preparing…</button>
+        <button id="open-filters" class="button secondary" type="button">
+          <span>Tune the Deck</span>
+          <span id="deck-summary" class="deck-summary"></span>
+        </button>
+      </div>
+
+      <!-- Log out is always here, so the band keeps its height whether or not
+           there is a game to discard. -->
+      <div class="menu-links">
+        <button id="new-game" class="link-button quiet hidden" type="button">Start a new game</button>
+        <button id="logout" class="link-button quiet" type="button">Log out</button>
+      </div>
     </section>
 
     <!-- Chrome is fine here. This screen is used before a game starts, not
@@ -164,6 +171,6 @@
     <p id="notice" class="status hidden"></p>
   </main>
 
-  <script type="module" src="src/app.js?v=721fe482"></script>
+  <script type="module" src="src/app.js?v=c381d38a"></script>
 </body>
 </html>

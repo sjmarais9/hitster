@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=721fe482') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=c381d38a') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=721fe482') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=c381d38a') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -262,8 +262,6 @@ h1 {
 /* Centred and set back from what is above it, so it reads as a footnote to the
    screen rather than the last item in the stack of things to do. */
 .link-button.quiet {
-  align-self: center;
-  margin-top: -0.5rem;
   font-size: 0.875rem;
   letter-spacing: 0.04em;
   opacity: 0.75;
@@ -272,8 +270,45 @@ h1 {
 /* The wordmark is the tallest thing on this screen, so it is the one that has
    to give when the screen is short - otherwise the buttons below it go off the
    bottom and the menu starts scrolling. */
+/* Three bands rather than a centred stack. A centred stack moves everything
+   whenever anything in it changes size, which is why the wordmark jumped the
+   moment a game was under way and Start a new game appeared.
+
+   auto / 1fr / auto pins the name to the top and the links to the bottom, and
+   gives the slack to the middle. Nothing below the wordmark can move it, and
+   the actions stay put because there are always exactly two of them.
+
+   min-height, not height: on a screen too short for the content the middle band
+   collapses and the section grows instead of overlapping itself. */
 #start {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   gap: 1rem;
+  min-height: calc(100svh
+    - max(1.25rem, env(safe-area-inset-top))
+    - max(1.25rem, env(safe-area-inset-bottom)));
+}
+
+#start .wordmark {
+  align-self: start;
+  padding-top: clamp(0.25rem, 3svh, 1.75rem);
+}
+
+/* Centred in the slack the other two bands leave. */
+.menu-actions {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* The band that is allowed to change. A link appearing or disappearing here
+   costs no height, because Log out is always in it holding the line open. */
+.menu-links {
+  align-self: end;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
 }
 
 #start .wordmark {
