@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=da0baee5';
-import { connect } from './player.js?v=da0baee5';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=da0baee5';
-import { keepAwake } from './wakelock.js?v=da0baee5';
-import { projectedShares } from './scoring.js?v=da0baee5';
-import * as filters from './filters.js?v=da0baee5';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=7a53434d';
+import { connect } from './player.js?v=7a53434d';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=7a53434d';
+import { keepAwake } from './wakelock.js?v=7a53434d';
+import { projectedShares } from './scoring.js?v=7a53434d';
+import * as filters from './filters.js?v=7a53434d';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -34,6 +34,10 @@ function show(screen) {
   for (const [name, node] of Object.entries(screens)) {
     node.classList.toggle('hidden', name !== screen);
   }
+  // The table is sized to fit exactly, so nothing there should ever scroll -
+  // and a card dragged half off the screen mid-round is a spoiler as much as an
+  // annoyance. The deck is the opposite: it is a long page and must scroll.
+  document.body.classList.toggle('locked', screen === 'table');
   if (screen === 'start') refreshStart();
 }
 
