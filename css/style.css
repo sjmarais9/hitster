@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=c381d38a') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=8316a179') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=c381d38a') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=8316a179') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -303,12 +303,28 @@ h1 {
 }
 
 /* The band that is allowed to change. A link appearing or disappearing here
-   costs no height, because Log out is always in it holding the line open. */
+   costs no height, because Log out is always in it holding the line open.
+
+   Two explicit columns rather than a flex row. Each link is assigned its own
+   column, so Log out stays hard right when the left cell is empty - flex, or
+   grid auto-placement, would slide it across to fill the gap, and the one
+   control that is always there would be the one that moves. */
 .menu-links {
   align-self: end;
-  display: flex;
-  justify-content: center;
-  gap: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#new-game {
+  grid-column: 1;
+  justify-self: start;
+}
+
+#logout {
+  grid-column: 2;
+  justify-self: end;
 }
 
 #start .wordmark {
