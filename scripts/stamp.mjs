@@ -33,6 +33,12 @@ const bare = (text) => text.replace(STAMP, '');
 
 const sources = (await readdir('src')).filter((f) => f.endsWith('.js')).sort();
 
+// Fonts are referenced from inside the stylesheet, so they need stamping too -
+// and their bytes have to reach the hash, or replacing a font would leave the
+// old one cached behind an unchanged URL.
+const fonts = (await readdir('fonts').catch(() => []))
+  .filter((f) => f.endsWith('.woff2')).sort();
+
 async function read(file) {
   return { file, text: await readFile(file, 'utf8') };
 }
@@ -48,6 +54,7 @@ const files = await Promise.all([
 // the whole app is about 40kB.
 const hash = createHash('sha1');
 for (const { file, text } of files) hash.update(`${file}\n${bare(text)}\n`);
+for (const font of fonts) hash.update(await readFile(`fonts/${font}`));
 const version = hash.digest('hex').slice(0, 8);
 
 /** Adds or replaces the stamp on a relative URL, leaving absolute ones alone. */
@@ -57,7 +64,11 @@ function stamp(text) {
     .replace(/(from\s+['"]\.\/[\w.-]+\.js)(['"])/g, `$1?v=${version}$2`)
     // index.html: href="css/style.css", src="src/app.js"
     .replace(/((?:href|src)=["'](?:\.\/)?(?:css|src|icons)\/[\w./-]+\.(?:css|js|png))(["'])/g,
-      `$1?v=${version}$2`);
+      `$1?v=${version}$2`)
+    // style.css: url('../fonts/oswald.woff2'). The backreference makes the
+    // closing quote match whichever one opened it, and match nothing at all
+    // when the url was written unquoted.
+    .replace(/(url\((['"]?)\.\.\/fonts\/[\w.-]+\.woff2)(\2\))/g, `$1?v=${version}$3`);
 }
 
 let changed = 0;

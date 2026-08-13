@@ -1,6 +1,22 @@
 /* Dark by default. This app is used in a dim living room, at arm's length,
    probably by someone holding a drink. Everything is large and low-contrast-safe. */
 
+/* Two faces, both self-hosted. A party app should not need a third party's
+   server to be up, and same-origin means they are cached with everything else.
+   Licences live beside them in fonts/. */
+@font-face {
+  font-family: 'Wordmark';
+  src: url('../fonts/yellowtail.woff2?v=f11688bd') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Panel';
+  src: url('../fonts/oswald.woff2?v=f11688bd') format('woff2');
+  font-weight: 200 700;
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
 
@@ -10,6 +26,21 @@
   --muted: #98a0b3;
   --accent: #1db954;
   --error: #ff6b6b;
+
+  /* The rule the whole interface follows: amber is what you operate, green is
+     what the machine tells you. The knob pointer, the fader index lines and the
+     lit buttons are amber; the revealed year and the record label going live
+     stay green, because those are the machine answering rather than you asking. */
+  --lamp: #e0a92b;
+  --lamp-dim: #8a6a1c;
+
+  /* Panel metal, shared by the buttons, the knob and the fader caps so they
+     read as parts of one piece of equipment. */
+  --metal-hi: #525a6d;
+  --metal: #333947;
+  --metal-lo: #22262f;
+
+  --panel-font: 'Panel', 'Oswald', system-ui, sans-serif;
 
   --tap-min: 4.5rem;
   --radius: 1rem;
@@ -61,19 +92,37 @@ body.centred {
   text-align: center;
 }
 
+/* Screen headings are panel legends: condensed, spaced out, engraved. */
 h1 {
   margin: 0;
-  font-size: 2.25rem;
-  letter-spacing: -0.02em;
+  font-family: var(--panel-font);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.6);
 }
 
-/* The start screen is the one place the name is the whole point rather than a
-   label, and it has room now that the lede has gone. Clamped so it fills a
-   phone without overrunning a narrow one. */
+/* The badge on the front of the amp, and the one place the name is the point
+   rather than a label. A flowing script the way that class of hardware has
+   always worn its name - our own letterforms, not a copy of anyone's mark -
+   in warm cream, lit faintly by the panel lamps around it.
+
+   Not letterspaced: a connected script comes apart if you space it. */
 .wordmark {
-  font-size: clamp(3rem, 15vw, 4.5rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
+  font-family: 'Wordmark', 'Segoe Script', cursive;
+  font-size: clamp(3.5rem, 19vw, 5.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #f7f3ea;
+  /* Room for the swashes, which a tight line-height would clip. */
+  padding: 0.08em 0 0.12em;
+  text-shadow:
+    0 1px 0 rgb(0 0 0 / 0.65),
+    0 0 1.75rem rgb(224 169 43 / 0.22);
 }
 
 .lede {
@@ -82,31 +131,49 @@ h1 {
 }
 
 /* Buttons are deliberately oversized. Missing one mid-round is worse than
-   the screen looking a little blunt. */
+   the screen looking a little blunt.
+
+   Panel hardware rather than flat fills: a bevelled cap in the same metal as
+   the knob and the fader caps, with an engraved legend. The primary one is lit
+   from behind in amber, the way the channel button you are meant to press is
+   the one that glows. */
 .button {
   display: grid;
   place-items: center;
+  gap: 0.15rem;
   min-height: var(--tap-min);
-  padding: 1rem 1.5rem;
-  border: 0;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: #06210f;
-  font: inherit;
-  font-weight: 650;
+  padding: 0.875rem 1.5rem;
+  border: 1px solid #4b5265;
+  border-radius: 0.6rem;
+  background:
+    linear-gradient(#5c4a1c 0%, #3d3013 55%, #2c220d 100%);
+  color: var(--lamp);
+  font-family: var(--panel-font);
+  font-weight: 600;
   font-size: 1.25rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
   text-decoration: none;
+  text-shadow: 0 0 0.65rem rgb(224 169 43 / 0.45);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 -2px 0 rgb(0 0 0 / 0.45),
+    0 3px 7px rgb(0 0 0 / 0.55);
   cursor: pointer;
   touch-action: manipulation;
 }
 
+/* Unlit. Same casting, no lamp behind it. */
 .button.secondary {
-  background: var(--surface);
+  background: linear-gradient(var(--metal-hi) 0%, var(--metal) 52%, var(--metal-lo) 100%);
   color: var(--text);
+  font-size: 1.0625rem;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.5);
 }
 
 .button:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
+  text-shadow: none;
   cursor: default;
 }
 
@@ -276,7 +343,9 @@ h1 {
 }
 
 .card.revealable .card-mark {
-  font-size: 1.125rem;
+  font-family: var(--panel-font);
+  font-weight: 600;
+  font-size: 1.1875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #06210f;
@@ -299,7 +368,9 @@ h1 {
 
 .card-year {
   margin: 0;
-  font-size: 3.5rem;
+  font-family: var(--panel-font);
+  letter-spacing: 0.02em;
+  font-size: 3.75rem;
   font-weight: 700;
   line-height: 1;
   color: var(--accent);
@@ -387,8 +458,10 @@ h1 {
 
 .filter-group h2 {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--panel-font);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   color: var(--muted);
 }
 
@@ -520,9 +593,11 @@ h1 {
   border: 0;
   background: none;
   color: var(--muted);
-  font: inherit;
+  font-family: var(--panel-font);
   font-size: 0.8125rem;
-  letter-spacing: 0.01em;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   touch-action: manipulation;
@@ -681,12 +756,18 @@ h1 {
   gap: 0 0.5rem;
 }
 
+/* Legends silk-screened beside their fader. */
 .mixer-label {
+  font-family: var(--panel-font);
   font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   color: var(--text);
 }
 
 .mixer-value {
+  font-family: var(--panel-font);
   font-size: 0.875rem;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
@@ -705,7 +786,10 @@ h1 {
 .slider-ends {
   display: flex;
   justify-content: space-between;
-  font-size: 0.875rem;
+  font-family: var(--panel-font);
+  font-size: 0.8125rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
@@ -716,8 +800,11 @@ h1 {
 
 /* Sits under the Deck button on the start screen. */
 .deck-summary {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
   color: var(--muted);
 }
 

@@ -23,8 +23,8 @@
 //
 // Refreshing is handled transparently so an hour-long game is not interrupted.
 
-import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=105ce954';
-import { createVerifier, createState, challengeFor } from './pkce.js?v=105ce954';
+import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=f11688bd';
+import { createVerifier, createState, challengeFor } from './pkce.js?v=f11688bd';
 
 // One-shot values for a single login flow. Per-tab is exactly right for these:
 // the callback lands in the same tab that started it, and nothing should be
