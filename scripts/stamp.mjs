@@ -65,7 +65,7 @@ function stamp(text) {
     // index.html: href="css/style.css", src="src/app.js"
     .replace(/((?:href|src)=["'](?:\.\/)?(?:css|src|icons)\/[\w./-]+\.(?:css|js|png))(["'])/g,
       `$1?v=${version}$2`)
-    // style.css: url('../fonts/oswald.woff2'). The backreference makes the
+    // style.css: url('../fonts/barlow-condensed.woff2'). The backreference makes the
     // closing quote match whichever one opened it, and match nothing at all
     // when the url was written unquoted.
     .replace(/(url\((['"]?)\.\.\/fonts\/[\w.-]+\.woff2)(\2\))/g, `$1?v=${version}$3`);

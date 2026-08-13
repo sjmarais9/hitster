@@ -6,14 +6,17 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=f11688bd') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=263eb779') format('woff2');
   font-display: swap;
 }
 
+/* Was Oswald, which has a flat-topped capital A that reads as a quirk rather
+   than as lettering. Barlow Condensed is the same condensed-grotesque idea
+   with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/oswald.woff2?v=f11688bd') format('woff2');
-  font-weight: 200 700;
+  src: url('../fonts/barlow-condensed.woff2?v=263eb779') format('woff2');
+  font-weight: 300 700;
   font-display: swap;
 }
 
@@ -27,12 +30,17 @@
   --accent: #1db954;
   --error: #ff6b6b;
 
-  /* The rule the whole interface follows: amber is what you operate, green is
-     what the machine tells you. The knob pointer, the fader index lines and the
-     lit buttons are amber; the revealed year and the record label going live
-     stay green, because those are the machine answering rather than you asking. */
+  /* Three lamp colours, the way a real panel has three, each meaning one thing.
+     Amber marks a setting - the knob pointer and the scale around it. Red is a
+     lit button, the thing you press. Green is the machine answering: the
+     revealed year, the record label going live.
+
+     The buttons were amber and it was too much of it - a whole panel of yellow
+     rather than a lamp. Red is what that class of hardware actually lights its
+     switches with, and it separates pressing from setting. */
   --lamp: #e0a92b;
-  --lamp-dim: #8a6a1c;
+  --lit: #e8503a;
+  --lit-text: #ffe4dc;
 
   /* Panel metal, shared by the buttons, the knob and the fader caps so they
      read as parts of one piece of equipment. */
@@ -40,7 +48,7 @@
   --metal: #333947;
   --metal-lo: #22262f;
 
-  --panel-font: 'Panel', 'Oswald', system-ui, sans-serif;
+  --panel-font: 'Panel', 'Barlow Condensed', system-ui, sans-serif;
 
   --tap-min: 4.5rem;
   --radius: 1rem;
@@ -49,8 +57,8 @@
 * { box-sizing: border-box; }
 
 /* Android Chrome paints a translucent rectangle over whatever is tapped. It
-   ignores border-radius, so it flashes a square over the round transport
-   buttons and over the record itself - which is the one element on the table
+   ignores border-radius, so it flashed a square over the rounded controls and
+   over the record itself - which is the one element on the table
    that should never look like anything but a record.
 
    Safe to remove only because every control here has its own pressed state;
@@ -112,7 +120,7 @@ h1 {
    Not letterspaced: a connected script comes apart if you space it. */
 .wordmark {
   font-family: 'Wordmark', 'Segoe Script', cursive;
-  font-size: clamp(3.5rem, 19vw, 5.75rem);
+  font-size: clamp(4.25rem, 23vw, 7rem);
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: 0;
@@ -135,8 +143,8 @@ h1 {
 
    Panel hardware rather than flat fills: a bevelled cap in the same metal as
    the knob and the fader caps, with an engraved legend. The primary one is lit
-   from behind in amber, the way the channel button you are meant to press is
-   the one that glows. */
+   from behind in red, the way the button you are meant to press is the one that
+   glows, and the way that class of hardware has always lit its switches. */
 .button {
   display: grid;
   place-items: center;
@@ -146,15 +154,15 @@ h1 {
   border: 1px solid #4b5265;
   border-radius: 0.6rem;
   background:
-    linear-gradient(#5c4a1c 0%, #3d3013 55%, #2c220d 100%);
-  color: var(--lamp);
+    linear-gradient(#a83224 0%, #7d2318 55%, #59160e 100%);
+  color: var(--lit-text);
   font-family: var(--panel-font);
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.3125rem;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   text-decoration: none;
-  text-shadow: 0 0 0.65rem rgb(224 169 43 / 0.45);
+  text-shadow: 0 0 0.7rem rgb(255 138 110 / 0.55);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 0 -2px 0 rgb(0 0 0 / 0.45),
@@ -403,29 +411,41 @@ h1 {
   gap: 1.25rem;
 }
 
+/* Transport keys, cast from the same metal as everything else. Rounded squares
+   rather than circles, which is the shape a transport button has ever since
+   tape machines - and it stops them reading as web icons in a row. */
 .icon-button {
   display: grid;
   place-items: center;
   width: var(--tap-min);
   height: var(--tap-min);
   padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--text);
+  border: 1px solid #4b5265;
+  border-radius: 0.65rem;
+  background: linear-gradient(var(--metal-hi) 0%, var(--metal) 52%, var(--metal-lo) 100%);
+  color: #cdd4e2;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    inset 0 -2px 0 rgb(0 0 0 / 0.45),
+    0 3px 7px rgb(0 0 0 / 0.55);
   cursor: pointer;
   touch-action: manipulation;
 }
 
+/* The one that is lit, same lamp as the primary button. */
 .icon-button.primary {
-  background: var(--accent);
-  color: #06210f;
+  background: linear-gradient(#a83224 0%, #7d2318 55%, #59160e 100%);
+  color: var(--lit-text);
 }
 
 .icon-button svg {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.125rem;
+  height: 2.125rem;
   fill: currentColor;
+}
+
+.icon-button.primary svg {
+  filter: drop-shadow(0 0 0.45rem rgb(255 138 110 / 0.5));
 }
 
 .icon-button:disabled {
@@ -578,7 +598,7 @@ h1 {
   height: 1.4rem;
   margin-left: -1.5px;
   border-radius: 2px;
-  background: #e0a92b;
+  background: var(--lamp);
   box-shadow: 0 0 0.55rem rgb(224 169 43 / 0.65);
 }
 
@@ -611,7 +631,7 @@ h1 {
 
 /* Lit in the same amber as the pointer, so the eye pairs the two. */
 .knob-stop[aria-pressed="true"] {
-  color: #e0a92b;
+  color: var(--lamp);
   font-weight: 600;
 }
 
@@ -764,6 +784,13 @@ h1 {
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text);
+}
+
+/* Decades are not words, they are dates. Uppercasing them gives "1990S", which
+   is simply wrong - the s is a plural, not an initial. */
+#decade-mixer .mixer-label {
+  text-transform: none;
+  letter-spacing: 0.05em;
 }
 
 .mixer-value {
