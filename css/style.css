@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=3d789e05') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=4412408a') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=3d789e05') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=4412408a') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -307,6 +307,7 @@ h1 {
   position: absolute;
   inset: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   place-content: center;
   align-content: safe center;
   gap: 0.375rem;
@@ -354,7 +355,7 @@ h1 {
   position: relative;
   /* The floor matters: in landscape the svh term goes negative, and a negative
      width is an invalid declaration that would drop back to auto. */
-  width: clamp(6rem, min(70vw, calc(100svh - 19.5rem)), 18rem);
+  width: clamp(6rem, min(70vw, calc(100svh - 12.5rem)), 20rem);
   aspect-ratio: 1;
   border-radius: 50%;
   /* Grooves. Concentric rings a couple of pixels apart read as vinyl at any
@@ -487,8 +488,10 @@ h1 {
   font-family: var(--panel-font);
   font-size: 2rem;
   font-weight: 700;
-  line-height: 1.06;
+  line-height: 1.12;
   letter-spacing: -0.005em;
+  /* A word too long for the line breaks rather than running off the paper. */
+  overflow-wrap: break-word;
   /* Three lines is a very long title. Past that it is clipped rather than
      allowed to push the year off the card - the year is the answer. */
   display: -webkit-box;
@@ -496,7 +499,17 @@ h1 {
   -webkit-line-clamp: 3;
   line-clamp: 3;
   overflow: hidden;
+  /* line-clamp clips at the line box, and a tight line-height is shorter than
+     the font's descender - which quietly beheaded the tail of every g, y and p.
+     Overflow clips at the padding box, so this is the room they need. */
+  padding-bottom: 0.14em;
 }
+
+/* Long titles step down rather than being clipped at three lines. The pool
+   holds names up to 57 characters; at full size those need four lines and lose
+   the last one. Almost every title is short enough to keep the full size. */
+.card-title.long { font-size: 1.75rem; }
+.card-title.longer { font-size: 1.5rem; }
 
 .card-year {
   margin: 0;
@@ -521,11 +534,13 @@ h1 {
    and clipped rather than allowed to push the year off a small card. */
 .card-album {
   margin: 0.25rem auto 0;
-  max-width: 20rem;
+  max-width: min(20rem, 100%);
   font-family: var(--panel-font);
   font-size: 1rem;
-  line-height: 1.18;
+  line-height: 1.22;
   letter-spacing: 0.015em;
+  overflow-wrap: break-word;
+  padding-bottom: 0.14em;
   color: rgb(42 33 24 / 0.62);
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -539,7 +554,7 @@ h1 {
 .controls {
   display: flex;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 1.5rem;
 }
 
 /* Transport keys, cast from the same metal as everything else. Rounded squares
@@ -548,8 +563,10 @@ h1 {
 .icon-button {
   display: grid;
   place-items: center;
-  width: var(--tap-min);
-  height: var(--tap-min);
+  /* Smaller than the old full-width Next, and still well past the 44px a
+     fingertip needs. What it gives up in size it gives to the card. */
+  width: 4rem;
+  height: 4rem;
   padding: 0;
   border: 1px solid #4b5265;
   border-radius: 0.65rem;
@@ -567,8 +584,8 @@ h1 {
 }
 
 .icon-button svg {
-  width: 2.125rem;
-  height: 2.125rem;
+  width: 1.9rem;
+  height: 1.9rem;
   fill: currentColor;
   filter: drop-shadow(0 0 0.5rem rgb(253 246 230 / 0.45));
 }
@@ -582,10 +599,19 @@ h1 {
   transform: scale(0.96);
 }
 
-/* One button, two faces. Whichever icon is not current is simply not rendered. */
+/* One button, two faces. Whichever icon is not current is simply not rendered.
+   The same trick on the skip key, which becomes a restart once the deck is
+   spent - by then Replay is disabled, so the two circular arrows can never be
+   on screen together to be confused with each other. */
 #toggle .icon-pause,
-#toggle.playing .icon-play {
+#toggle.playing .icon-play,
+#action .icon-restart,
+#action.exhausted .icon-next {
   display: none;
+}
+
+#action.exhausted .icon-restart {
+  display: block;
 }
 
 #toggle.playing .icon-pause {

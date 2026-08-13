@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=3d789e05';
-import { connect } from './player.js?v=3d789e05';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=3d789e05';
-import { keepAwake } from './wakelock.js?v=3d789e05';
-import { projectedShares } from './scoring.js?v=3d789e05';
-import * as filters from './filters.js?v=3d789e05';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=4412408a';
+import { connect } from './player.js?v=4412408a';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=4412408a';
+import { keepAwake } from './wakelock.js?v=4412408a';
+import { projectedShares } from './scoring.js?v=4412408a';
+import * as filters from './filters.js?v=4412408a';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -87,8 +87,16 @@ function say(message, isError = false) {
 function setCard(song) {
   // Populate only at the moment of reveal; clear on the way out.
   el('card-artist').textContent = song?.artist ?? '';
-  el('card-title').textContent = song?.title ?? '';
   el('card-year').textContent = song?.year ?? '';
+
+  // The pool holds titles up to 57 characters. At full size those need four
+  // lines and lose the last one to the clamp, so the long tail steps down a
+  // size or two. Almost every title is short enough to keep the full size.
+  const title = el('card-title');
+  const length = (song?.title ?? '').length;
+  title.textContent = song?.title ?? '';
+  title.classList.toggle('long', length > 22 && length <= 34);
+  title.classList.toggle('longer', length > 34);
 
   // Only about 70% of the pool carries one, and an empty line under the year
   // reads as something failing to load rather than something absent.
@@ -100,7 +108,11 @@ function setCard(song) {
 }
 
 function render() {
-  action.textContent = phase === 'empty' ? 'Start over' : 'Next';
+  // Icon-only now, so the meaning has to reach a screen reader some other way -
+  // and the icon itself swaps to a restart once there is nothing left to skip to.
+  const spent = phase === 'empty';
+  action.classList.toggle('exhausted', spent);
+  action.setAttribute('aria-label', spent ? 'Start over' : 'Next song');
   action.disabled = false;
 
   // The card can only be turned over once the song has actually been heard.

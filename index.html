@@ -7,9 +7,9 @@
   <!-- The tab title never changes. It must never leak the drawn song. -->
   <title>Hitster</title>
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png?v=3d789e05" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png?v=3d789e05">
-  <link rel="stylesheet" href="css/style.css?v=3d789e05">
+  <link rel="icon" href="icons/icon-192.png?v=4412408a" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png?v=4412408a">
+  <link rel="stylesheet" href="css/style.css?v=4412408a">
 </head>
 <body class="centred">
   <main class="panel">
@@ -131,8 +131,9 @@
         </div>
       </div>
 
-      <!-- Transport sits above the primary action so the two are not confused
-           for one another in a dim room. -->
+      <!-- One transport row: back to the start, play/pause, on to the next.
+           A full-width Next button below this was costing about 90px of height
+           that the card wanted more. -->
       <div class="controls">
         <button id="replay" class="icon-button" type="button" aria-label="Play from the start">
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -147,14 +148,22 @@
             <path d="M6 5h4v14H6zm8 0h4v14h-4z"/>
           </svg>
         </button>
+        <!-- Skip, and a restart once the deck is spent - the same button, since
+             the thing it means is the same: put the next card on the table. -->
+        <button id="action" class="icon-button" type="button" aria-label="Next song">
+          <svg class="icon-next" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 18l8.5-6L6 6v12zM16 6h2.5v12H16z"/>
+          </svg>
+          <svg class="icon-restart" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5V1L7 6l5 5V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/>
+          </svg>
+        </button>
       </div>
-
-      <button id="action" class="button" type="button">Next</button>
     </section>
 
     <p id="notice" class="status hidden"></p>
   </main>
 
-  <script type="module" src="src/app.js?v=3d789e05"></script>
+  <script type="module" src="src/app.js?v=4412408a"></script>
 </body>
 </html>
