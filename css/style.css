@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=263eb779') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=99489147') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=263eb779') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=99489147') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -30,17 +30,20 @@
   --accent: #1db954;
   --error: #ff6b6b;
 
-  /* Three lamp colours, the way a real panel has three, each meaning one thing.
-     Amber marks a setting - the knob pointer and the scale around it. Red is a
-     lit button, the thing you press. Green is the machine answering: the
-     revealed year, the record label going live.
+  /* Amber marks a setting: the knob pointer and the scale around it. Small, and
+     the only saturated colour on the panel.
 
-     The buttons were amber and it was too much of it - a whole panel of yellow
-     rather than a lamp. Red is what that class of hardware actually lights its
-     switches with, and it separates pressing from setting. */
+     The buttons were amber first and then red, and both were wrong for the same
+     reason - a button-sized wash of colour stops reading as a lamp and starts
+     reading as a colour scheme. What lit equipment actually looks like is warm
+     white lettering glowing out of dark metal, so that is what the buttons are:
+     the legend is lit, not the button. */
   --lamp: #e0a92b;
-  --lit: #e8503a;
-  --lit-text: #ffe4dc;
+  --lit-text: #fdf6e6;
+
+  /* Aged paper, for the record label. */
+  --label: #ded0ad;
+  --label-ink: #2a2118;
 
   /* Panel metal, shared by the buttons, the knob and the fader caps so they
      read as parts of one piece of equipment. */
@@ -142,9 +145,9 @@ h1 {
    the screen looking a little blunt.
 
    Panel hardware rather than flat fills: a bevelled cap in the same metal as
-   the knob and the fader caps, with an engraved legend. The primary one is lit
-   from behind in red, the way the button you are meant to press is the one that
-   glows, and the way that class of hardware has always lit its switches. */
+   the knob and the fader caps. On the primary one the legend itself is lit -
+   warm white glowing out of dark metal, which is what illuminated equipment
+   actually looks like, and which adds no colour to the panel at all. */
 .button {
   display: grid;
   place-items: center;
@@ -154,7 +157,7 @@ h1 {
   border: 1px solid #4b5265;
   border-radius: 0.6rem;
   background:
-    linear-gradient(#a83224 0%, #7d2318 55%, #59160e 100%);
+    linear-gradient(#606a80 0%, #3c4353 50%, #272c37 100%);
   color: var(--lit-text);
   font-family: var(--panel-font);
   font-weight: 600;
@@ -162,7 +165,12 @@ h1 {
   letter-spacing: 0.13em;
   text-transform: uppercase;
   text-decoration: none;
-  text-shadow: 0 0 0.7rem rgb(255 138 110 / 0.55);
+  /* The legend is what is lit. Two shadows: a tight one that makes the letters
+     look like they are glowing through the panel, and a wide soft one for the
+     spill around them. */
+  text-shadow:
+    0 0 0.35rem rgb(253 246 230 / 0.55),
+    0 0 1.1rem rgb(253 246 230 / 0.25);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.16),
     inset 0 -2px 0 rgb(0 0 0 / 0.45),
@@ -312,6 +320,13 @@ h1 {
 /* A percentage of the record, so it scales with it. The mark lives inside,
    which is what makes the word turn with the label instead of hanging still
    over a spinning disc. */
+/* A paper label glued to the record, not a coloured disc. Aged manila, a
+   printed ring set in from the edge the way a 45 has one, and a vignette so it
+   sits under the light rather than in front of it.
+
+   Dimmed until the song has been heard - the same paper, unlit. The label
+   coming up is the signal that the card can be turned over, which used to be
+   done by turning it bright green. A record label is never bright green. */
 .vinyl-label {
   position: absolute;
   top: 50%;
@@ -322,14 +337,28 @@ h1 {
   place-items: center;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  /* Grey until the song has been heard. The label lighting up is the signal
-     that the card can now be turned over. */
-  background: #2c3242;
-  transition: background-color 0.3s ease;
+  background:
+    /* the printed ring */
+    radial-gradient(circle at 50% 50%,
+      rgb(0 0 0 / 0) 0 71%,
+      rgb(74 58 34 / 0.55) 71% 73%,
+      rgb(0 0 0 / 0) 73% 100%),
+    /* light falling across the paper */
+    radial-gradient(circle at 38% 30%,
+      #efe3c4 0%,
+      var(--label) 55%,
+      #b8a781 100%);
+  box-shadow:
+    inset 0 0 0.6rem rgb(60 44 22 / 0.45),
+    0 0 0 1px rgb(0 0 0 / 0.45),
+    0 2px 6px rgb(0 0 0 / 0.5);
+  filter: brightness(0.58) saturate(0.75);
+  transition: filter 0.35s ease;
 }
 
+/* Lit. Same paper, the lamp now on it. */
 .card.revealable .vinyl-label {
-  background: var(--accent);
+  filter: none;
 }
 
 .card.paused .vinyl {
@@ -343,20 +372,21 @@ h1 {
 /* Before the song has played this is a question mark; once it has, the same
    spot becomes the word to tap. Either way it is printed on the label and turns
    with it. */
+/* Printed on the label, so it is ink rather than UI: dark, and the same both
+   times, because a label does not change colour when you are allowed to read it. */
 .card-mark {
+  font-family: var(--panel-font);
   font-size: 3.25rem;
   font-weight: 700;
   line-height: 1;
-  color: var(--muted);
+  color: var(--label-ink);
 }
 
 .card.revealable .card-mark {
-  font-family: var(--panel-font);
   font-weight: 600;
   font-size: 1.1875rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #06210f;
 }
 
 .card-front {
@@ -432,9 +462,9 @@ h1 {
   touch-action: manipulation;
 }
 
-/* The one that is lit, same lamp as the primary button. */
+/* The one you reach for, lit the same way the primary button is. */
 .icon-button.primary {
-  background: linear-gradient(#a83224 0%, #7d2318 55%, #59160e 100%);
+  background: linear-gradient(#606a80 0%, #3c4353 50%, #272c37 100%);
   color: var(--lit-text);
 }
 
@@ -445,7 +475,7 @@ h1 {
 }
 
 .icon-button.primary svg {
-  filter: drop-shadow(0 0 0.45rem rgb(255 138 110 / 0.5));
+  filter: drop-shadow(0 0 0.5rem rgb(253 246 230 / 0.45));
 }
 
 .icon-button:disabled {
