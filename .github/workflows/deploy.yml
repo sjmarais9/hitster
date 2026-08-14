@@ -1,0 +1,93 @@
+# Test, then deploy. Nothing reaches the phone that has not passed.
+#
+# Until now GitHub Pages served whatever landed on main. The pre-commit hook
+# runs the tests, but a hook protects the careless rather than the determined:
+# --no-verify skips it, a fresh clone does not have it installed until someone
+# runs git config, and the scheduled import commits without a human present.
+# This is the path that cannot be skipped, because it is the one that publishes.
+#
+# The site is unchanged in content. Pages used to serve the branch; this serves
+# the same checkout minus .git and .github, which were never meant to be public
+# even in a public repo.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # So a deploy can be re-run without an empty commit - useful when a run failed
+  # for a reason that had nothing to do with the code.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and never cancel one in flight: a half-finished
+# Pages deploy is how a site ends up serving a mix of two versions. The daily
+# import pushes on its own schedule, so overlapping runs are a real possibility
+# rather than a theoretical one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # No dependencies to install - the project has none, deliberately.
+
+      # test:ci rather than test: the local script stamps the assets, which in CI
+      # would quietly fix an unstamped commit and then deploy files that do not
+      # match what is in the repository. --check fails instead, so a commit that
+      # skipped the hook is caught here rather than silently repaired.
+      - name: Tests
+        run: npm run test:ci
+
+      # The guards are only worth what they catch, so CI re-derives that rather
+      # than trusting the last time somebody ran it by hand.
+      - name: Check the data guards still catch their own bugs
+        run: npm run verify
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Drop what should not be served
+        run: rm -rf .git .github
+
+      # A last look before publishing. If one of these is missing the app is
+      # broken in a way no unit test would notice, because every one of them is
+      # fetched by the browser rather than imported by node.
+      - name: Check the site is complete
+        run: |
+          for f in index.html manifest.webmanifest callback/index.html \
+                   css/style.css src/app.js data/songs.json \
+                   fonts/yellowtail.woff2 fonts/barlow-condensed.woff2 \
+                   icons/icon-192.png; do
+            test -f "$f" || { echo "missing: $f"; exit 1; }
+          done
+          node -e "
+            const n = require('./data/songs.json').songs.length;
+            if (!n) { console.error('the pool is empty'); process.exit(1); }
+            console.log('publishing ' + n + ' playable songs');
+          "
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

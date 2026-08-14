@@ -8,7 +8,8 @@
     "stats": "node scripts/stats.mjs",
     "stamp": "node scripts/stamp.mjs",
     "stamp:check": "node scripts/stamp.mjs --check",
-    "test": "node scripts/stamp.mjs && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/songs-file.test.mjs scripts/stamping.test.mjs scripts/seeds.test.mjs scripts/percentiles.test.mjs scripts/data.test.mjs scripts/smoke.test.mjs",
-    "verify": "node scripts/verify-guards.mjs"
+    "test": "node scripts/stamp.mjs && node --test \"scripts/*.test.mjs\"",
+    "verify": "node scripts/verify-guards.mjs",
+    "test:ci": "node scripts/stamp.mjs --check && node --test \"scripts/*.test.mjs\""
   }
 }
