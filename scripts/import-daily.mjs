@@ -123,6 +123,14 @@ if (stillLocked) {
   const mins = Math.round((stillLocked - Date.now()) / 60000);
   console.log(`Still rate limited for about ${mins} more minutes (until ${stillLocked.toISOString().slice(11, 16)} UTC).`);
   console.log('Not calling Spotify. Delete .import-lockout.json to force an attempt.');
+
+  // Still publish. A previous run may have committed and failed to push, or been
+  // killed between saving the pool and shipping it - and locked-out runs are the
+  // majority, so returning here without trying would mean the retry almost never
+  // happens. Publishing touches nothing but git.
+  const held = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] });
+  await publish((held.songs ?? []).length);
+
   process.exit(EXIT_RATE_LIMITED);
 }
 
@@ -196,7 +204,11 @@ process.exit(hitQuota ? EXIT_RATE_LIMITED : 0);
  * the next run to carry.
  */
 async function publish(count) {
-  const OURS = ['data/songs.json', 'data/review.json'];
+  // Everything this run is entitled to change: the pool, the review file, and
+  // the batch seeds, which apply-canonicity rewrites when it re-scores. Staging
+  // only the first two would leave the seeds dirty after every successful run
+  // and split one logical change across two commits.
+  const OURS = ['data/songs.json', 'data/review.json', 'data/*.seed.json'];
 
   const git = (...args) => new Promise((resolve) => {
     const child = spawn('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });

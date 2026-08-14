@@ -100,11 +100,22 @@ function percentiles(valueOf) {
   return out;
 }
 
-// A song absent from every playlist is genuinely obscure rather than unmeasured,
-// so a zero count is a real zero. A song Last.fm has never heard of is the same.
+// A song absent from the playlist harvest appeared on none of the playlists we
+// swept, which is a real zero: that index holds 32,898 tracks and covers 99% of
+// the corpus, so absence from it is a finding rather than a gap.
+//
+// Last.fm is the opposite, and this line used to treat it the same way. That
+// was the bug. That index is a deliberate partial pass - 1,458 tracks, taken
+// when the corpus WAS 1,458 songs. The corpus is 10,927 now, so 87% of it was
+// never fetched, and calling that a zero ranked seven thousand unmeasured songs
+// below every measured one. It inverted the tiers outright: standard fell from
+// a median of 98 to 49 while familiar rose to 93.
+//
+// Absent is not zero. Left null, percentiles() skips it and the average below
+// uses whichever sources actually have something to say - which for most of the
+// corpus means Deezer alone.
 for (const s of all) {
   if (s.playlists === null) s.playlists = 0;
-  if (s.listeners === null) s.listeners = 0;
 }
 
 const byPlaylists = percentiles((s) => s.playlists);
@@ -118,20 +129,19 @@ for (const s of all) {
   scores.set(s.id, both.length ? Math.round(both.reduce((x, y) => x + y, 0) / both.length) : null);
 }
 
-// --- write -------------------------------------------------------------------
+// --- score in memory ---------------------------------------------------------
+//
+// Nothing is written here. The check below decides whether these scores are fit
+// to keep, and it cannot do that after the files have already been overwritten.
 
 let changed = 0;
-for (const { file, doc } of docs) {
+for (const { doc } of docs) {
   doc.songs = (doc.songs ?? []).map((song) => {
     const score = scores.get(`${song.artist}|${song.title}`.toLowerCase()) ?? null;
     if (song.canonicity === score) return song;
     changed++;
     return { ...song, canonicity: score };
   });
-
-  if (!dryRun) {
-    await writeSongs(path.resolve(ROOT, file), doc);
-  }
 }
 
 // --- report ------------------------------------------------------------------
@@ -149,12 +159,37 @@ for (const { doc } of docs) {
   }
 }
 console.log('\nsanity check - canonicity should fall across our tiers:');
+const median = {};
 for (const [tier, xs] of Object.entries(tiers)) {
   if (!xs.length) continue;
   const sorted = [...xs].sort((a, b) => a - b);
-  console.log(`  ${tier.padEnd(10)} median ${String(sorted[Math.floor(sorted.length / 2)]).padStart(3)}  (${xs.length} songs)`);
+  median[tier] = sorted[Math.floor(sorted.length / 2)];
+  console.log(`  ${tier.padEnd(10)} median ${String(median[tier]).padStart(3)}  (${xs.length} songs)`);
 }
 
-if (dryRun) console.log('\nDry run: nothing written.');
+// A gate, not a note. This check printed the corruption plainly and then wrote
+// it out anyway, which is how a scrambled score reached the pool: the evidence
+// was on screen and nothing acted on it.
+//
+// The requirement is deliberately weak. The two signals are allowed to disagree
+// with the tags song by song - that disagreement is the entire reason TRUST
+// exists. But if the tier medians stop falling, the scores have stopped meaning
+// the thing the sampler blends them as, and writing them would quietly degrade
+// every draw from then on.
+if (!(median.standard > median.familiar && median.familiar > median.deep)) {
+  console.error('\nREFUSING TO WRITE. The medians do not fall across the tiers, so these');
+  console.error('scores no longer track how well known a song is. Nothing has been changed.');
+  console.error('Check that data/lastfm.json still covers enough of the corpus to rank on.');
+  process.exit(1);
+}
+
+if (dryRun) {
+  console.log('\nDry run: nothing written.');
+} else {
+  for (const { file, doc } of docs) {
+    await writeSongs(path.resolve(ROOT, file), doc);
+  }
+  console.log(`\nWritten. ${changed} record(s) updated.`);
+}
 
 
