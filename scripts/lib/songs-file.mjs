@@ -8,7 +8,7 @@
 // Everything that writes a song file must use this, or the format flips back
 // and forth and every diff is unreadable.
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, rename, rm } from 'node:fs/promises';
 
 /** One song per line, with the spacing these files are written by hand in. */
 export function serialise(doc) {
@@ -35,8 +35,32 @@ export function serialise(doc) {
   return `{\n${head}  "songs": [\n${lines}\n  ]\n}\n`;
 }
 
+/**
+ * Writes the file, or leaves the old one exactly as it was.
+ *
+ * Not a plain overwrite, because the import checkpoints every 25 songs and runs
+ * unattended on a schedule. That is hundreds of writes a night with nobody
+ * watching, and a plain write is a window in which the pool is half a file: a
+ * killed process, a power cut, or the task scheduler losing patience would
+ * leave truncated JSON that the app cannot parse and the next run cannot read.
+ *
+ * Writing beside it and renaming closes the window. A rename over an existing
+ * file is atomic on the same volume - libuv maps it to MoveFileEx with
+ * REPLACE_EXISTING on Windows - so a reader sees either the whole old file or
+ * the whole new one, never a splice of the two.
+ *
+ * The temp file is deliberately a sibling. Renaming across volumes is a copy,
+ * which is exactly the non-atomic write this exists to avoid.
+ */
 export async function writeSongs(file, doc) {
-  await writeFile(file, serialise(doc), 'utf8');
+  const temp = `${file}.tmp-${process.pid}`;
+  try {
+    await writeFile(temp, serialise(doc), 'utf8');
+    await rename(temp, file);
+  } catch (err) {
+    await rm(temp, { force: true }).catch(() => {});
+    throw err;
+  }
 }
 
 export async function readSongs(file, fallback) {

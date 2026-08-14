@@ -124,12 +124,18 @@ if (stillLocked) {
   console.log(`Still rate limited for about ${mins} more minutes (until ${stillLocked.toISOString().slice(11, 16)} UTC).`);
   console.log('Not calling Spotify. Delete .import-lockout.json to force an attempt.');
 
-  // Still publish. A previous run may have committed and failed to push, or been
-  // killed between saving the pool and shipping it - and locked-out runs are the
-  // majority, so returning here without trying would mean the retry almost never
-  // happens. Publishing touches nothing but git.
+  // Locked-out runs are the majority, so anything that only happens on the way
+  // past this point effectively never happens.
+  //
+  // Publish, because a previous run may have committed and failed to push, or
+  // been killed between saving the pool and shipping it. Track progress, because
+  // a staleness alarm that only fires on successful runs would be silent for
+  // exactly the weeks it exists to notice. Neither touches Spotify.
   const held = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] });
-  await publish((held.songs ?? []).length);
+  const size = (held.songs ?? []).length;
+
+  await trackProgress(size);
+  await publish(size);
 
   process.exit(EXIT_RATE_LIMITED);
 }
@@ -182,9 +188,57 @@ const pool = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] 
 const size = (pool.songs ?? []).length;
 console.log(`\n=== pool is now ${size} playable songs ===`);
 
+await trackProgress(size);
+
 await publish(size);
 
 process.exit(hitQuota ? EXIT_RATE_LIMITED : 0);
+
+/**
+ * Notices when the import has quietly stopped working.
+ *
+ * This runs unattended for weeks. Every failure mode it has - expired git
+ * credentials, a disabled task, a lockout that never lifts, a batch that has
+ * silently finished - looks identical from the outside: nothing happens, and
+ * nothing complains. The pool simply stops growing and the only symptom is a
+ * deck that feels the same size it did a fortnight ago.
+ *
+ * So the one number that matters is remembered between runs, and a run that
+ * finds it unchanged for days says so loudly in the log.
+ */
+async function trackProgress(size) {
+  const FILE = path.join(ROOT, '.import-state.json');
+  const now = new Date().toISOString();
+
+  let state = {};
+  try {
+    state = JSON.parse(await readFile(FILE, 'utf8'));
+  } catch {
+    // First run, or the file was removed. Today becomes the baseline.
+  }
+
+  if (size > (state.pool ?? 0)) {
+    state.pool = size;
+    state.grewAt = now;
+  }
+  state.checkedAt = now;
+  state.note = 'Written by import-daily. Delete to reset the staleness warning.';
+
+  try {
+    await writeFile(FILE, JSON.stringify(state, null, 2) + '\n', 'utf8');
+  } catch {
+    // Losing the marker costs a warning, not the import.
+  }
+
+  const days = state.grewAt ? (Date.now() - Date.parse(state.grewAt)) / 86_400_000 : 0;
+  if (days >= 3) {
+    console.warn(`\nWARNING: the pool has not grown in ${Math.floor(days)} days.`);
+    console.warn('That is longer than a quota lockout, so something has stopped working.');
+    console.warn('Likely: expired git credentials, a disabled scheduled task, or every');
+    console.warn('batch already imported. Check the tail of logs/import.log.');
+  }
+  return state;
+}
 
 /**
  * Commits the pool and pushes it, because that is the only way a resolved song

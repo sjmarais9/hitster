@@ -25,3 +25,6 @@ data/year-audit.json
 
 # Candidates already tried and failed, regenerable but slow
 data/generation-rejects.json
+
+# Written by import-daily to notice when the pool stops growing.
+.import-state.json

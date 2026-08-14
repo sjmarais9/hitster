@@ -93,6 +93,39 @@ test('a round trip through the disk changes nothing', async () => {
   }
 });
 
+test('a failed write leaves the previous file intact', async () => {
+  // The scenario this protects: the import checkpoints hundreds of times a
+  // night, unattended. A plain overwrite that dies halfway leaves truncated
+  // JSON that neither the app nor the next run can read.
+  const dir = await mkdtemp(path.join(tmpdir(), 'songs-file-'));
+  const file = path.join(dir, 'songs.json');
+  try {
+    await writeSongs(file, doc({ meta: { generation: 1 } }));
+    const before = await readFile(file, 'utf8');
+
+    // serialise() throws on this, partway through building the new contents.
+    const poison = { meta: { generation: 2 }, songs: [{ get artist() { throw new Error('disk full'); } }] };
+    await assert.rejects(() => writeSongs(file, poison), /disk full/);
+
+    assert.equal(await readFile(file, 'utf8'), before, 'the old file was damaged');
+    assert.deepEqual((await readSongs(file)).meta, { generation: 1 });
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('a failed write leaves no temp file behind', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const dir = await mkdtemp(path.join(tmpdir(), 'songs-file-'));
+  try {
+    const poison = { songs: [{ get artist() { throw new Error('nope'); } }] };
+    await assert.rejects(() => writeSongs(path.join(dir, 'songs.json'), poison));
+    assert.deepEqual(await readdir(dir), [], 'temp file left in place');
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
 test('a missing file returns the fallback rather than throwing', async () => {
   assert.deepEqual(await readSongs('data/does-not-exist.json', { songs: [] }), { songs: [] });
 });

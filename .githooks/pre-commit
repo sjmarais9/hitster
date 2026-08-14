@@ -1,14 +1,25 @@
 #!/bin/sh
-# Re-stamp asset URLs before every commit.
-#
-# The stamp is a hash of the source, so this is a no-op unless something
-# actually changed. Without it a deploy can land on a phone that goes on
-# serving the previous CSS and modules from its cache for another ten minutes -
-# or indefinitely, for anyone with the app on their home screen.
+# Stamp the assets, then refuse the commit if anything is broken.
 #
 # Enabled with:  git config core.hooksPath .githooks
+#
+# The stamp is a hash of the source, so it is a no-op unless something changed.
+# Without it a deploy can land on a phone that goes on serving the previous CSS
+# and modules for another ten minutes - or indefinitely, for anyone with the app
+# on their home screen.
+#
+# The tests matter more. 114 of them exist and until now nothing ran them
+# without being asked, which makes a suite a thing you remember rather than a
+# thing that protects you. A green suite that nobody runs is the same as no
+# suite, and it is worse than none if it is being counted as safety.
+#
+# Skippable with --no-verify when it is genuinely in the way, which is why the
+# CI check is worth having as well: a hook protects the careless, not the
+# determined.
 
-node scripts/stamp.mjs || exit 1
+set -e
+
+node scripts/stamp.mjs
 
 # Only re-stage files that were already part of this commit. Stamping a file the
 # author deliberately left out of the index would drag it in behind their back.
@@ -17,5 +28,15 @@ for file in $(git diff --name-only); do
     git add "$file"
   fi
 done
+
+# The data invariants read the working tree, not the index, so a partial commit
+# is checked against files that are not all being committed. That is the right
+# way round: it is the state of the repository that has to be sound.
+if ! npm test --silent; then
+  echo ""
+  echo "Commit refused: the tests are failing."
+  echo "Fix them, or commit with --no-verify if you know what you are doing."
+  exit 1
+fi
 
 exit 0
