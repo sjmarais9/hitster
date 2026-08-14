@@ -65,29 +65,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Drop what should not be served
-        run: rm -rf .git .github
-
-      # A last look before publishing. If one of these is missing the app is
-      # broken in a way no unit test would notice, because every one of them is
-      # fetched by the browser rather than imported by node.
-      - name: Check the site is complete
+      # Only what a browser asks for. Publishing the whole repository meant
+      # serving 13MB, of which 12 were batch seeds, scripts and docs that no
+      # browser has ever requested - the playable pool is the only file in
+      # data/ the app fetches.
+      #
+      # The fonts come with their licence files deliberately. Serving a font is
+      # redistributing it, and both of ours are under licences that require the
+      # licence to travel with the file.
+      - name: Assemble the site
         run: |
-          for f in index.html manifest.webmanifest callback/index.html \
-                   css/style.css src/app.js data/songs.json \
-                   fonts/yellowtail.woff2 fonts/barlow-condensed.woff2 \
-                   icons/icon-192.png; do
-            test -f "$f" || { echo "missing: $f"; exit 1; }
-          done
-          node -e "
-            const n = require('./data/songs.json').songs.length;
-            if (!n) { console.error('the pool is empty'); process.exit(1); }
-            console.log('publishing ' + n + ' playable songs');
-          "
+          mkdir -p _site/data
+          cp -r index.html manifest.webmanifest callback css src fonts icons _site/
+          cp data/songs.json _site/data/
+
+      # A hand-picked list is a list that can be wrong, and a missing file
+      # breaks the app in a way no unit test can see - nothing in the suite ever
+      # fetches anything over HTTP. So this does not trust the list: it follows
+      # every reference in the HTML, CSS and modules and checks each resolves.
+      - name: Check the site is complete
+        run: node scripts/check-site.mjs _site
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - id: deployment
         uses: actions/deploy-pages@v4

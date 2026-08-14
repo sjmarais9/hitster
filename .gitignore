@@ -28,3 +28,6 @@ data/generation-rejects.json
 
 # Written by import-daily to notice when the pool stops growing.
 .import-state.json
+
+# Assembled by the deploy workflow.
+_site/
