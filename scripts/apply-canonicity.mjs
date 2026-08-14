@@ -25,6 +25,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
+import { percentiles, blend } from './lib/percentiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TARGETS = [
@@ -80,25 +81,9 @@ for (const { doc } of docs) {
   }
 }
 
-/**
- * Percentile of each song within its own decade, 0-100.
- * Songs with no value for a source are excluded from that source's ranking
- * rather than treated as zero - absent data is not the same as a zero score.
- */
-function percentiles(valueOf) {
-  const byDecade = new Map();
-  for (const s of all) {
-    if (valueOf(s) === null) continue;
-    if (!byDecade.has(s.decade)) byDecade.set(s.decade, []);
-    byDecade.get(s.decade).push(s);
-  }
-  const out = new Map();
-  for (const [, group] of byDecade) {
-    const sorted = [...group].sort((a, b) => valueOf(a) - valueOf(b));
-    sorted.forEach((s, i) => out.set(s.id, (i / Math.max(1, sorted.length - 1)) * 100));
-  }
-  return out;
-}
+// Ranking lives in lib/percentiles.mjs, where it is tested. It was a private
+// function here, which is how a rule as consequential as "absent is not zero"
+// ended up with no test at all.
 
 // A song absent from the playlist harvest appeared on none of the playlists we
 // swept, which is a real zero: that index holds 32,898 tracks and covers 99% of
@@ -118,16 +103,10 @@ for (const s of all) {
   if (s.playlists === null) s.playlists = 0;
 }
 
-const byPlaylists = percentiles((s) => s.playlists);
-const byListeners = percentiles((s) => s.listeners);
+const byPlaylists = percentiles(all, (s) => s.playlists);
+const byListeners = percentiles(all, (s) => s.listeners);
 
-const scores = new Map();
-for (const s of all) {
-  const a = byPlaylists.get(s.id);
-  const b = byListeners.get(s.id);
-  const both = [a, b].filter((x) => x !== undefined);
-  scores.set(s.id, both.length ? Math.round(both.reduce((x, y) => x + y, 0) / both.length) : null);
-}
+const scores = new Map(all.map((s) => [s.id, blend([byPlaylists, byListeners], s.id)]));
 
 // --- score in memory ---------------------------------------------------------
 //

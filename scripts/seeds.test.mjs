@@ -1,0 +1,142 @@
+// Tests for what the generator decides about a candidate:
+//   node --test scripts/seeds.test.mjs
+//
+// These four functions chose the tags on 9,469 songs. Nothing they produce is
+// ever invalid, so nothing ever threw - the skew seed put every pre-2000 song
+// on the adults' side across the whole batch and the only symptom was a night
+// that felt oddly recent.
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf,
+  PLURALITY, SHARED, STANDARD, FAMILIAR, DECADE_YEARS,
+} from './lib/seeds.mjs';
+
+// --- the era the playlists agree on ------------------------------------------
+
+test('a clear majority decides the era', () => {
+  assert.equal(crowdDecade({ decades: { '1990s': 38, '2000s': 4 } }), '1990s');
+});
+
+test('a split vote decides nothing', () => {
+  // Two decades at 35% each. Picking the larger would be picking noise.
+  assert.equal(crowdDecade({ decades: { '1980s': 35, '1990s': 34, '2000s': 31 } }), null);
+});
+
+test('the threshold is a plurality, not a majority', () => {
+  // 40% is enough on purpose: a song can genuinely appear on playlists either
+  // side of its decade boundary without that meaning it is undated.
+  assert.equal(crowdDecade({ decades: { '1970s': 40, '1980s': 30, '1990s': 30 } }), '1970s');
+  assert.equal(crowdDecade({ decades: { '1970s': 39, '1980s': 31, '1990s': 30 } }), null);
+  assert.ok(PLURALITY === 0.4);
+});
+
+test('no playlist evidence at all decides nothing', () => {
+  assert.equal(crowdDecade({}), null);
+  assert.equal(crowdDecade({ decades: {} }), null);
+});
+
+// --- genres ------------------------------------------------------------------
+
+test('the two commonest themes become the genres', () => {
+  assert.deepEqual(genresOf({ genres: { rock: 24, metal: 20, indie: 16, pop: 4 } }),
+    ['rock', 'metal']);
+});
+
+test('a song with one theme gets one genre, not a padded pair', () => {
+  assert.deepEqual(genresOf({ genres: { kwaito: 9 } }), ['kwaito']);
+});
+
+test('no theme at all falls back rather than writing an empty list', () => {
+  // An empty genres array would put the song in "Everything else" forever and
+  // trip the data invariants.
+  assert.deepEqual(genresOf({}), ['pop']);
+  assert.deepEqual(genresOf({ genres: {} }), ['pop']);
+});
+
+// --- the cross-check ---------------------------------------------------------
+
+test('a year inside its era agrees', () => {
+  assert.ok(agreesWithEra(1995, '1990s'));
+  assert.ok(agreesWithEra(1990, '1990s'), 'the first year of a decade is inside it');
+  assert.ok(agreesWithEra(1999, '1990s'), 'the last year of a decade is inside it');
+});
+
+test('a year outside its era is a clash', () => {
+  assert.ok(!agreesWithEra(1989, '1990s'));
+  assert.ok(!agreesWithEra(2000, '1990s'));
+  // The real failure this catches: a remaster date on a sixties song.
+  assert.ok(!agreesWithEra(2017, '1960s'));
+});
+
+test('every decade the app knows has a range, and they tile without gaps', () => {
+  const eras = Object.keys(DECADE_YEARS);
+  for (const era of eras) {
+    const [lo, hi] = DECADE_YEARS[era];
+    assert.equal(decadeOf(lo), era, `${era} starts at ${lo}`);
+    assert.equal(decadeOf(hi), era, `${era} ends at ${hi}`);
+    assert.equal(hi - lo, 9);
+  }
+  for (let i = 1; i < eras.length; i++) {
+    assert.equal(DECADE_YEARS[eras[i]][0], DECADE_YEARS[eras[i - 1]][1] + 1, 'no gap between decades');
+  }
+});
+
+test('an unknown era accepts anything rather than rejecting everything', () => {
+  // The fallback in the generator is a wide-open range. Worth pinning: the
+  // opposite default would silently reject every candidate.
+  assert.ok(agreesWithEra(1995, '1890s'));
+});
+
+// --- the seeds ---------------------------------------------------------------
+
+test('familiarity steps at its thresholds', () => {
+  assert.equal(familiarityFor(100), 'standard');
+  assert.equal(familiarityFor(STANDARD), 'standard');
+  assert.equal(familiarityFor(STANDARD - 1), 'familiar');
+  assert.equal(familiarityFor(FAMILIAR), 'familiar');
+  assert.equal(familiarityFor(FAMILIAR - 1), 'deep');
+  assert.equal(familiarityFor(0), 'deep');
+});
+
+test('every familiarity seed is a value the sampler knows', () => {
+  const known = ['standard', 'familiar', 'deep'];
+  for (let p = 0; p <= 100; p++) assert.ok(known.includes(familiarityFor(p)), `p=${p}`);
+});
+
+test('recent music goes to the children, as it always did', () => {
+  assert.equal(skewFor(2020, 10), 'kids');
+  assert.equal(skewFor(2015, 99), 'kids');
+  assert.equal(skewFor(2014, 10), 'even');
+  assert.equal(skewFor(2005, 10), 'even');
+});
+
+test('a well-known old song is shared rather than kept from the children', () => {
+  // The bug this replaced: every pre-2005 song was `adults`, whatever it was.
+  assert.equal(skewFor(1975, 95), 'even', 'Stairway to Heaven is not adults-only');
+  assert.equal(skewFor(1975, SHARED), 'even');
+});
+
+test('an obscure old song still belongs to the adults', () => {
+  assert.equal(skewFor(1975, SHARED - 1), 'adults');
+  assert.equal(skewFor(1975, 5), 'adults');
+});
+
+test('the seed can never again put every old song on one side', () => {
+  // The property, not the thresholds: across a realistic spread of scores,
+  // pre-2000 music has to reach the children's side a fair share of the time.
+  const scores = Array.from({ length: 101 }, (_, i) => i);
+  const shared = scores.filter((p) => skewFor(1985, p) !== 'adults').length;
+  assert.ok(shared / scores.length > 0.25,
+    `only ${shared}% of 1985 songs would be shareable`);
+});
+
+test('every skew seed is a value the sampler knows', () => {
+  const known = ['adults', 'even', 'kids'];
+  for (const year of [1955, 1975, 1999, 2004, 2005, 2014, 2015, 2026]) {
+    for (const p of [0, 50, 64, 65, 100]) {
+      assert.ok(known.includes(skewFor(year, p)), `${year}/${p}`);
+    }
+  }
+});

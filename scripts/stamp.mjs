@@ -23,13 +23,10 @@
 import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { readdir } from 'node:fs/promises';
+import { stamp, bare } from './lib/stamping.mjs';
 
 const HTML = ['index.html', 'callback/index.html'];
 const CHECK = process.argv.includes('--check');
-
-// Any existing stamp, so hashing sees the source rather than the last stamp.
-const STAMP = /\?v=[0-9a-f]{8}/g;
-const bare = (text) => text.replace(STAMP, '');
 
 const sources = (await readdir('src')).filter((f) => f.endsWith('.js')).sort();
 
@@ -57,24 +54,10 @@ for (const { file, text } of files) hash.update(`${file}\n${bare(text)}\n`);
 for (const font of fonts) hash.update(await readFile(`fonts/${font}`));
 const version = hash.digest('hex').slice(0, 8);
 
-/** Adds or replaces the stamp on a relative URL, leaving absolute ones alone. */
-function stamp(text) {
-  return bare(text)
-    // Module specifiers: from './scoring.js'
-    .replace(/(from\s+['"]\.\/[\w.-]+\.js)(['"])/g, `$1?v=${version}$2`)
-    // index.html: href="css/style.css", src="src/app.js"
-    .replace(/((?:href|src)=["'](?:\.\/)?(?:css|src|icons)\/[\w./-]+\.(?:css|js|png))(["'])/g,
-      `$1?v=${version}$2`)
-    // style.css: url('../fonts/barlow-condensed.woff2'). The backreference makes the
-    // closing quote match whichever one opened it, and match nothing at all
-    // when the url was written unquoted.
-    .replace(/(url\((['"]?)\.\.\/fonts\/[\w.-]+\.woff2)(\2\))/g, `$1?v=${version}$3`);
-}
-
 let changed = 0;
 const touched = [];
 for (const { file, text } of files) {
-  const next = stamp(text);
+  const next = stamp(text, version);
   if (next === text) continue;
   changed++;
   touched.push(file);

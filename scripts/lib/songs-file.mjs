@@ -14,9 +14,14 @@ import { readFile, writeFile } from 'node:fs/promises';
 export function serialise(doc) {
   const { songs, ...rest } = doc;
 
-  const head = JSON.stringify(rest, null, 2)
-    .replace(/^\{\n/, '')
-    .replace(/\n\}$/, '');
+  // Everything but the songs, with its own braces trimmed so it can be spliced
+  // into ours. When there is nothing but songs, JSON.stringify returns "{}",
+  // which neither trim matches - and splicing that in produced "{\n{},\n" and a
+  // file that would not parse. A document with no meta is unusual but it is not
+  // an error, and it should not silently write corrupt JSON.
+  const head = Object.keys(rest).length
+    ? `${JSON.stringify(rest, null, 2).replace(/^\{\n/, '').replace(/\n\}$/, '')},\n`
+    : '';
 
   // Built field by field rather than by string-replacing a compact dump: a
   // title containing a comma or a colon would corrupt the latter.
@@ -27,7 +32,7 @@ export function serialise(doc) {
     return `    { ${fields} }`;
   }).join(',\n');
 
-  return `{\n${head},\n  "songs": [\n${lines}\n  ]\n}\n`;
+  return `{\n${head}  "songs": [\n${lines}\n  ]\n}\n`;
 }
 
 export async function writeSongs(file, doc) {

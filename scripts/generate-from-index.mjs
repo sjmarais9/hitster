@@ -27,6 +27,9 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs, readSongs } from './lib/songs-file.mjs';
+import {
+  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf,
+} from './lib/seeds.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'data', 'batch-006.seed.json');
@@ -93,11 +96,6 @@ function leansToward(entry, family) {
 // Titles that are not the song we want, however well they match.
 const JUNK = /\bkaraoke\b|\bmade popular by\b|\btribute\b|\bin the style of\b|\blive\b(?!\s*(and|to|at last))|\bremix\b|\bedit\b|\bmix\)|\bcover\b|\binstrumental\b|\bbacking track\b|\bremaster(ed)?\b/i;
 
-const DECADE_YEARS = {
-  '1950s': [1950, 1959], '1960s': [1960, 1969], '1970s': [1970, 1979],
-  '1980s': [1980, 1989], '1990s': [1990, 1999], '2000s': [2000, 2009],
-  '2010s': [2010, 2019], '2020s': [2020, 2029],
-};
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const readJson = async (f) => JSON.parse(await readFile(path.resolve(ROOT, f), 'utf8'));
@@ -224,55 +222,6 @@ async function yearOf(artist, title) {
   return years.length ? Math.min(...years) : null;
 }
 
-/**
- * The era the crowd puts this song in, from which decade-themed playlists it
- * appears on. Independent of MusicBrainz, which is the point.
- */
-function crowdDecade(entry) {
-  const counts = Object.entries(entry.decades ?? {});
-  if (!counts.length) return null;
-  const total = counts.reduce((a, [, n]) => a + n, 0);
-  const [decade, n] = counts.sort((a, b) => b[1] - a[1])[0];
-  // A weak plurality is not evidence. Two decades splitting the vote tells us
-  // nothing about which is right.
-  return n / total >= 0.4 ? decade : null;
-}
-
-/** Up to two genres, from the themes the song actually appeared on. */
-function genresOf(entry) {
-  const counts = Object.entries(entry.genres ?? {});
-  if (!counts.length) return ['pop'];
-  return counts.sort((a, b) => b[1] - a[1]).slice(0, 2).map(([g]) => g);
-}
-
-/**
- * Seeds, not judgements. Both are starting points the review and the sampler
- * can move.
- *
- * skew used to come from the year alone - pre-2005 adults, then even, then kids
- * from 2015. That was measured across the existing pool and faithfully
- * reproduced a mistake in it: the hand-tagging had read `kids` as "music from
- * the children's era" rather than "music the children know", leaving every
- * decade before 2000 at 99% adults. Since the crowd slider is normalised by
- * population, Balanced then had to find half the night from a side of the pool
- * containing nothing older than Hey Ya, and the 1990s fell to 13.4% of the draw.
- *
- * Canonicity fixes it without pretending to know the family: a pre-2005 song in
- * the top third of its decade is one that crossed generations, which is what
- * rule 8 in docs/tagging.md means by shared. Everything below that bar stays
- * with the grown-ups.
- */
-const familiarityFor = (percentile) =>
-  (percentile >= 85 ? 'standard' : percentile >= 45 ? 'familiar' : 'deep');
-
-const SHARED = 65;
-
-const skewFor = (year, percentile) => {
-  if (year >= 2015) return 'kids';
-  if (year >= 2005) return 'even';
-  return percentile >= SHARED ? 'even' : 'adults';
-};
-
 async function main() {
   const index = (await readJson('data/canonicity.json')).tracks ?? {};
 
@@ -383,14 +332,13 @@ async function main() {
 
     // The cross-check. Two unrelated sources must place the song in the same
     // decade, or we do not use it.
-    const [lo, hi] = DECADE_YEARS[crowd] ?? [0, 9999];
-    if (year < lo || year > hi) { reject(key, entry, 'decadeClash'); continue; }
+    if (!agreesWithEra(year, crowd)) { reject(key, entry, 'decadeClash'); continue; }
 
     produced.push({
       artist: entry.artist,
       title: entry.title,
       year,
-      decade: `${Math.floor(year / 10) * 10}s`,
+      decade: decadeOf(year),
       genres: genresOf(entry),
       familiarity: familiarityFor(percentile.get(key) ?? 50),
       skew: skewFor(year, percentile.get(key) ?? 50),
