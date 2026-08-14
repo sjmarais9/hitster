@@ -107,27 +107,44 @@ test('every canonicity is a percentile', () => {
 
 // --- the measurement still means what the sampler blends it as ---------------
 
-test('canonicity falls across the familiarity tiers', () => {
-  // The check that apply-canonicity printed and then ignored. Deliberately weak:
-  // the two may disagree song by song, which is the whole reason TRUST exists.
-  // But if the medians stop falling, the number has stopped tracking how well
-  // known a song is, and every draw is being weighted on noise.
-  const median = (xs) => {
-    const s = xs.slice().sort((a, b) => a - b);
-    return s[Math.floor(s.length / 2)];
-  };
+const median = (xs) => {
+  const s = xs.slice().sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+};
 
-  const tier = Object.fromEntries(FAMILIARITY.map((t) => [t,
-    corpus.filter((s) => s.familiarity === t && s.canonicity != null).map((s) => s.canonicity)]));
+/** Median canonicity per familiarity tier, over whichever songs are given. */
+function tiers(songs) {
+  return FAMILIARITY.map((t) =>
+    median(songs.filter((s) => s.familiarity === t && s.canonicity != null)
+      .map((s) => s.canonicity)));
+}
 
-  for (const t of FAMILIARITY) assert.ok(tier[t].length > 50, `too few ${t} songs to judge`);
+// The check that apply-canonicity printed and then ignored. Deliberately weak:
+// the two may disagree song by song, which is the whole reason TRUST exists.
+// But if the medians stop falling, the number has stopped tracking how well
+// known a song is, and every draw is being weighted on noise.
+//
+// Run over the pool AND the corpus, because over the corpus alone it was barely
+// a check at all. The pool is 1,649 songs of 11,000, so corrupting only the file
+// the app downloads moves the corpus medians by a few points and passes:
+// zeroing every pool score gave 82/53/19, inverting every one gave 82/54/25,
+// and both sailed through. That is precisely the bug this exists to catch,
+// arriving through the import instead of the scorer.
+for (const [what, songs] of [['the playable pool', () => pool], ['the whole corpus', () => corpus]]) {
+  test(`canonicity falls across the familiarity tiers, in ${what}`, () => {
+    const set = songs();
+    const counts = FAMILIARITY.map((t) => set.filter((s) => s.familiarity === t).length);
+    for (const [i, t] of FAMILIARITY.entries()) {
+      assert.ok(counts[i] > 50, `too few ${t} songs in ${what} to judge`);
+    }
 
-  const [standard, familiar, deep] = FAMILIARITY.map((t) => median(tier[t]));
-  assert.ok(standard > familiar,
-    `standard should outrank familiar, got ${standard} vs ${familiar}`);
-  assert.ok(familiar > deep,
-    `familiar should outrank deep, got ${familiar} vs ${deep}`);
-});
+    const [standard, familiar, deep] = tiers(set);
+    assert.ok(standard > familiar,
+      `${what}: standard should outrank familiar, got ${standard} vs ${familiar}`);
+    assert.ok(familiar > deep,
+      `${what}: familiar should outrank deep, got ${familiar} vs ${deep}`);
+  });
+}
 
 test('the children can be dealt music from before they were born', () => {
   // The skew seed once put nothing at all before 2000 on their side, which made

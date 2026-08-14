@@ -80,9 +80,18 @@ const PORT = process.argv.includes('--port')
 function runImport(file) {
   return new Promise((resolve) => {
     let seconds = null;
+    // One review file per batch. They all defaulted to data/review.json, so
+    // each batch overwrote the last one's findings and the file that survived
+    // described whichever batch happened to run last. Batches 003, 004 and 005
+    // have 22 unmatched songs between them and the file held one entry, from
+    // 006 - the diagnostic record for the other 22 was destroyed nightly, and
+    // then committed.
+    const review = file.replace(/\.seed\.json$|\.json$/, '') + '.review.json';
+
     const child = spawn(
       process.execPath,
-      [path.join(ROOT, 'scripts', 'import-songs.mjs'), '--in', file, '--port', PORT],
+      [path.join(ROOT, 'scripts', 'import-songs.mjs'),
+        '--in', file, '--review', review, '--port', PORT],
       { cwd: ROOT, stdio: ['inherit', 'pipe', 'inherit'] },
     );
 
@@ -141,6 +150,7 @@ if (stillLocked) {
 }
 
 let hitQuota = false;
+let failed = false;
 
 for (const file of BATCHES) {
   const todo = await outstanding(file);
@@ -169,19 +179,31 @@ for (const file of BATCHES) {
   }
   if (code !== 0) {
     console.error(`\n${file} failed with exit code ${code}. Stopping.`);
-    process.exit(1);
+    // Not process.exit. Whatever this run checkpointed before dying is real
+    // work, and exiting here would skip both the staleness marker and the
+    // publish - leaving it on disk with no alarm and no route to the app.
+    failed = true;
+    break;
   }
 }
 
 // Keep the pool's canonicity consistent as new songs land, so the sampler is
 // never weighting on scores computed from a smaller corpus.
-if (!hitQuota) {
+if (!hitQuota && !failed) {
   console.log('\nRefreshing canonicity across all files...');
-  await new Promise((resolve) => {
+  const scored = await new Promise((resolve) => {
     spawn(process.execPath, [path.join(ROOT, 'scripts', 'apply-canonicity.mjs')], {
       cwd: ROOT, stdio: 'inherit',
-    }).on('close', resolve);
+    }).on('close', (code) => resolve(code ?? 1));
   });
+
+  // It refuses to write when the scores stop tracking how well known a song is,
+  // and says so on stderr. Throwing the exit code away meant this wrapper
+  // announced a refresh that had not happened, and then published anyway.
+  if (scored !== 0) {
+    console.error('\nCanonicity refused to write. Publishing the pool as it stands;');
+    console.error('the scores are unchanged rather than wrong.');
+  }
 }
 
 const pool = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] });
@@ -192,7 +214,7 @@ await trackProgress(size);
 
 await publish(size);
 
-process.exit(hitQuota ? EXIT_RATE_LIMITED : 0);
+process.exit(failed ? 1 : hitQuota ? EXIT_RATE_LIMITED : 0);
 
 /**
  * Notices when the import has quietly stopped working.
@@ -262,7 +284,7 @@ async function publish(count) {
   // the batch seeds, which apply-canonicity rewrites when it re-scores. Staging
   // only the first two would leave the seeds dirty after every successful run
   // and split one logical change across two commits.
-  const OURS = ['data/songs.json', 'data/review.json', 'data/*.seed.json'];
+  const OURS = ['data/songs.json', 'data/*.review.json', 'data/review.json', 'data/*.seed.json'];
 
   const git = (...args) => new Promise((resolve) => {
     const child = spawn('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -308,24 +330,47 @@ async function publish(count) {
     console.log(`\nCould not check git status, leaving the pool uncommitted: ${status.out}`);
     return;
   }
-  if (!status.out) {
-    console.log('\nPool unchanged since the last run, nothing to publish.');
-    return;
+
+  if (status.out) {
+    await git('add', '--', ...OURS);
+    // --only, so the commit contains exactly the paths named above. Plain
+    // `git commit` takes whatever else happens to be staged, and a scheduled
+    // task at 3am has no idea what a human left in the index.
+    const commit = await git('commit', '--only', '-m',
+      `Import: the pool reaches ${count} playable songs\n\n` +
+      'Written by scripts/import-daily.mjs on its scheduled run. Only the pool,\n' +
+      'the review files and the batch seeds are touched.', '--', ...OURS);
+
+    if (commit.code !== 0) {
+      console.log(`\nCommit failed, pool left staged: ${commit.out}`);
+      return;
+    }
   }
 
-  await git('add', '--', ...OURS);
-  const commit = await git('commit', '-m',
-    `Import: the pool reaches ${count} playable songs\n\n` +
-    'Written by scripts/import-daily.mjs on its scheduled run. Only the pool and\n' +
-    'the review file are touched.');
+  // Push whenever the branch is ahead, not only when this run committed.
+  //
+  // The old code returned early on a clean tree, which is exactly the state
+  // after a commit whose push failed - so the retry this function was written
+  // for could never happen. A night that imported 700 songs, committed, and
+  // lost the network would stay unpublished until some later run happened to
+  // produce new data, and after the last batch finished, forever.
+  const ahead = await git('rev-list', '--count', '@{upstream}..HEAD');
+  const pending = Number(ahead.out) || 0;
 
-  if (commit.code !== 0) {
-    console.log(`\nCommit failed, pool left staged: ${commit.out}`);
+  if (ahead.code !== 0) {
+    console.log(`\nCannot tell whether anything is unpushed (${ahead.out.split('\n').pop()}).`);
+    return;
+  }
+  if (pending === 0) {
+    console.log('\nNothing new to publish, and nothing waiting to be pushed.');
     return;
   }
 
   const push = await git('push', 'origin', 'HEAD');
-  console.log(push.code === 0
-    ? `\nPublished. The app will serve ${count} songs within ten minutes.`
-    : `\nCommitted but not pushed (${push.out.split('\n').pop()}). The next run will carry it.`);
+  if (push.code === 0) {
+    console.log(`\nPublished ${pending} commit(s). The app will serve ${count} songs within ten minutes.`);
+  } else {
+    console.log(`\n${pending} commit(s) still unpushed (${push.out.split('\n').pop()}).`);
+    console.log('The next run will try again, whether or not it imports anything.');
+  }
 }

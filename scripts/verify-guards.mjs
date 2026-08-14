@@ -74,7 +74,7 @@ const MUTATIONS = [
   },
   {
     name: 'apply-canonicity inverts the tiers',
-    expect: 'canonicity falls across the familiarity tiers',
+    expect: 'canonicity falls across the familiarity tiers, in the whole corpus',
     apply: (data) => {
       for (const file of FILES) {
         for (const s of data[file].songs) {
@@ -89,6 +89,17 @@ const MUTATIONS = [
     apply: (data) => {
       for (const file of FILES) {
         for (const s of data[file].songs) if (s.year < 2000) s.skew = 'adults';
+      }
+    },
+  },
+  {
+    // The reviewer's case: corruption confined to the file the app downloads.
+    // Over the corpus this moves the medians by a few points and passes.
+    name: 'the import corrupts only the pool, leaving the batches clean',
+    expect: 'canonicity falls across the familiarity tiers, in the playable pool',
+    apply: (data) => {
+      for (const s of data['songs.json'].songs) {
+        if (s.canonicity != null) s.canonicity = 100 - s.canonicity;
       }
     },
   },

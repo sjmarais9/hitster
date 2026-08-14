@@ -190,6 +190,11 @@ async function main() {
   let matched = 0;
   let aborted = null;
 
+  // A circuit breaker for the difference between "this song cannot be matched"
+  // and "nothing can be matched right now".
+  let consecutiveFailures = 0;
+  const FAILURE_LIMIT = 20;
+
   // Correcting a song's year changes its identity key, which would otherwise
   // leave the old entry behind as a duplicate pointing at the same track.
   // Dedupe on URI, preferring whichever entry the current batch still refers to.
@@ -242,8 +247,22 @@ async function main() {
       }
       console.log(`error`);
       review.push({ ...song, problem: `lookup failed: ${err.message}`, candidates: [] });
+
+      // A run of consecutive failures is not a run of unmatchable songs, it is
+      // the network being down or the token being dead. Without this, a drop at
+      // 3am marks every remaining song "needs manual resolution", returns
+      // normally, and the wrapper reports success over a pool that did not grow.
+      // One bad song is noise; twenty in a row is a broken environment.
+      if (++consecutiveFailures >= FAILURE_LIMIT) {
+        aborted = new Error(
+          `${consecutiveFailures} lookups failed in a row - last: ${err.message}. `
+          + 'That is an environment problem rather than a data problem, so nothing '
+          + 'further would succeed either.');
+        break;
+      }
       continue;
     }
+    consecutiveFailures = 0;
 
     if (best?.verdict === 'confident') {
       matched++;
