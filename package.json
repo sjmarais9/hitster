@@ -8,6 +8,7 @@
     "stats": "node scripts/stats.mjs",
     "stamp": "node scripts/stamp.mjs",
     "stamp:check": "node scripts/stamp.mjs --check",
-    "test": "node scripts/stamp.mjs && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/smoke.test.mjs"
+    "test": "node scripts/stamp.mjs && node --test scripts/match.test.mjs scripts/filters.test.mjs scripts/scoring.test.mjs scripts/data.test.mjs scripts/smoke.test.mjs",
+    "verify": "node scripts/verify-guards.mjs"
   }
 }

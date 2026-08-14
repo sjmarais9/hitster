@@ -219,6 +219,36 @@ async function publish(count) {
     child.on('error', () => resolve({ code: 1, out: 'could not run git' }));
   });
 
+  // The gate. Every bug that has hurt this project reached the pool quietly and
+  // was found days later by somebody noticing something odd in the app. This is
+  // the last point at which that can be stopped: if the data does not hold up,
+  // it stays on this machine where it can be looked at, rather than going to
+  // the phone where it becomes a mystery.
+  const sound = await new Promise((resolve) => {
+    const child = spawn(process.execPath, ['--test', path.join(ROOT, 'scripts', 'data.test.mjs')],
+      { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    child.stdout.on('data', (d) => { out += d; });
+    child.stderr.on('data', (d) => { out += d; });
+    child.on('close', (code) => resolve({ ok: code === 0, out }));
+    child.on('error', () => resolve({ ok: false, out: 'could not run the data tests' }));
+  });
+
+  if (!sound.ok) {
+    // The whole escape, not just its tail: dropping only the [31m leaves the
+    // escape character at the head of the line, which no anchored pattern will
+    // match. That printed an empty diagnosis the first time this fired.
+    const plain = sound.out.replace(/\x1b\[[0-9;]*m/g, '');
+    const why = plain.split('\n')
+      .filter((l) => /^(✖|not ok )/.test(l.trim()) || /AssertionError|expected/.test(l))
+      .slice(0, 20);
+
+    console.error('\nNOT PUBLISHING. The pool failed its own checks:\n');
+    console.error(why.length ? why.join('\n') : plain.slice(-1500));
+    console.error('\nEverything is still on disk. Nothing has been committed or pushed.');
+    return;
+  }
+
   const status = await git('status', '--porcelain', '--', ...OURS);
   if (status.code !== 0) {
     console.log(`\nCould not check git status, leaving the pool uncommitted: ${status.out}`);
