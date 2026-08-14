@@ -159,18 +159,31 @@ test('a fader only changes likelihood until it reaches Off', () => {
   assert.equal(off.folk, 0, 'Off must genuinely exclude, or the label lies');
 });
 
-test('muting every genre falls back to uniform rather than drawing nothing', () => {
+test('a deck with nothing eligible draws nothing, rather than dealing the muted', () => {
+  // It used to fall back to a uniform draw, which dealt the very songs the
+  // player had switched off while their labels read Off. Returning nothing
+  // lets the caller say so.
   const deck = [song({ title: 'a', genres: ['rock'] }), song({ title: 'b', genres: ['pop'] })];
   const silent = { rock: 0, pop: 0, other: 0 };
   const weights = weightsFor(deck, { level: 'everything', crowd: 0.5, genreLevels: silent });
-  const picked = pickWeighted(deck, weights, seeded(11));
-  assert.ok(picked, 'an all-muted mixer must not leave the game unable to draw');
+  assert.equal(pickWeighted(deck, weights, seeded(11)), null);
 });
 
-test('pickWeighted survives an all-zero weight vector', () => {
-  const deck = [song({ title: 'a' }), song({ title: 'b' })];
-  const picked = pickWeighted(deck, [0, 0], seeded(3));
-  assert.ok(picked, 'should fall back to uniform rather than returning nothing');
+test('pickWeighted returns nothing for an all-zero weight vector', () => {
+  assert.equal(pickWeighted([song({ title: 'a' }), song({ title: 'b' })], [0, 0], seeded(3)), null);
+});
+
+test('a partial mute can zero a deck, and it is reported not dealt', () => {
+  // The reachable case: one decade, and the only families it contains muted.
+  const deck = [
+    song({ title: 'a', decade: '1950s', genres: ['rock and roll'] }),
+    song({ title: 'b', decade: '1950s', genres: ['rock and roll'] }),
+  ];
+  const weights = weightsFor(deck, {
+    level: 'everything', crowd: 0.5, genreLevels: { rock: 0 },
+  });
+  assert.equal(weights.reduce((a, b) => a + b, 0), 0);
+  assert.equal(pickWeighted(deck, weights, seeded(5)), null);
 });
 
 // --- the decade mixer --------------------------------------------------------

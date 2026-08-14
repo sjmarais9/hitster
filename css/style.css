@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=8316a179') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=25fa6b28') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=8316a179') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=25fa6b28') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }
@@ -1058,6 +1058,43 @@ h1 {
 .status {
   margin: 0;
   color: var(--muted);
+}
+
+/* The notice is the app's only way of telling you anything, and it was pinned
+   below the fold on the two screens that use it most.
+
+   #start and #table are sized to exactly the body's content box, so the notice
+   - the next flex child, plus a 1.5rem gap - began one and a half rem past the
+   bottom of the viewport. body.locked then set overflow: hidden, so it could
+   not even be scrolled to. Everything went there to die: "every song has been
+   played", "open the Spotify app on this device", a failed pool load, the
+   fallback warning the spec requires be surfaced.
+
+   Floating it fixes that without giving the height back, which those screens
+   cannot spare. It sits over the layout, at the bottom, above everything. */
+#notice:not(.hidden) {
+  position: fixed;
+  left: 50%;
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 10;
+
+  width: min(28rem, calc(100vw - 1.5rem));
+  padding: 0.75rem 1rem;
+  border: 1px solid #4b5265;
+  border-radius: 0.6rem;
+  background: #1b2029;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.6);
+
+  font-family: var(--panel-font);
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+#notice.error {
+  border-color: var(--error);
+  color: var(--error);
 }
 
 .status.error {

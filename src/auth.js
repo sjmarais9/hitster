@@ -23,8 +23,8 @@
 //
 // Refreshing is handled transparently so an hour-long game is not interrupted.
 
-import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=8316a179';
-import { createVerifier, createState, challengeFor } from './pkce.js?v=8316a179';
+import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=25fa6b28';
+import { createVerifier, createState, challengeFor } from './pkce.js?v=25fa6b28';
 
 // One-shot values for a single login flow. Per-tab is exactly right for these:
 // the callback lands in the same tab that started it, and nothing should be
@@ -192,9 +192,21 @@ async function refresh(refreshToken) {
       client_id: CLIENT_ID,
     });
   } catch (err) {
-    // A rejected refresh token is terminal: nothing to do but log in again.
-    logout();
-    throw new Error(`Session expired. Log in again. (${err.message})`);
+    // Only a refusal is terminal. This used to log out on any failure at all,
+    // which meant a two-second drop in wifi an hour into a game night destroyed
+    // the session and sent someone to the login screen mid-party - exactly the
+    // outcome that keeping the refresh token in localStorage was meant to
+    // prevent. A 5xx did the same.
+    //
+    // Spotify says invalid_grant when a refresh token is genuinely dead. A
+    // network rejection has no status at all, and a 500 means try later. Both
+    // keep the token: the next call will refresh again, and if the token really
+    // is dead we will find out then and clear it then.
+    if (err.terminal) {
+      logout();
+      throw new Error(`Session expired. Log in again. (${err.message})`);
+    }
+    throw new Error(`Could not reach Spotify. Still signed in - try again. (${err.message})`);
   }
 
   // Spotify rotates the refresh token, but does not always send a new one.
@@ -213,7 +225,13 @@ async function requestTokens(body) {
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
     const detail = payload.error_description || payload.error || response.status;
-    throw new Error(`Token request failed: ${detail}`);
+    const failure = new Error(`Token request failed: ${detail}`);
+    // Terminal means the credential itself is dead, not that the request went
+    // badly. Only that distinction may clear a stored refresh token. A 5xx is
+    // Spotify having a bad minute; a fetch rejection never reaches here at all,
+    // so it is terminal only if this flag says so.
+    failure.terminal = response.status >= 400 && response.status < 500;
+    throw failure;
   }
   return payload;
 }

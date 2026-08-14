@@ -25,7 +25,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { readdir } from 'node:fs/promises';
 import { stamp, bare } from './lib/stamping.mjs';
 
-const HTML = ['index.html', 'callback/index.html'];
+const HTML = ['index.html', 'callback/index.html', 'manifest.webmanifest'];
 const CHECK = process.argv.includes('--check');
 
 const sources = (await readdir('src')).filter((f) => f.endsWith('.js')).sort();

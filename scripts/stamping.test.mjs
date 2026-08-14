@@ -87,7 +87,10 @@ test('the real project files are all matched by at least one pattern', async () 
   // Guards against a rename quietly taking a file out of scope: if index.html
   // stops matching, nothing errors, it simply stops being cache-busted.
   const { readFile } = await import('node:fs/promises');
-  for (const file of ['index.html', 'css/style.css', 'src/app.js']) {
+  // callback/index.html was absent from this list, which is how it went several
+  // releases with nothing stamped in it while --check reported success.
+  for (const file of ['index.html', 'callback/index.html', 'manifest.webmanifest',
+    'css/style.css', 'src/app.js']) {
     const text = await readFile(file, 'utf8');
     assert.notEqual(stamp(text, V), bare(text), `${file} has no stampable URL`);
   }

@@ -71,6 +71,21 @@ export const LEVELS = {
 const KIDSNESS = { adults: 0, even: 0.5, kids: 1 };
 
 /**
+ * The slider position, coerced to something arithmetic can use.
+ *
+ * A saved setting from an older version holds `crowd: 'everyone'`, and one
+ * non-numeric value turns every weight into NaN, which collapses the whole
+ * deck. That used to be masked by pickWeighted falling back to a uniform draw -
+ * so a garbled setting produced a working game, silently ignoring every control
+ * on the screen. With that fallback gone the mask is gone too, and the value
+ * has to be made sound here rather than survive by accident.
+ */
+function position(crowd) {
+  const n = Number(crowd);
+  return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0.5;
+}
+
+/**
  * Weights for the crowd slider, 0 = adults only, 1 = kids only.
  *
  * Normalised by how many songs sit on each side. Without that, a slider that
@@ -78,7 +93,7 @@ const KIDSNESS = { adults: 0, even: 0.5, kids: 1 };
  * about 80% adults-skewed - so the slider would set a preference nobody could
  * see. Normalised, it sets the actual mix of what comes up.
  */
-function skewWeights(deck, position) {
+function skewWeights(deck, at) {
   let adultSide = 0;
   let kidsSide = 0;
   for (const song of deck) {
@@ -92,7 +107,7 @@ function skewWeights(deck, position) {
 
   return deck.map((song) => {
     const k = KIDSNESS[song.skew] ?? 0.5;
-    return (1 - k) * ((1 - position) / a) + k * (position / c);
+    return (1 - k) * ((1 - at) / a) + k * (at / c);
   });
 }
 
@@ -188,7 +203,7 @@ export function weightsFor(deck, {
   level = 'everything', crowd = 0.5, genreLevels, decadeLevels,
 } = {}) {
   const k = LEVELS[level]?.k ?? 0;
-  const skew = skewWeights(deck, crowd);
+  const skew = skewWeights(deck, position(crowd));
   const genre = genreWeights(deck, genreLevels);
   const decade = decadeWeights(deck, decadeLevels);
 
@@ -226,7 +241,17 @@ export function projectedShares(deck, options, groupOf) {
  */
 export function pickWeighted(deck, weights, random = Math.random) {
   const total = weights.reduce((a, b) => a + b, 0);
-  if (!(total > 0)) return deck[Math.floor(random() * deck.length)] ?? null;
+
+  // Nothing is eligible. This used to fall back to a uniform draw, on the
+  // reasoning that refusing to deal is worse than dealing something - but what
+  // it actually did was deal the songs the player had just switched off, while
+  // their labels read Off and the share readout said 0%.
+  //
+  // It is reachable without muting everything: one decade plus four genre
+  // faders leaves a thirteen-song deck whose whole weight is zero, and 9,238 of
+  // 10,000 draws came from families set to Off. Returning nothing lets the
+  // caller say so instead of quietly contradicting the controls.
+  if (!(total > 0)) return null;
 
   let target = random() * total;
   for (let i = 0; i < deck.length; i++) {

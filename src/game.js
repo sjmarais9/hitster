@@ -1,8 +1,8 @@
 // The deck. Everything else about the game — timelines, tokens, scoring, turn
 // order — stays physical on the table, so this is only ever "which song next".
 
-import { basePath } from './config.js?v=8316a179';
-import { weightsFor, pickWeighted } from './scoring.js?v=8316a179';
+import { basePath } from './config.js?v=25fa6b28';
+import { weightsFor, pickWeighted } from './scoring.js?v=25fa6b28';
 
 // Per-tab, so closing the tab starts a fresh game. Survives a reload mid-game,
 // which is the case that actually matters when a phone is being passed around.
@@ -57,6 +57,15 @@ export function draw(pool, options = {}) {
   if (available.length === 0) return null;
 
   const song = pickWeighted(available, weightsFor(available, options));
+
+  // Songs remain, but every one of them is weighted to nothing - the mixers
+  // have excluded whatever this decade selection left. That is a different
+  // thing from an exhausted deck and deserves a different sentence, or the
+  // player is told to start over when what they need is to turn a fader up.
+  if (!song) {
+    throw new Error('Every song left in this deck is switched off in the mixers. Turn a genre back up.');
+  }
+
   remember(song.spotify_uri);
   return song;
 }

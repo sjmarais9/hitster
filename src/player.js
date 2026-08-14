@@ -12,8 +12,8 @@
 // Both routes end up calling the same Web API play endpoint with a device_id,
 // so only the device differs.
 
-import { api } from './api.js?v=8316a179';
-import { getAccessToken } from './auth.js?v=8316a179';
+import { api } from './api.js?v=25fa6b28';
+import { getAccessToken } from './auth.js?v=25fa6b28';
 
 const SDK_URL = 'https://sdk.scdn.co/spotify-player.js';
 
@@ -57,11 +57,20 @@ async function connectSdk() {
     player.addListener('initialization_error', ({ message }) => settle(reject, new Error(message)));
     player.addListener('authentication_error', ({ message }) => settle(reject, new Error(message)));
     // Not a browser problem and the fallback will not help, so say so plainly.
-    player.addListener('account_error', () => settle(reject, new Error('Spotify Premium is required')));
-
-    player.connect().then((ok) => {
-      if (!ok) settle(reject, new Error('the SDK refused to connect'));
+    // The flag carries that distinction out to connect(), which used to discard
+    // it and offer a fallback that could only fail the same way.
+    player.addListener('account_error', () => {
+      const err = new Error('Spotify Premium is required');
+      err.fatal = true;
+      settle(reject, err);
     });
+
+    // A rejecting connect() left this promise to the twelve-second timeout, and
+    // an unhandled rejection on the way there.
+    player.connect().then(
+      (ok) => { if (!ok) settle(reject, new Error('the SDK refused to connect')); },
+      (err) => settle(reject, new Error(err?.message ?? 'the SDK could not connect')),
+    );
   });
 
   return {
@@ -115,6 +124,12 @@ export async function connect({ onFallback }) {
   try {
     route = await connectSdk();
   } catch (err) {
+    // Some failures the fallback cannot help with. Without Premium neither
+    // route can play anything, and offering "playing through the Spotify app
+    // instead (Spotify Premium is required)" is both nonsense and a promise
+    // that will 403 on the first tap. Rethrowing lets boot() show the real
+    // reason and stop, rather than enabling a Start button that cannot work.
+    if (err.fatal) throw err;
     onFallback?.(err.message);
     route = remoteControl();
   }

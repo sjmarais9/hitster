@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=8316a179';
-import { connect } from './player.js?v=8316a179';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=8316a179';
-import { keepAwake } from './wakelock.js?v=8316a179';
-import { projectedShares } from './scoring.js?v=8316a179';
-import * as filters from './filters.js?v=8316a179';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=25fa6b28';
+import { connect } from './player.js?v=25fa6b28';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=25fa6b28';
+import { keepAwake, letSleep } from './wakelock.js?v=25fa6b28';
+import { projectedShares } from './scoring.js?v=25fa6b28';
+import * as filters from './filters.js?v=25fa6b28';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -60,6 +60,9 @@ function go(screen) {
 
 /** Stops the music on the way out of a game. The session itself is kept. */
 async function leaveTable() {
+  // Unconditional: the lock was taken on the first Start and never given back,
+  // so the screen was held awake on the menu and the deck screen too.
+  letSleep();
   if (!playing) return;
   playing = false;
   await route?.pause().catch(() => {});
@@ -540,56 +543,69 @@ function onReveal() {
   render();
 }
 
-async function onAction() {
+/**
+ * One transport action at a time.
+ *
+ * Each handler used to disable only its own button, so a tap on Next while Play
+ * was still in flight ran both. `playing` was still false, so deal()'s pause
+ * guard missed, song B was drawn, and then the pending play(A) resolved and set
+ * started = true - leaving a revealable card showing B while A was audible.
+ * Reveal then gave the wrong year, which is the one thing this app must never
+ * do. The window is a network round trip: hundreds of milliseconds, longer on a
+ * bad connection, and a second tap in that window is not an unusual thing to do.
+ *
+ * Guarding the shared state rather than the three buttons separately is what
+ * makes it safe; disabling all three is only so it looks unavailable too.
+ */
+let busy = false;
+
+async function transport(work) {
+  if (busy) return;
+  busy = true;
   action.disabled = true;
-  say('');
-
-  try {
-    if (phase === 'empty') resetSession();
-    await deal();
-  } catch (err) {
-    say(err.message, true);
-  }
-
-  render();
-}
-
-async function onToggle() {
   toggle.disabled = true;
-  say('');
-
-  try {
-    if (playing) {
-      await route.pause();
-      playing = false;
-    } else if (started) {
-      await route.resume();
-      playing = true;
-    } else {
-      await route.play(current.spotify_uri);
-      started = true;
-      playing = true;
-    }
-  } catch (err) {
-    say(err.message, true);
-  }
-
-  render();
-}
-
-async function onReplay() {
   replay.disabled = true;
   say('');
 
   try {
-    await route.play(current.spotify_uri);
-    playing = true;
+    await work();
   } catch (err) {
     say(err.message, true);
+  } finally {
+    busy = false;
+    render();
   }
-
-  render();
 }
+
+const onAction = () => transport(async () => {
+  if (phase === 'empty') resetSession();
+  await deal();
+});
+
+const onToggle = () => transport(async () => {
+  if (playing) {
+    await route.pause();
+    playing = false;
+  } else if (started) {
+    await route.resume();
+    playing = true;
+  } else {
+    // Captured before the await: if anything did manage to change the card
+    // underneath us, these flags must not be applied to a different song.
+    const song = current;
+    await route.play(song.spotify_uri);
+    if (song !== current) return;
+    started = true;
+    playing = true;
+  }
+});
+
+const onReplay = () => transport(async () => {
+  const song = current;
+  await route.play(song.spotify_uri);
+  if (song !== current) return;
+  playing = true;
+});
 
 function onBegin() {
   // Must stay synchronous. This runs inside the tap, and activateElement()
