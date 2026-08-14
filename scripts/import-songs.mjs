@@ -354,10 +354,14 @@ async function main() {
   if (aborted) {
     console.log(`\nSTOPPED EARLY: ${aborted.message}`);
     console.log(`Everything resolved so far has been saved. Re-run the same command to continue.`);
-    // Distinct exit code so a scheduled run can tell "quota reached, stop for
-    // today" apart from "finished" or "broke". Without it a wrapper would keep
-    // marching through the remaining batches into the same wall.
-    process.exitCode = EXIT_RATE_LIMITED;
+
+    // Two different reasons to stop early, and they must not report the same
+    // way. A quota is expected and self-clearing: the wrapper records the
+    // lockout, waits, and the scheduled task counts the day a success. A dead
+    // token or a dead network is neither - it needs somebody to look at it, and
+    // reporting it as a quota day is the same laundering the circuit breaker
+    // was added to stop, moved one step downstream.
+    process.exitCode = aborted.rateLimited ? EXIT_RATE_LIMITED : 1;
   }
 
   if (review.length > 0 || yearSuspects.length > 0) {

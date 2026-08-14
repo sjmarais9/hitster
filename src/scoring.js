@@ -85,7 +85,12 @@ const KIDSNESS = { adults: 0, even: 0.5, kids: 1 };
  * on the screen. With that fallback gone the mask is gone too, and the value
  * has to be made sound here rather than survive by accident.
  */
-function position(crowd) {
+export function position(crowd) {
+  // null and undefined both mean "not set", so both take the default. Number()
+  // disagrees - it reads null as 0, i.e. Adults only - and since the callers
+  // write `crowd ?? 0.5`, a stored null would have labelled the slider Balanced
+  // while the draw excluded every child in the pool.
+  if (crowd === null || crowd === undefined) return 0.5;
   const n = Number(crowd);
   return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0.5;
 }

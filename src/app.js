@@ -1,9 +1,9 @@
-import { beginLogin, isLoggedIn, logout } from './auth.js?v=e29056ff';
-import { connect } from './player.js?v=e29056ff';
-import { loadPool, draw, resetSession, playedCount } from './game.js?v=e29056ff';
-import { keepAwake, letSleep } from './wakelock.js?v=e29056ff';
-import { projectedShares } from './scoring.js?v=e29056ff';
-import * as filters from './filters.js?v=e29056ff';
+import { beginLogin, isLoggedIn, logout } from './auth.js?v=160df1b9';
+import { connect } from './player.js?v=160df1b9';
+import { loadPool, draw, resetSession, playedCount } from './game.js?v=160df1b9';
+import { keepAwake, letSleep } from './wakelock.js?v=160df1b9';
+import { projectedShares } from './scoring.js?v=160df1b9';
+import * as filters from './filters.js?v=160df1b9';
 
 const el = (id) => document.getElementById(id);
 const screens = {
@@ -63,7 +63,13 @@ async function leaveTable() {
   // Unconditional: the lock was taken on the first Start and never given back,
   // so the screen was held awake on the menu and the deck screen too.
   letSleep();
-  if (!playing) return;
+
+  // `busy` as well as `playing`, because the window they differ in is the one
+  // that matters. During an in-flight play, `playing` is still false, so this
+  // used to walk away without pausing - the song carried on over the menu while
+  // the app believed nothing was playing, and the next card was then dealt on
+  // top of it.
+  if (!playing && !busy) return;
   playing = false;
   await route?.pause().catch(() => {});
   render();
@@ -87,6 +93,16 @@ function say(message, isError = false) {
   notice.textContent = message ?? '';
   notice.classList.toggle('hidden', !message);
   notice.classList.toggle('error', Boolean(isError));
+
+  // Reserve the room it occupies rather than floating over the layout.
+  //
+  // Fixing the notice to the bottom of the viewport made it visible everywhere,
+  // and then parked it on top of the transport row on the table screen and the
+  // Log out link on the menu - so a boot-time failure covered the only way out
+  // of the screen it was reporting. The sections are sized to the viewport, so
+  // the only honest fix is to give them less viewport when a notice is up.
+  const room = message ? Math.ceil(notice.getBoundingClientRect().height) + 12 : 0;
+  document.documentElement.style.setProperty('--notice', `${room}px`);
 }
 
 function setCard(song) {
@@ -524,7 +540,11 @@ async function deal() {
   if (!song) {
     current = null;
     phase = 'empty';
-    say('Every song in this deck has been played. Start over, or widen the filters.');
+    // Covers both ways of running out: every song played, or every song that
+    // remains excluded by where the controls are set. The player cannot tell
+    // those apart and does not need to - the remedy is the same either way, and
+    // naming a specific control would be wrong half the time.
+    say('Nothing left to draw at these settings. Start over, or open the deck and widen it.');
     return;
   }
 
@@ -621,7 +641,12 @@ function onBegin() {
   // Resuming keeps the card that is already on the table. Only a fresh game
   // deals, and it deals before the screen is touched so nothing plays on its
   // own - the first tap of Play starts it.
-  if (current === null) deal().then(render);
+  //
+  // Through transport(), not bare: this is the only deal() outside it, and
+  // deal() can fail - a pool that loaded but has nothing eligible, for one.
+  // Unguarded, that rejection went nowhere and left a blank table with no
+  // message and stale buttons.
+  if (current === null) transport(deal);
   else render();
 }
 

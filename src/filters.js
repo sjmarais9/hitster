@@ -22,7 +22,7 @@ const STORAGE_KEY = 'hitster.filters';
 // probabilistic version of it would just be baffling.
 // Imported as well as re-exported: `export ... from` forwards the binding
 // without introducing it locally, and describe() below needs to read it.
-import { LEVELS } from './scoring.js?v=e29056ff';
+import { LEVELS, position } from './scoring.js?v=160df1b9';
 
 export { LEVELS };
 
@@ -34,11 +34,16 @@ export const CROWD = {
   min: 0,
   max: 1,
   step: 0.05,
-  labelFor(position) {
-    if (position <= 0.05) return 'Adults only';
-    if (position < 0.35) return 'Mostly adults';
-    if (position <= 0.65) return 'Balanced';
-    if (position < 0.95) return 'Mostly kids';
+  // Through the same sanitiser the draw uses. Comparing a saved 'everyone'
+  // against numbers made every test false and fell through to "Kids only",
+  // while the sampler read it as Balanced - so the label beside the slider
+  // contradicted the deck it described.
+  labelFor(crowd) {
+    const at = position(crowd);
+    if (at <= 0.05) return 'Adults only';
+    if (at < 0.35) return 'Mostly adults';
+    if (at <= 0.65) return 'Balanced';
+    if (at < 0.95) return 'Mostly kids';
     return 'Kids only';
   },
 };
@@ -55,7 +60,7 @@ export const CROWD = {
 // Imported as well as re-exported. `export ... from` forwards a binding without
 // introducing it locally, and DEFAULTS and describe() below both read it. This
 // is the third time that has bitten here.
-import { GENRE_FAMILIES, DECADES, familyOf } from './scoring.js?v=e29056ff';
+import { GENRE_FAMILIES, DECADES, familyOf } from './scoring.js?v=160df1b9';
 
 export { GENRE_FAMILIES, DECADES, familyOf };
 

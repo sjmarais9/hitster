@@ -7,7 +7,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  scoreOf, weightsFor, pickWeighted, projectedShares, TRUST, LEVELS,
+  scoreOf, weightsFor, pickWeighted, projectedShares, position, TRUST, LEVELS,
 } from '../src/scoring.js';
 
 const song = (over = {}) => ({
@@ -363,4 +363,44 @@ test('each level is a step someone would feel, on the pool that ships', () => {
   // And the whole range has to be worth having four settings for.
   assert.ok(shares.at(-1) / shares[0] > 8,
     `end to end is only ${(shares.at(-1) / shares[0]).toFixed(1)}x`);
+});
+
+// --- the slider position, which three places read ----------------------------
+
+test('a garbled or missing slider position falls back to the middle', () => {
+  // A saved setting from an older version holds the string 'everyone'. One
+  // non-numeric value makes every weight NaN and collapses the deck.
+  assert.equal(position('everyone'), 0.5);
+  assert.equal(position(undefined), 0.5);
+  assert.equal(position(NaN), 0.5);
+
+  // null means not set, like undefined - not zero. Number() disagrees, and the
+  // callers write `crowd ?? 0.5`, so reading it as 0 made the label say
+  // Balanced while the draw excluded every child in the pool.
+  assert.equal(position(null), 0.5);
+});
+
+test('a slider position outside its range is clamped, not rejected', () => {
+  assert.equal(position(5), 1);
+  assert.equal(position(-2), 0);
+  assert.equal(position(0), 0);
+  assert.equal(position(1), 1);
+});
+
+test('an endpoint slider runs a deck down without an error', () => {
+  // At crowd 0 every kids-tagged song weighs nothing, which is the documented
+  // behaviour - so once the adults' side is spent, nothing is eligible. That is
+  // a finished deck, not a fault: it used to throw, blaming the genre mixer for
+  // something the crowd slider did, in the middle of an ordinary night.
+  const deck = [
+    ...Array.from({ length: 5 }, (_, i) => song({ title: `adult${i}`, skew: 'adults' })),
+    ...Array.from({ length: 5 }, (_, i) => song({ title: `kid${i}`, skew: 'kids' })),
+  ];
+
+  const remaining = deck.filter((s) => s.skew === 'kids');
+  const weights = weightsFor(remaining, { level: 'casual', crowd: 0 });
+
+  assert.equal(weights.reduce((a, b) => a + b, 0), 0);
+  assert.equal(pickWeighted(remaining, weights, seeded(3)), null,
+    'nothing eligible must report as nothing, for the caller to phrase');
 });

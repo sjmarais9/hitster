@@ -23,8 +23,8 @@
 //
 // Refreshing is handled transparently so an hour-long game is not interrupted.
 
-import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=e29056ff';
-import { createVerifier, createState, challengeFor } from './pkce.js?v=e29056ff';
+import { CLIENT_ID, SCOPES, AUTHORIZE_ENDPOINT, TOKEN_ENDPOINT, redirectUri, basePath } from './config.js?v=160df1b9';
+import { createVerifier, createState, challengeFor } from './pkce.js?v=160df1b9';
 
 // One-shot values for a single login flow. Per-tab is exactly right for these:
 // the callback lands in the same tab that started it, and nothing should be
@@ -227,10 +227,17 @@ async function requestTokens(body) {
     const detail = payload.error_description || payload.error || response.status;
     const failure = new Error(`Token request failed: ${detail}`);
     // Terminal means the credential itself is dead, not that the request went
-    // badly. Only that distinction may clear a stored refresh token. A 5xx is
-    // Spotify having a bad minute; a fetch rejection never reaches here at all,
-    // so it is terminal only if this flag says so.
-    failure.terminal = response.status >= 400 && response.status < 500;
+    // badly. Only that distinction may clear a stored refresh token.
+    //
+    // The whole 4xx block was too wide. A 429 is Spotify asking us to wait -
+    // plausible here, since every API call and every SDK token callback comes
+    // through this path - and treating it as a dead credential produced exactly
+    // the mid-party logout this classification exists to prevent. So does a
+    // captive portal answering the POST with its own 403 page. A dead refresh
+    // token is specifically a 400 or 401 invalid_grant; everything else is
+    // worth retrying with the token intact.
+    const transient = response.status === 408 || response.status === 429;
+    failure.terminal = !transient && response.status >= 400 && response.status < 500;
     throw failure;
   }
   return payload;

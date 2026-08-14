@@ -1,8 +1,8 @@
 // The deck. Everything else about the game — timelines, tokens, scoring, turn
 // order — stays physical on the table, so this is only ever "which song next".
 
-import { basePath } from './config.js?v=e29056ff';
-import { weightsFor, pickWeighted } from './scoring.js?v=e29056ff';
+import { basePath } from './config.js?v=160df1b9';
+import { weightsFor, pickWeighted } from './scoring.js?v=160df1b9';
 
 // Per-tab, so closing the tab starts a fresh game. Survives a reload mid-game,
 // which is the case that actually matters when a phone is being passed around.
@@ -56,15 +56,19 @@ export function draw(pool, options = {}) {
   const available = pool.filter((song) => !seen.has(song.spotify_uri));
   if (available.length === 0) return null;
 
+  // Nothing is eligible: songs remain, but every one is weighted to zero.
+  //
+  // This used to throw, blaming the genre mixer, which was wrong twice over.
+  // The commonest cause is not the mixer at all - it is the crowd slider at an
+  // endpoint, where excluding the other side is the documented behaviour. A
+  // "Kids only" night therefore ran normally and then died with 844 songs left,
+  // telling the player to turn up a genre that was never down.
+  //
+  // From the table it is the same situation as an empty deck: there is nothing
+  // more to deal at these settings. So it reports the same way, and the caller
+  // says so in words that fit both causes.
   const song = pickWeighted(available, weightsFor(available, options));
-
-  // Songs remain, but every one of them is weighted to nothing - the mixers
-  // have excluded whatever this decade selection left. That is a different
-  // thing from an exhausted deck and deserves a different sentence, or the
-  // player is told to start over when what they need is to turn a fader up.
-  if (!song) {
-    throw new Error('Every song left in this deck is switched off in the mixers. Turn a genre back up.');
-  }
+  if (!song) return null;
 
   remember(song.spotify_uri);
   return song;

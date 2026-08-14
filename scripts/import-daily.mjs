@@ -332,14 +332,36 @@ async function publish(count) {
   }
 
   if (status.out) {
-    await git('add', '--', ...OURS);
-    // --only, so the commit contains exactly the paths named above. Plain
-    // `git commit` takes whatever else happens to be staged, and a scheduled
-    // task at 3am has no idea what a human left in the index.
+    // Stage the paths git just told us about, not the patterns we asked about.
+    //
+    // OURS contains globs, and `git status` tolerates one that matches nothing
+    // while `git add` and `git commit` treat it as fatal. Since no batch had
+    // produced a review file yet, every run would have died here - "Commit
+    // failed, pool left staged", no commit, no push, and trackProgress still
+    // watching the local pool grow so the staleness alarm stayed quiet. Worse
+    // than the bug it replaced, and silent in the same way.
+    //
+    // Porcelain output is "XY path", so three characters of status come off the
+    // front. These paths exist by definition: git has just reported them.
+    const changed = status.out.split('\n')
+      .map((line) => line.slice(3).trim())
+      .filter(Boolean);
+
+    const staged = await git('add', '--', ...changed);
+    if (staged.code !== 0) {
+      // Discarding this is what let the pathspec failure reach the commit and
+      // be reported as a commit problem.
+      console.log(`\nCould not stage the pool: ${staged.out}`);
+      return;
+    }
+
+    // --only, so the commit contains exactly these paths. Plain `git commit`
+    // takes whatever else happens to be staged, and a scheduled task at 3am has
+    // no idea what a human left in the index.
     const commit = await git('commit', '--only', '-m',
       `Import: the pool reaches ${count} playable songs\n\n` +
       'Written by scripts/import-daily.mjs on its scheduled run. Only the pool,\n' +
-      'the review files and the batch seeds are touched.', '--', ...OURS);
+      'the review files and the batch seeds are touched.', '--', ...changed);
 
     if (commit.code !== 0) {
       console.log(`\nCommit failed, pool left staged: ${commit.out}`);
