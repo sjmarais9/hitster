@@ -45,10 +45,15 @@ export function scoreOf(song) {
 // Four rather than three, because the old spacing was not even. Measured across
 // the pool, as the share of the draw that is tagged `deep`:
 //
-//   k=4  Casual          0.6%    one deep cut every 170 cards
-//   k=2  Confident       5.3%    one every 19
-//   k=1  Devoted        14.9%    one every 7
-//   k=0  Encyclopaedic  35.4%    one in three
+//   k=4  Casual          3.8%    one deep cut every 26 cards
+//   k=2  Confident      14.3%    one every 7
+//   k=1  Devoted        25.5%    one in four
+//   k=0  Encyclopaedic  41.6%    two in five
+//
+// Measured on the 1,649 songs playable today, and they move as the pool grows -
+// the earlier figures in this comment were taken on a 7,500-song corpus and
+// were badly out of date by the time anyone read them. scripts/stats.mjs and
+// the level test both recompute rather than quoting.
 //
 // Casual to Confident is the difference between two kinds of rare, which nobody
 // at a table would feel. Confident to Encyclopaedic was a sevenfold jump - the
@@ -88,20 +93,40 @@ function position(crowd) {
 /**
  * Weights for the crowd slider, 0 = adults only, 1 = kids only.
  *
- * Normalised by how many songs sit on each side. Without that, a slider that
+ * Normalised by how much weight sits on each side. Without that, a slider that
  * merely "favours kids" still produces a mostly-adults draw, because the pool is
  * about 80% adults-skewed - so the slider would set a preference nobody could
  * see. Normalised, it sets the actual mix of what comes up.
+ *
+ * `rest` is every other factor: familiarity, genre, decade. It has to be here.
+ *
+ * This used to normalise by raw song counts and then get multiplied by those
+ * factors afterwards, which destroyed the invariant before the draw ever saw
+ * it - because they correlate with skew. The children's songs are recent, and
+ * recent songs score differently, so favouring well-known music silently
+ * favoured the children too. Measured on the real pool, "Balanced" on Casual
+ * gave the kids side 67% of the night:
+ *
+ *          slider 0.25   slider 0.50   slider 0.75
+ *   Casual       0.406         0.672         0.860
+ *   Confident    0.351         0.619         0.830
+ *   Devoted      0.306         0.569         0.799
+ *   Encyclo.     0.250         0.500         0.750
+ *
+ * Only the bottom row was ever right. Weighting each side by the mass it
+ * actually carries makes every row read 0.25 / 0.50 / 0.75.
  */
-function skewWeights(deck, at) {
+function skewWeights(deck, at, rest) {
   let adultSide = 0;
   let kidsSide = 0;
-  for (const song of deck) {
+  deck.forEach((song, i) => {
     const k = KIDSNESS[song.skew] ?? 0.5;
-    adultSide += 1 - k;
-    kidsSide += k;
-  }
-  // An empty side would divide by zero and take the whole draw with it.
+    adultSide += rest[i] * (1 - k);
+    kidsSide += rest[i] * k;
+  });
+  // An empty side would divide by zero and take the whole draw with it. So
+  // would a side whose every song has been weighted to nothing by a muted
+  // genre, which counting songs could not see.
   const a = adultSide || 1;
   const c = kidsSide || 1;
 
@@ -119,9 +144,9 @@ function skewWeights(deck, at) {
 // Deliberately NOT normalised by family size, unlike the crowd slider. There
 // the imbalance is an artefact worth correcting: the pool is 80% adults-skewed
 // only because of what has been generated, and the children deserve an even
-// game regardless. Here the sizes are real. The pool holds 1,064 rock songs and
-// 12 African ones, and normalising would make a flat mixer give both the same
-// airtime - those 12 songs would repeat all night. A fader raises how likely
+// game regardless. Here the sizes are real: rock outnumbers African by roughly
+// a hundred to one, and normalising would make a flat mixer give both the same
+// airtime - those few songs would repeat all night. A fader raises how likely
 // each song of a family is, and cannot conjure a mix the pool cannot sustain.
 export const GENRE_FAMILIES = {
   rock: { label: 'Rock & alternative', match: /rock|punk|grunge|britpop|indie|new wave|shoegaze|madchester/i },
@@ -203,11 +228,17 @@ export function weightsFor(deck, {
   level = 'everything', crowd = 0.5, genreLevels, decadeLevels,
 } = {}) {
   const k = LEVELS[level]?.k ?? 0;
-  const skew = skewWeights(deck, position(crowd));
   const genre = genreWeights(deck, genreLevels);
   const decade = decadeWeights(deck, decadeLevels);
 
-  return deck.map((song, i) => scoreOf(song) ** k * skew[i] * genre[i] * decade[i]);
+  // Everything except skew, computed first, because the crowd slider has to
+  // normalise against the mass these produce rather than against a song count.
+  // Multiplying a count-normalised skew by these afterwards is what made the
+  // slider a suggestion instead of a setting.
+  const rest = deck.map((song, i) => scoreOf(song) ** k * genre[i] * decade[i]);
+  const skew = skewWeights(deck, position(crowd), rest);
+
+  return deck.map((_, i) => rest[i] * skew[i]);
 }
 
 /**

@@ -6,7 +6,7 @@
    Licences live beside them in fonts/. */
 @font-face {
   font-family: 'Wordmark';
-  src: url('../fonts/yellowtail.woff2?v=25fa6b28') format('woff2');
+  src: url('../fonts/yellowtail.woff2?v=e29056ff') format('woff2');
   font-display: swap;
 }
 
@@ -15,7 +15,7 @@
    with conventional letterforms, which is what panel legends actually use. */
 @font-face {
   font-family: 'Panel';
-  src: url('../fonts/barlow-condensed.woff2?v=25fa6b28') format('woff2');
+  src: url('../fonts/barlow-condensed.woff2?v=e29056ff') format('woff2');
   font-weight: 300 700;
   font-display: swap;
 }

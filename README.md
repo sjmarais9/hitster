@@ -87,7 +87,7 @@ Four dimensions multiply together:
 | Control | What it does | Can it exclude? |
 |---|---|---|
 | **Familiarity** — a knob, four settings | Sharpens or flattens the preference for well-known songs | Never, at any level |
-| **Crowd** — a slider, adults to kids | Sets the resulting mix, not just a preference | Only at the exact ends, where the label says so |
+| **Crowd** — a slider, adults to kids | Sets the resulting mix, not just a preference — and now actually does | Only at the exact ends, where the label says so |
 | **Genre** — a mixer, one fader each | Raises or lowers a genre family | Only at `Off`, which is labelled |
 | **Decade** — a mixer, one fader each | Raises or lowers an era | Only at `Off`, which is labelled |
 
@@ -114,10 +114,13 @@ The right-hand column is what it actually costs, measured across the pool:
 
 | Level | `k` | Ratio, best song to worst | Share of the draw tagged `deep` |
 |---|---|---|---|
-| Casual | 4 | ~1,500:1 | 0.6% — one every 170 cards |
-| Confident | 2 | 39:1 | 5.3% — one every 19 |
-| Devoted | 1 | 6:1 | 14.9% — one every 7 |
-| **Encyclopaedic** | 0 | **1:1** — perfectly flat | 35.4% — one in three |
+| Casual | 4 | ~1,500:1 | 3.8% — one every 26 cards |
+| Confident | 2 | 39:1 | 14.3% — one every 7 |
+| Devoted | 1 | 6:1 | 25.5% — one in four |
+| **Encyclopaedic** | 0 | **1:1** — perfectly flat | 41.6% — two in five |
+
+The right-hand column moves as the pool grows, so it is measured rather than
+promised: `npm test` recomputes it against the songs that actually ship.
 
 At Encyclopaedic every song's familiarity weight is `scoreOf ** 0`, which is 1
 however obscure it is, so the draw is shaped only by the crowd slider and the
@@ -126,12 +129,13 @@ likely than a perfect standard — you would probably never see it in a night, b
 the weight stays positive, which is the whole point. The tags are wrong often
 enough that a mis-tagged song must not vanish from every game forever.
 
-**Devoted was added because the original three were not evenly spaced.** Casual
-to Confident moved deep cuts from 0.6% to 5.3% — the difference between two
-kinds of rare, which nobody at a table would feel. Confident to Encyclopaedic
-was a sevenfold jump, and that is where a night changes character. `k=1` is the
-rung that was missing from it. A test holds every neighbouring pair to at least
-a doubling, so a fifth level cannot be added without earning its place.
+**Devoted was added because the original three were not evenly spaced**, and the
+gap was not in the middle: Casual to Confident was the difference between two
+kinds of rare, while Confident to Encyclopaedic was where a night changed
+character. `k=1` sits in that gap. A test holds every neighbouring pair to at
+least half as much again *on the shipped pool*, so a fifth level cannot be added
+without earning its place — and the guarantee cannot quietly stop being true, as
+an earlier one did while its test went on passing against a deck of its own.
 
 The **crowd slider** zeroes the opposite side only at *exactly* 0 or 1. Its step
 is 0.05 and the label reads "Adults only" from 0.05 down, so one notch off the
@@ -139,10 +143,16 @@ end still says Adults only while leaving a kids-tagged song possible. Songs
 tagged `even` are never excluded at either end, since they carry half weight on
 both sides.
 
-Muting **every** genre fader at once makes `pickWeighted` fall back to a uniform
-draw over the whole deck rather than deadlocking. Better than refusing to deal,
-but it means all-Off behaves like "no preference" rather than like Off. It takes
-dragging all nine faders down, so it is unlikely to happen by accident.
+**A deck where nothing is eligible refuses to deal, and says so.** It used to
+fall back to a uniform draw over everything, on the reasoning that dealing
+something beats dealing nothing — but what that actually did was deal the songs
+you had just switched off, while their labels read `Off` and the share readout
+said 0%.
+
+It did not need all nine faders down to happen, either. One decade plus four
+muted genres leaves a thirteen-song deck with no weight at all, and 9,238 of
+10,000 draws came from families set to `Off`. Now the game stops and tells you
+which control to turn back up.
 
 The familiarity weight blends two disagreeing sources: our own `familiarity`
 tag, which knows this household but is one person's judgement, and a measured
@@ -152,11 +162,20 @@ ahead — a song the family knows but no playlist has heard of still outranks a
 global hit they cannot place — while canonicity moves about 6% of songs across a
 tier boundary and, more usefully, separates songs the tags treat as identical.
 
-The crowd slider is normalised by population; both mixers deliberately are not.
+The crowd slider normalises by the weight each side actually carries, **after**
+familiarity, genre and decade have had their say. Normalising by song count and
+multiplying afterwards looks equivalent and is not: those factors correlate with
+skew — the children's songs are recent and well known, the adults' side holds
+the deep cuts — so favouring familiar music silently favoured the children too.
+On the real pool, "Balanced" at Casual gave them 67% of the night. Ordering it
+this way makes the slider mean what it says at every level, which a test now
+holds it to on a deck built to expose exactly that interaction.
+
+Both mixers deliberately are not normalised.
 The adults/kids imbalance is an artefact worth correcting. Genre family sizes
-are real — 3,338 rock songs against 12 African ones — and so are decade sizes,
-where the 1950s holds thirteen. Normalising either would give a flat mixer the
-job of handing those thirteen an eighth of the night.
+are real — rock outnumbers African by about a hundred to one — and so are decade
+sizes, where the 1950s holds a handful. Normalising either would give a flat
+mixer the job of handing those few an eighth of the night.
 
 Run `node scripts/stats.mjs` for the current counts, which reports the playable
 pool and the import queue separately rather than summing them.

@@ -5,6 +5,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   scoreOf, weightsFor, pickWeighted, projectedShares, TRUST, LEVELS,
 } from '../src/scoring.js';
@@ -100,6 +101,47 @@ test('the crowd slider sets the resulting mix, not merely a preference', () => {
 
   const kidsEnd = distribution(deck, { level: 'everything', crowd: 1 });
   assert.ok(kidsEnd.kid0 > 0.95, `kids end should almost always draw kids, got ${kidsEnd.kid0}`);
+});
+
+test('the crowd slider still sets the mix once the other controls are moved', () => {
+  // The test above cannot fail on the bug this one exists for. Its songs are
+  // identical apart from skew, so scoreOf is constant, the other factors are
+  // constant, and the normalisation is exact by construction whatever the
+  // arithmetic does. The real pool is not like that: the children's songs are
+  // recent and well known, the adults' side holds the deep cuts, so every other
+  // control correlates with skew. Under the old code, Casual + Balanced gave
+  // the children 67% of the night.
+  const deck = [
+    ...Array.from({ length: 40 }, (_, i) => song({
+      title: `adult${i}`, skew: 'adults', familiarity: 'deep', canonicity: 15,
+      decade: '1970s', genres: ['rock'],
+    })),
+    ...Array.from({ length: 10 }, (_, i) => song({
+      title: `kid${i}`, skew: 'kids', familiarity: 'standard', canonicity: 92,
+      decade: '2010s', genres: ['pop'],
+    })),
+  ];
+
+  const kidsShare = (options) => {
+    const d = distribution(deck, options, 40000);
+    return Object.entries(d).filter(([t]) => t.startsWith('kid'))
+      .reduce((a, [, v]) => a + v, 0);
+  };
+
+  for (const level of Object.keys(LEVELS)) {
+    for (const crowd of [0.25, 0.5, 0.75]) {
+      const got = kidsShare({ level, crowd });
+      assert.ok(Math.abs(got - crowd) < 0.03,
+        `${level} at ${crowd}: the children got ${got.toFixed(3)}`);
+    }
+  }
+
+  // And with the mixers moved, which broke it the same way.
+  const withMixers = kidsShare({
+    level: 'casual', crowd: 0.5, genreLevels: { rock: 4 }, decadeLevels: { '1970s': 3 },
+  });
+  assert.ok(Math.abs(withMixers - 0.5) < 0.03,
+    `a raised rock fader should not move the crowd balance, kids got ${withMixers}`);
 });
 
 test('the two dimensions compose without one swamping the other', () => {
@@ -290,28 +332,35 @@ test('the levels are declared quietest first', () => {
   assert.equal(ks.at(-1), 0, 'the loudest setting must be perfectly flat');
 });
 
-test('each level is a step someone would feel', () => {
-  // Four levels are only worth four stops if each one changes the night. The
-  // old three did not: Casual to Confident moved deep cuts from 0.6% to 5.3%,
-  // two kinds of rare, while Confident to Encyclopaedic was a sevenfold jump.
-  // This holds every neighbouring pair to at least a doubling.
-  const deck = [
-    ...Array.from({ length: 25 }, (_, i) => song({ title: `std${i}`, familiarity: 'standard', canonicity: 90 })),
-    ...Array.from({ length: 40 }, (_, i) => song({ title: `fam${i}`, familiarity: 'familiar', canonicity: 50 })),
-    ...Array.from({ length: 35 }, (_, i) => song({ title: `deep${i}`, familiarity: 'deep', canonicity: 10 })),
-  ];
+test('each level is a step someone would feel, on the pool that ships', () => {
+  // This used to build its own deck - canonicity 90/50/10, evenly split - and
+  // assert every neighbouring pair at least doubled the deep-cut share. That
+  // passed while being false of the real thing: the shipped pool gives 3.8x,
+  // 1.8x, 1.6x, so two of the three pairs missed the guarantee the test claimed
+  // to protect. A synthetic deck can be made to satisfy any property; the
+  // question is whether the pool does.
+  const pool = JSON.parse(readFileSync('data/songs.json', 'utf8')).songs;
 
   const deepShare = (level) => {
-    const w = weightsFor(deck, { level, crowd: 0.5 });
+    const w = weightsFor(pool, { level, crowd: 0.5 });
     const total = w.reduce((a, b) => a + b, 0);
-    return deck.reduce((acc, s, i) => acc + (s.familiarity === 'deep' ? w[i] / total : 0), 0);
+    return pool.reduce((acc, s, i) => acc + (s.familiarity === 'deep' ? w[i] : 0), 0) / total;
   };
 
   const keys = Object.keys(LEVELS);
+  const shares = keys.map(deepShare);
+
   for (let i = 1; i < keys.length; i++) {
-    const previous = deepShare(keys[i - 1]);
-    const current = deepShare(keys[i]);
-    assert.ok(current > previous * 2,
-      `${keys[i - 1]} -> ${keys[i]} barely moves: ${(previous * 100).toFixed(1)}% to ${(current * 100).toFixed(1)}%`);
+    const ratio = shares[i] / shares[i - 1];
+    // Half as much again, not twice as much. Four levels across a range this
+    // wide cannot each double without the ends becoming absurd, and 1.5x is
+    // still a step you would notice across a night.
+    assert.ok(ratio >= 1.5,
+      `${keys[i - 1]} -> ${keys[i]}: ${(shares[i - 1] * 100).toFixed(1)}% to `
+      + `${(shares[i] * 100).toFixed(1)}% is only ${ratio.toFixed(2)}x`);
   }
+
+  // And the whole range has to be worth having four settings for.
+  assert.ok(shares.at(-1) / shares[0] > 8,
+    `end to end is only ${(shares.at(-1) / shares[0]).toFixed(1)}x`);
 });
