@@ -332,20 +332,34 @@ async function publish(count) {
   }
 
   if (status.out) {
-    // Stage the paths git just told us about, not the patterns we asked about.
+    // Stage the paths git names, not the patterns we asked about.
     //
     // OURS contains globs, and `git status` tolerates one that matches nothing
-    // while `git add` and `git commit` treat it as fatal. Since no batch had
-    // produced a review file yet, every run would have died here - "Commit
-    // failed, pool left staged", no commit, no push, and trackProgress still
-    // watching the local pool grow so the staleness alarm stayed quiet. Worse
-    // than the bug it replaced, and silent in the same way.
+    // while `git add` and `git commit` treat it as fatal - so a glob with no
+    // matches yet killed the commit on every run.
     //
-    // Porcelain output is "XY path", so three characters of status come off the
-    // front. These paths exist by definition: git has just reported them.
-    const changed = status.out.split('\n')
-      .map((line) => line.slice(3).trim())
-      .filter(Boolean);
+    // The first attempt at this parsed `git status --porcelain`, whose format is
+    // two status characters, a space, then the path. That was right, and it
+    // still broke: the git() helper trims its output, which ate the leading
+    // space of the first line, so slicing three characters took the first letter
+    // of the path with it - "ata/songs.json". Five runs failed to publish while
+    // the import kept working perfectly.
+    //
+    // So: no parsing. Two commands that emit bare paths, one per line, both of
+    // which tolerate a glob that matches nothing. Nothing to mis-slice.
+    const [tracked, untracked] = await Promise.all([
+      git('diff', '--name-only', '--', ...OURS),
+      git('ls-files', '--others', '--exclude-standard', '--', ...OURS),
+    ]);
+
+    const changed = [...new Set(
+      [tracked.out, untracked.out].join('\n').split('\n').map((l) => l.trim()).filter(Boolean),
+    )];
+
+    if (!changed.length) {
+      console.log('\nGit reported changes but named no files; leaving the pool alone.');
+      return;
+    }
 
     const staged = await git('add', '--', ...changed);
     if (staged.code !== 0) {
