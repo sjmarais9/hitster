@@ -340,7 +340,7 @@ async function main() {
       year,
       decade: decadeOf(year),
       genres: genresOf(entry),
-      familiarity: familiarityFor(percentile.get(key) ?? 50),
+      familiarity: familiarityFor(percentile.get(key) ?? 50, genresOf(entry)),
       skew: skewFor(year, percentile.get(key) ?? 50),
       spotify_uri: null,
       market_checked: null,

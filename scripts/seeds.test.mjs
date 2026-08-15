@@ -100,6 +100,34 @@ test('familiarity steps at its thresholds', () => {
   assert.equal(familiarityFor(0), 'deep');
 });
 
+test('hip hop and R&B enter lower than their global numbers suggest', () => {
+  // Measured, not guessed: a review of twenty songs found 80% of this genre
+  // tagged as better known than it is, against 33% of everything else, and
+  // every correction went downward. Terror Squad's Lean Back arrived as
+  // `standard` on a US chart position.
+  assert.equal(familiarityFor(90, ['rock']), 'standard');
+  assert.equal(familiarityFor(90, ['hip hop']), 'familiar', 'the same score, damped');
+  assert.equal(familiarityFor(50, ['r&b']), 'deep');
+  assert.equal(familiarityFor(50, ['rock']), 'familiar');
+});
+
+test('the damping reaches every name the genre travels under', () => {
+  for (const genre of ['hip hop', 'rap', 'r&b', 'grime', 'trap']) {
+    assert.equal(familiarityFor(90, [genre]), 'familiar', genre);
+  }
+  // And leaves everything else alone, including the neighbours it is easy to
+  // catch by accident. Enigma was corrected upward, so damping dance would
+  // have made that one worse.
+  for (const genre of ['rock', 'pop', 'soul', 'funk', 'dance', 'country', 'amapiano']) {
+    assert.equal(familiarityFor(90, [genre]), 'standard', genre);
+  }
+});
+
+test('a song with no genres is not damped', () => {
+  assert.equal(familiarityFor(90), 'standard');
+  assert.equal(familiarityFor(90, []), 'standard');
+});
+
 test('every familiarity seed is a value the sampler knows', () => {
   const known = ['standard', 'familiar', 'deep'];
   for (let p = 0; p <= 100; p++) assert.ok(known.includes(familiarityFor(p)), `p=${p}`);
