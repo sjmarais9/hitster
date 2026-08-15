@@ -92,7 +92,17 @@ export const familiarityFor = (percentile, genres = []) => {
  * the top third of its decade is one that crossed generations, which is what
  * rule 8 in docs/tagging.md means by shared.
  */
-export const SHARED = 65;
+// Raised from 65 after a second review, of twenty pre-2005 songs the old
+// threshold had tagged `even`. Twenty out of twenty said otherwise: seven
+// "adults only", thirteen "nobody here", not one "both". A song in the top
+// third of 2001 is not thereby something a ten-year-old knows.
+//
+// Moved to 80 rather than to what the sample literally implies, because the
+// sample was one adult answering on their children's behalf and had already
+// been shown wrong that way once - Coi Leray's Players came back "I don't know
+// it" from the parent while the children know it perfectly well. A partial move
+// leaves room for that to be true here too.
+export const SHARED = 80;
 
 export const skewFor = (year, percentile) => {
   if (year >= 2015) return 'kids';
