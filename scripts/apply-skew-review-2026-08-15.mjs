@@ -1,76 +1,76 @@
-// Applies the skew review of 15 August to batch 006.
+// Applies the skew review of 15 August.
 //
-// Two things. The twenty reviewed songs get what the review said. Everything
-// else machine-seeded gets re-run through skewFor at the new SHARED of 80,
-// because the seed change alone would do nothing - batch 006 is the last batch
-// and there is no future generation for it to affect.
+// SHARED rose from 65 to 80, which on its own changes nothing: batch 006 is the
+// last batch, and everything already tagged was tagged under the old threshold.
+// So the songs the new threshold disagrees with are re-seeded here.
 //
-// Hand-tagged files are left alone. A rule does not overwrite a judgement.
-import { readSongs, writeSongs } from 'file:///C:/Projects/hitster/scripts/lib/songs-file.mjs';
-import { skewFor } from 'file:///C:/Projects/hitster/scripts/lib/seeds.mjs';
+// Only in the direction the change implies. A pre-2005 song tagged `even` whose
+// canonicity now falls short becomes `adults`, and nothing else moves. The
+// first attempt at this re-ran the whole seed instead, which flipped seven
+// songs the earlier review had corrected by hand back to what the machine
+// thought - so it also repairs those, and every judgement now lives in
+// lib/reviewed.mjs where a test defends it.
+//
+// The pool matters most: it is what the app deals tonight. But it mixes 292
+// songs tagged by hand with two thousand promoted out of the batches, and
+// nothing in the record says which is which. A promoted song still exists in
+// the batch it came from, so that is the test. Untraceable means someone
+// decided, and a rule has no business overwriting a judgement.
+//
+// Re-running this changes nothing.
+import { join } from 'node:path';
+// A path, not a URL: writeSongs builds its temp file by interpolation.
+import { readSongs, writeSongs } from './lib/songs-file.mjs';
+import { SHARED } from './lib/seeds.mjs';
+import { REVIEWED, reviewKey, verdictFor } from './lib/reviewed.mjs';
 
-const FILE = 'C:/Projects/hitster/data/batch-006.seed.json';
+const DIR = join(import.meta.dirname, '..', 'data');
+const BATCHES = ['batch-002', 'batch-003', 'batch-004', 'batch-005', 'batch-006']
+  .map((b) => `${b}.seed.json`);
 
-// "adults" = you know it, the children do not.
-const ADULTS = [
-  'mariah carey|honey',
-  'avenged sevenfold|unholy confessions',
-  'jaÿ-z|03\' bonnie & clyde',
-  'sugar ray|every morning',
-  'usher|burn (confession special edition version)',
-  'bob marley & the wailers|roots, rock, reggae',
-  'julio iglesias|to all the girls i\'ve loved before (with willie nelson)',
-];
-
-// "nobody here" = not known at that table at all. That is a familiarity
-// judgement as much as a skew one, so both move.
-const UNKNOWN = [
-  'isaac hayes|walk on by',
-  'double you|please don\'t go',
-  'sananda maitreya|sign your name',
-  'chaka khan|i\'m every woman',
-  'ciara|1, 2 step (feat. missy elliott)',
-  'alan jackson|here in the real world',
-  'sly & the family stone|if you want me to stay',
-  'montell jordan|get it on tonite',
-  'slowdive|alison',
-  'ashanti|unfoolish',
-  'club nouveau|rumors',
-  'mega banton|sound boy killing',
-  'the cleaners from venus|living on nerve ends',
-];
-
-const key = (s) => `${s.artist}|${s.title}`.toLowerCase();
 const dry = process.argv.includes('--dry-run');
+const counts = { judged: 0, reseeded: 0, spared: 0 };
+const seen = new Set();
 
-const doc = await readSongs(FILE);
-let judged = 0;
-let reseeded = 0;
-let matched = 0;
+const apply = async (file, machineTagged) => {
+  const path = join(DIR, file);
+  const doc = await readSongs(path);
 
-doc.songs = doc.songs.map((song) => {
-  const k = key(song);
+  doc.songs = doc.songs.map((song) => {
+    const verdict = verdictFor(song);
+    if (verdict) {
+      seen.add(reviewKey(song));
+      const next = { ...song, skew: verdict.skew };
+      if (verdict.familiarity) next.familiarity = verdict.familiarity;
+      if (next.skew !== song.skew || next.familiarity !== song.familiarity) counts.judged++;
+      return next;
+    }
 
-  if (ADULTS.includes(k)) {
-    matched++;
-    judged++;
+    // The one move the new threshold implies, and only that one.
+    if (song.skew !== 'even' || song.year >= 2005) return song;
+    if (song.canonicity == null || song.canonicity >= SHARED) return song;
+    if (!machineTagged(song)) { counts.spared++; return song; }
+    counts.reseeded++;
     return { ...song, skew: 'adults' };
-  }
-  if (UNKNOWN.includes(k)) {
-    matched++;
-    judged++;
-    return { ...song, skew: 'adults', familiarity: 'deep' };
-  }
+  });
 
-  if (song.canonicity == null) return song;
-  const next = skewFor(song.year, song.canonicity);
-  if (next === song.skew) return song;
-  reseeded++;
-  return { ...song, skew: next };
-});
+  if (!dry) await writeSongs(path, doc);
+  return doc.songs;
+};
 
-if (!dry) await writeSongs(FILE, doc);
+// The batches are machine-seeded end to end.
+const seeded = new Set();
+for (const file of BATCHES) {
+  for (const song of await apply(file, () => true)) seeded.add(reviewKey(song));
+}
 
-console.log(`${judged} tags set from the review (${matched}/${ADULTS.length + UNKNOWN.length} matched by name)`);
-console.log(`${reseeded} other songs re-seeded at the new threshold`);
+// The pool is not, so each song has to earn the correction.
+await apply('songs.json', (song) => seeded.has(reviewKey(song)));
+
+console.log(`${counts.judged} tags corrected to match a review`);
+console.log(`${counts.reseeded} machine-tagged songs moved to adults at the new threshold of ${SHARED}`);
+console.log(`${counts.spared} hand-tagged songs left alone despite falling short`);
+
+const missing = Object.keys(REVIEWED).filter((k) => !seen.has(k));
+if (missing.length) console.log(`\n${missing.length} reviewed songs are not in the data:\n  ${missing.join('\n  ')}`);
 if (dry) console.log('\n--dry-run: nothing written.');

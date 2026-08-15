@@ -9,6 +9,7 @@
 //   the import dropped `canonicity` from every record it wrote
 //   apply-canonicity ranked unmeasured songs as zeros and inverted the tiers
 //   the skew seed put nothing before 2000 on the children's side
+//   a re-seed overwrote seven tags the household had corrected by hand
 //
 // This file is also the gate the daily import runs before it publishes, so a
 // corrupt pool cannot reach the phone even if something new goes wrong.
@@ -17,6 +18,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { statSync } from 'node:fs';
 import { readSongs } from './lib/songs-file.mjs';
+import { verdictFor } from './lib/reviewed.mjs';
 
 const POOL = 'data/songs.json';
 const BATCHES = [
@@ -154,6 +156,30 @@ test('the children can be dealt music from before they were born', () => {
   const old = shareable.filter((s) => s.year < 2000);
   assert.ok(old.length / shareable.length > 0.15,
     `only ${((old.length / shareable.length) * 100).toFixed(1)}% of the children's side predates 2000`);
+});
+
+test('no rule has overwritten a judgement the household made', () => {
+  // The fourth bug of the kind this file exists for, and the first that was
+  // caused by a fix rather than found by one. Raising SHARED to 80 was right,
+  // and re-seeding the data to match it was right, but the re-seed ran over
+  // every song instead of only the ones the threshold moved - and flipped seven
+  // songs the review that same morning had corrected by hand back to what the
+  // machine thought. Both changes correct, the seam between them not.
+  //
+  // Nothing threw, because every value it wrote was a legal one. This is the
+  // only thing that would have noticed.
+  const wrong = [];
+  for (const song of corpus) {
+    const verdict = verdictFor(song);
+    if (!verdict) continue;
+    if (song.skew !== verdict.skew) {
+      wrong.push(`${song.artist} - ${song.title}: skew is ${song.skew}, the review said ${verdict.skew}`);
+    }
+    if (verdict.familiarity && song.familiarity !== verdict.familiarity) {
+      wrong.push(`${song.artist} - ${song.title}: familiarity is ${song.familiarity}, the review said ${verdict.familiarity}`);
+    }
+  }
+  assert.deepEqual(wrong, [], `\n  ${wrong.join('\n  ')}\n`);
 });
 
 // --- what ships over mobile data ---------------------------------------------
