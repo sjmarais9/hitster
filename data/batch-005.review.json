@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "count": 4,
+    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
+  },
+  "year_suspects": [],
+  "songs": [
+    { "artist": "The Jimi Hendrix Experience", "title": "All Along the Watchtower", "year": 1968, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:2aoo2jlRnM3A0NyLQqMN2f","title":"All Along the Watchtower","artists":["Jimi Hendrix"],"album":"Electric Ladyland","spotify_release_year":1968,"verdict":"probable"}] },
+    { "artist": "Cat Stevens", "title": "Wild World", "year": 1970, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:7mjSHL2Eb0kAwiKbvNNyD9","title":"Wild World","artists":["Yusuf / Cat Stevens"],"album":"Tea For The Tillerman (Remastered 2020)","spotify_release_year":1970,"verdict":"probable"}] },
+    { "artist": "Elton John", "title": "Saturday Night's Alright for Fighting", "year": 1973, "problem": "partial match (title loose, artist exact)", "candidates": [{"uri":"spotify:track:12yHvSYFXI7PGzNecUvIDu","title":"Saturday Night’s Alright (For Fighting) - Remastered 2014","artists":["Elton John"],"album":"Goodbye Yellow Brick Road (Remastered)","spotify_release_year":1973,"verdict":"probable"}] },
+    { "artist": "Hall & Oates", "title": "Rich Girl", "year": 1976, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:0qRR9d89hIS0MHRkQ0ejxX","title":"Rich Girl","artists":["Daryl Hall & John Oates"],"album":"Bigger Than Both Of Us","spotify_release_year":1976,"verdict":"reject"}] }
+  ]
+}
