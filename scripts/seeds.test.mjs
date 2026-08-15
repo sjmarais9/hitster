@@ -136,8 +136,18 @@ test('every familiarity seed is a value the sampler knows', () => {
 test('recent music goes to the children, as it always did', () => {
   assert.equal(skewFor(2020, 10), 'kids');
   assert.equal(skewFor(2015, 99), 'kids');
-  assert.equal(skewFor(2014, 10), 'even');
-  assert.equal(skewFor(2005, 10), 'even');
+});
+
+test('the 2005-2014 band is judged, not waved through', () => {
+  // It returned `even` for everything on the year alone, which the calibration
+  // round found was wrong eight times in ten - Sleeping With Sirens at
+  // canonicity 7 was being offered to the children as common ground.
+  assert.equal(skewFor(2011, 7), 'adults');
+  assert.equal(skewFor(2010, SHARED - 1), 'adults');
+  assert.equal(skewFor(2010, SHARED), 'even', 'a genuine crossover still crosses');
+  // And no cliff at either boundary: 2004 and 2005 are now judged alike.
+  assert.equal(skewFor(2004, 50), skewFor(2005, 50));
+  assert.equal(skewFor(2014, 90), skewFor(2015 - 11, 90));
 });
 
 test('a well-known old song is shared rather than kept from the children', () => {

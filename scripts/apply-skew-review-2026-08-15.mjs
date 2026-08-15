@@ -46,8 +46,10 @@ const apply = async (file, machineTagged) => {
       return next;
     }
 
-    // The one move the new threshold implies, and only that one.
-    if (song.skew !== 'even' || song.year >= 2005) return song;
+    // The one move the rule change implies, and only that one: a song tagged
+    // `even` that falls short of the threshold now applied to it. The band from
+    // 2005 to 2014 is included because it is no longer exempt from being asked.
+    if (song.skew !== 'even' || song.year >= 2015) return song;
     if (song.canonicity == null || song.canonicity >= SHARED) return song;
     if (!machineTagged(song)) { counts.spared++; return song; }
     counts.reseeded++;

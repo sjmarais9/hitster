@@ -104,8 +104,19 @@ export const familiarityFor = (percentile, genres = []) => {
 // leaves room for that to be true here too.
 export const SHARED = 80;
 
+/**
+ * The 2005-2014 band used to return `even` for everything, on the year alone.
+ * 2,390 songs rested on that, and a calibration round of thirty songs found it
+ * the worst thing in the data: eight of ten wrong, seven of them songs the
+ * children would not know. Consulting canonicity took the same ten from 2/10
+ * to 7/10 correct.
+ *
+ * So the band is not special. A song is shared if it crossed generations,
+ * whether it came out in 1975 or 2010, and the year only decides the one thing
+ * a year genuinely settles: music released after the children could listen to
+ * it themselves is theirs.
+ */
 export const skewFor = (year, percentile) => {
   if (year >= 2015) return 'kids';
-  if (year >= 2005) return 'even';
   return percentile >= SHARED ? 'even' : 'adults';
 };

@@ -1,0 +1,444 @@
+{
+  "seed": 20260815,
+  "asked": [
+    {
+      "stratum": "genre",
+      "artist": "Luther Vandross",
+      "title": "So Amazing",
+      "year": 1987,
+      "genres": [
+        "r&b",
+        "soul"
+      ],
+      "canonicity": 69,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Gavin DeGraw",
+      "title": "Not Over You",
+      "year": 2011,
+      "genres": [
+        "rock",
+        "pop"
+      ],
+      "canonicity": 35,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Mikey General",
+      "title": "Sinners",
+      "year": 1994,
+      "genres": [
+        "reggae"
+      ],
+      "canonicity": 23,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "The Streets",
+      "title": "Fit but You Know It",
+      "year": 2004,
+      "genres": [
+        "rock",
+        "indie"
+      ],
+      "canonicity": 51,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Keyshia Cole",
+      "title": "Heaven Sent",
+      "year": 2007,
+      "genres": [
+        "r&b",
+        "rock"
+      ],
+      "canonicity": 62,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "The Replacements",
+      "title": "Merry Go Round",
+      "year": 1990,
+      "genres": [
+        "indie"
+      ],
+      "canonicity": 36,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "The Crystals",
+      "title": "He's Sure the Boy I Love",
+      "year": 1963,
+      "genres": [
+        "funk",
+        "soul"
+      ],
+      "canonicity": 57,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "OneRepublic",
+      "title": "Apologize",
+      "year": 2007,
+      "genres": [
+        "pop rock"
+      ],
+      "canonicity": 58,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "George Benson",
+      "title": "20/20",
+      "year": 1984,
+      "genres": [
+        "funk",
+        "pop"
+      ],
+      "canonicity": 9,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Foster the People",
+      "title": "Pumped Up Kicks",
+      "year": 2011,
+      "genres": [
+        "indie pop"
+      ],
+      "canonicity": 100,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Zebrahead",
+      "title": "Falling Apart",
+      "year": 2003,
+      "genres": [
+        "punk",
+        "indie"
+      ],
+      "canonicity": 24,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Ike and Tina Turner",
+      "title": "I Want To Take You Higher",
+      "year": 1971,
+      "genres": [
+        "soul",
+        "funk"
+      ],
+      "canonicity": 24,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Fleet Foxes",
+      "title": "Mykonos",
+      "year": 2008,
+      "genres": [
+        "indie",
+        "rock"
+      ],
+      "canonicity": 43,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Stevie Wonder",
+      "title": "You Are the Sunshine of My Life",
+      "year": 1973,
+      "genres": [
+        "soul"
+      ],
+      "canonicity": 65,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Eminem",
+      "title": "Space Bound",
+      "year": 2010,
+      "genres": [
+        "hip hop",
+        "r&b"
+      ],
+      "canonicity": 12,
+      "was": {
+        "familiarity": "deep",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Syndicate Of Sound",
+      "title": "Little Girl",
+      "year": 1966,
+      "genres": [
+        "rock",
+        "pop"
+      ],
+      "canonicity": 34,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Sleeping With Sirens",
+      "title": "Do It Now Remember It Later",
+      "year": 2011,
+      "genres": [
+        "punk"
+      ],
+      "canonicity": 7,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Télépopmusik",
+      "title": "Breathe",
+      "year": 2001,
+      "genres": [
+        "indie",
+        "soul"
+      ],
+      "canonicity": 39,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "2Pac",
+      "title": "Ambitionz Az A Ridah",
+      "year": 1996,
+      "genres": [
+        "hip hop",
+        "funk"
+      ],
+      "canonicity": 76,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Janet Jackson",
+      "title": "That's The Way Love Goes",
+      "year": 1993,
+      "genres": [
+        "r&b",
+        "soul"
+      ],
+      "canonicity": 95,
+      "was": {
+        "familiarity": "standard",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Rihanna",
+      "title": "If It's Lovin' That You Want (Part 2 - Album Version)",
+      "year": 2005,
+      "genres": [
+        "hip hop",
+        "dance"
+      ],
+      "canonicity": 71,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Guru Josh",
+      "title": "Infinity",
+      "year": 1990,
+      "genres": [
+        "dance",
+        "funk"
+      ],
+      "canonicity": 80,
+      "was": {
+        "familiarity": "standard",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Beat Happening",
+      "title": "Cry for a Shadow",
+      "year": 1991,
+      "genres": [
+        "punk",
+        "indie"
+      ],
+      "canonicity": 79,
+      "was": {
+        "familiarity": "standard",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Kwame",
+      "title": "The Rhythm",
+      "year": 1989,
+      "genres": [
+        "hip hop",
+        "funk"
+      ],
+      "canonicity": 20,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "The Crystals",
+      "title": "Da Doo Ron Ron",
+      "year": 1963,
+      "genres": [
+        "pop"
+      ],
+      "canonicity": 45,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "genre",
+      "artist": "Four Tops",
+      "title": "Standing In The Shadows Of Love",
+      "year": 1966,
+      "genres": [
+        "soul",
+        "funk"
+      ],
+      "canonicity": 54,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Queen",
+      "title": "Killer Queen",
+      "year": 1974,
+      "genres": [
+        "rock"
+      ],
+      "canonicity": 81,
+      "was": {
+        "familiarity": "deep",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Keith Urban",
+      "title": "Coming Home",
+      "year": 2018,
+      "genres": [
+        "country"
+      ],
+      "canonicity": 32,
+      "was": {
+        "familiarity": "deep",
+        "skew": "kids"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Soulja Boy",
+      "title": "Crank That (Soulja Boy)",
+      "year": 2007,
+      "genres": [
+        "hip hop"
+      ],
+      "canonicity": 17,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "band",
+      "artist": "Miley Cyrus",
+      "title": "7 Things (Single Version)",
+      "year": 2008,
+      "genres": [
+        "pop"
+      ],
+      "canonicity": 12,
+      "was": {
+        "familiarity": "deep",
+        "skew": "even"
+      }
+    }
+  ]
+}
