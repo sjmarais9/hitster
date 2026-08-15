@@ -143,8 +143,8 @@ if (stillLocked) {
   const held = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] });
   const size = (held.songs ?? []).length;
 
-  await trackProgress(size);
   await publish(size);
+  await trackProgress(size, await publishedSize());
 
   process.exit(EXIT_RATE_LIMITED);
 }
@@ -210,9 +210,9 @@ const pool = await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] 
 const size = (pool.songs ?? []).length;
 console.log(`\n=== pool is now ${size} playable songs ===`);
 
-await trackProgress(size);
 
 await publish(size);
+await trackProgress(size, await publishedSize());
 
 process.exit(failed ? 1 : hitQuota ? EXIT_RATE_LIMITED : 0);
 
@@ -228,7 +228,7 @@ process.exit(failed ? 1 : hitQuota ? EXIT_RATE_LIMITED : 0);
  * So the one number that matters is remembered between runs, and a run that
  * finds it unchanged for days says so loudly in the log.
  */
-async function trackProgress(size) {
+async function trackProgress(local, published) {
   const FILE = path.join(ROOT, '.import-state.json');
   const now = new Date().toISOString();
 
@@ -239,12 +239,22 @@ async function trackProgress(size) {
     // First run, or the file was removed. Today becomes the baseline.
   }
 
-  if (size > (state.pool ?? 0)) {
-    state.pool = size;
-    state.grewAt = now;
+  // The number that matters is the published one.
+  //
+  // This used to watch the local pool, and the local pool is not what the app
+  // downloads. When five consecutive runs imported 667 songs and then failed to
+  // push them, the marker advanced happily every single time - because the work
+  // was real and the file on disk really was growing. It was measuring effort
+  // rather than effect, and stayed silent through exactly the failure it exists
+  // to catch. Somebody noticed before it did, twice.
+  if (published !== null && published > (state.published ?? 0)) {
+    state.published = published;
+    state.publishedAt = now;
   }
+  state.pool = local;
   state.checkedAt = now;
-  state.note = 'Written by import-daily. Delete to reset the staleness warning.';
+  state.note = 'Written by import-daily. `published` is what origin/main holds - '
+    + 'the number the app can actually serve. Delete to reset the warnings.';
 
   try {
     await writeFile(FILE, JSON.stringify(state, null, 2) + '\n', 'utf8');
@@ -252,14 +262,64 @@ async function trackProgress(size) {
     // Losing the marker costs a warning, not the import.
   }
 
-  const days = state.grewAt ? (Date.now() - Date.parse(state.grewAt)) / 86_400_000 : 0;
+  // Immediate: work exists that nobody can play. No need to wait three days to
+  // say so, and this is the shape every publishing failure takes.
+  if (published !== null && local > published) {
+    console.warn(`\nWARNING: ${local - published} songs are resolved but not published.`);
+    console.warn('The app serves what is on origin/main, so they are doing nobody any good.');
+    console.warn('Check the last "Could not stage" or "still unpushed" line in logs/import.log.');
+  }
+
+  // Slower: nothing has reached the app in days, whatever the reason.
+  const days = state.publishedAt ? (Date.now() - Date.parse(state.publishedAt)) / 86_400_000 : 0;
   if (days >= 3) {
-    console.warn(`\nWARNING: the pool has not grown in ${Math.floor(days)} days.`);
+    console.warn(`\nWARNING: nothing new has reached the app in ${Math.floor(days)} days.`);
     console.warn('That is longer than a quota lockout, so something has stopped working.');
-    console.warn('Likely: expired git credentials, a disabled scheduled task, or every');
-    console.warn('batch already imported. Check the tail of logs/import.log.');
+    console.warn('Likely: expired git credentials, a disabled scheduled task, a failing');
+    console.warn('publish, or every batch already imported. Check logs/import.log.');
   }
   return state;
+}
+
+/**
+ * How many songs origin/main holds - the number the app can actually serve.
+ *
+ * Read from the ref rather than fetched over HTTP: the ref is updated by our own
+ * push, so it is exact and immediate, where the deployed file trails behind a
+ * ten-minute cache and a workflow run. Returns null if it cannot be determined,
+ * which is treated as "no opinion" rather than as zero.
+ */
+/**
+ * Runs git and hands back its output.
+ *
+ * `out` is trimmed, which is convenient for the one-line answers most of these
+ * give and was a trap for one that isn't: parsing `git status --porcelain` here
+ * lost the leading space of the first line, and with it the first letter of the
+ * path. Nothing parses positionally any more, but the trim is worth knowing
+ * about before writing something that does.
+ */
+// A declaration rather than a const: the top-level code above calls publish()
+// before this point in the file, and a const would still be in its temporal
+// dead zone. Declarations hoist; arrow functions assigned to consts do not.
+function git(...args) {
+  return new Promise((resolve) => {
+    const child = spawn('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    child.stdout.on('data', (d) => { out += d; });
+    child.stderr.on('data', (d) => { out += d; });
+    child.on('close', (code) => resolve({ code: code ?? 1, out: out.trim() }));
+    child.on('error', () => resolve({ code: 1, out: 'could not run git' }));
+  });
+}
+
+async function publishedSize() {
+  const shown = await git('show', 'origin/main:data/songs.json');
+  if (shown.code !== 0) return null;
+  try {
+    return JSON.parse(shown.out).songs?.length ?? null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -285,15 +345,6 @@ async function publish(count) {
   // only the first two would leave the seeds dirty after every successful run
   // and split one logical change across two commits.
   const OURS = ['data/songs.json', 'data/*.review.json', 'data/review.json', 'data/*.seed.json'];
-
-  const git = (...args) => new Promise((resolve) => {
-    const child = spawn('git', args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
-    let out = '';
-    child.stdout.on('data', (d) => { out += d; });
-    child.stderr.on('data', (d) => { out += d; });
-    child.on('close', (code) => resolve({ code: code ?? 1, out: out.trim() }));
-    child.on('error', () => resolve({ code: 1, out: 'could not run git' }));
-  });
 
   // The gate. Every bug that has hurt this project reached the pool quietly and
   // was found days later by somebody noticing something odd in the app. This is
