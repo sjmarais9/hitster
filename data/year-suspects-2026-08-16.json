@@ -1,0 +1,140 @@
+{
+  "checked": 9,
+  "results": [
+    {
+      "artist": "Luther Ingram",
+      "title": "(If Loving You Is Wrong) I Don't Want to Be Right",
+      "our_year": 1972,
+      "spotify": 1967,
+      "mb_recording": 1972,
+      "mb_recording_releases": 43,
+      "mb_release_group": 1972,
+      "release_group_is_circular": true,
+      "verdict": "ours confirmed",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Taylor Swift",
+      "title": "Cruel Summer",
+      "our_year": 2023,
+      "spotify": 2019,
+      "mb_recording": 2019,
+      "mb_recording_releases": 54,
+      "mb_release_group": 2023,
+      "release_group_is_circular": true,
+      "verdict": "ours wrong",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Ramones",
+      "title": "I Wanna Be Sedated",
+      "our_year": 1988,
+      "spotify": 1978,
+      "mb_recording": 1991,
+      "mb_recording_releases": 7,
+      "mb_release_group": 1988,
+      "release_group_is_circular": true,
+      "verdict": "third answer",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Frankie Knuckles",
+      "title": "Your Love",
+      "our_year": 2003,
+      "spotify": 1987,
+      "mb_recording": 1987,
+      "mb_recording_releases": 56,
+      "mb_release_group": 2003,
+      "release_group_is_circular": true,
+      "verdict": "ours wrong",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Dinosaur Jr.",
+      "title": "Just Like Heaven",
+      "our_year": 1989,
+      "spotify": 1987,
+      "mb_recording": 1989,
+      "mb_recording_releases": 30,
+      "mb_release_group": 1989,
+      "release_group_is_circular": true,
+      "verdict": "ours confirmed",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Måneskin",
+      "title": "Beggin'",
+      "our_year": 2023,
+      "spotify": 2017,
+      "mb_recording": 2017,
+      "mb_recording_releases": 22,
+      "mb_release_group": 2023,
+      "release_group_is_circular": true,
+      "verdict": "ours wrong",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Mayhem",
+      "title": "Freezing Moon",
+      "our_year": 1996,
+      "spotify": 1994,
+      "mb_recording": 1995,
+      "mb_recording_releases": 41,
+      "mb_release_group": 1996,
+      "release_group_is_circular": true,
+      "verdict": "third answer",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Neil Sedaka",
+      "title": "Breaking Up Is Hard to Do",
+      "our_year": 1962,
+      "spotify": 1960,
+      "mb_recording": 1993,
+      "mb_recording_releases": 3,
+      "mb_release_group": 1962,
+      "release_group_is_circular": true,
+      "verdict": "third answer",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    },
+    {
+      "artist": "Bush",
+      "title": "Machinehead",
+      "our_year": 1996,
+      "spotify": 1994,
+      "mb_recording": 1994,
+      "mb_recording_releases": 79,
+      "mb_release_group": 1996,
+      "release_group_is_circular": true,
+      "verdict": "ours wrong",
+      "why": {
+        "release_group": "ok",
+        "recording": "ok"
+      }
+    }
+  ]
+}

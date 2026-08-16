@@ -106,8 +106,41 @@ export const REVIEWED = {
   'four tops|standing in the shadows of love': { familiarity: 'deep', skew: 'adults' },
 };
 
+/**
+ * Years established against a source, and not to be re-derived.
+ *
+ * Same reasoning as REVIEWED and the same failure it guards against, one field
+ * over. These six were dated by the generator from MusicBrainz release-groups,
+ * which prefers a standalone single over the album that first carried the song;
+ * every one came out as the reissue date. A later re-run of that lookup would
+ * confidently put all six back, and nothing in the data would look wrong -
+ * 1988 is a perfectly legal year for a Ramones song.
+ *
+ * Recorded here so it fails a test instead.
+ */
+export const VERIFIED_YEARS = {
+  // --- 16 August, against MusicBrainz recordings and Spotify ------------------
+  // Each was checked twice over: the most-carried recording, and Spotify's own
+  // earliest date, which agreed in all six. The `album` field in the pool then
+  // corroborates every one of them by name.
+  'taylor swift|cruel summer': 2019,        // Lover
+  'bush|machinehead': 1994,                 // Sixteen Stone
+  'frankie knuckles|your love': 1987,       // Baby Wants to Ride / Your Love
+  'måneskin|beggin\'': 2017,                // Chosen
+  'ramones|i wanna be sedated': 1978,       // Road to Ruin
+  'mayhem|freezing moon': 1994,             // De Mysteriis Dom Sathanas
+  // Checked the same day and left alone, because the alarm was wrong about
+  // them. Recorded so the next check does not spend a request re-asking.
+  'dinosaur jr.|just like heaven': 1989,    // a Cure cover; 1987 is the original
+  'neil sedaka|breaking up is hard to do': 1962,
+  'luther ingram|(if loving you is wrong) i don\'t want to be right': 1972,
+};
+
 /** The key a song is recorded under. */
 export const reviewKey = (song) => `${song.artist}|${song.title}`.toLowerCase();
 
 /** What the household said about this song, or null if it was never asked. */
 export const verdictFor = (song) => REVIEWED[reviewKey(song)] ?? null;
+
+/** The established year for this song, or null if none was ever established. */
+export const verifiedYearFor = (song) => VERIFIED_YEARS[reviewKey(song)] ?? null;

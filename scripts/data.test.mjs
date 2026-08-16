@@ -18,7 +18,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { statSync } from 'node:fs';
 import { readSongs } from './lib/songs-file.mjs';
-import { verdictFor } from './lib/reviewed.mjs';
+import { verdictFor, verifiedYearFor } from './lib/reviewed.mjs';
 
 const POOL = 'data/songs.json';
 const BATCHES = [
@@ -177,6 +177,26 @@ test('no rule has overwritten a judgement the household made', () => {
     }
     if (verdict.familiarity && song.familiarity !== verdict.familiarity) {
       wrong.push(`${song.artist} - ${song.title}: familiarity is ${song.familiarity}, the review said ${verdict.familiarity}`);
+    }
+  }
+  assert.deepEqual(wrong, [], `\n  ${wrong.join('\n  ')}\n`);
+});
+
+test('no lookup has undone a year that was established against a source', () => {
+  // The same guard as above, for the field that actually breaks the game. Six
+  // years were corrected on 16 August against MusicBrainz recordings and
+  // Spotify, all six having been dated by the generator to a reissue single
+  // rather than to the record the song came out on.
+  //
+  // Re-running the generator's lookup would restore all six, and no other test
+  // here would notice: 1988 is a legal year, it matches the decade beside it,
+  // and it is plausible. Only the fact that somebody checked makes it wrong.
+  const wrong = [];
+  for (const song of corpus) {
+    const year = verifiedYearFor(song);
+    if (year === null) continue;
+    if (song.year !== year) {
+      wrong.push(`${song.artist} - ${song.title}: year is ${song.year}, the check established ${year}`);
     }
   }
   assert.deepEqual(wrong, [], `\n  ${wrong.join('\n  ')}\n`);
