@@ -349,7 +349,42 @@ specifically so no client secret exists anywhere in this project.
 ```sh
 node scripts/check-tags.mjs data/batch-006.seed.json   # distribution, rule breaches
 node scripts/audit-years.mjs                           # years against MusicBrainz
+node scripts/recheck-pool-years.mjs                    # two-source year check over the pool
 ```
+
+### How a wrong year gets caught
+
+`year` is the field that breaks the game, and no single source can be trusted
+with it. Both of the ones available are wrong in their own direction:
+
+| Source | Drifts | Measured |
+|---|---|---|
+| Spotify release dates | **late**, towards remasters and reissues | raised 9 suspects in 665 songs, 6 real |
+| MusicBrainz recordings | **late** before 1990, where its earliest entry is a CD reissue | disagreed with 21% of batch 006, mostly its own error |
+
+So neither votes alone. A year is only corrected when **both land on the same
+earlier year**, which two independent catalogues with unrelated failure modes do
+not do by accident. Replayed over the nine suspects of 16 August that rule made
+four corrections, all four right, and none of the three where our year was
+already correct — including Dinosaur Jr.'s *Just Like Heaven*, where Spotify
+finds The Cure's 1987 original and MusicBrainz, filtering on an exact artist,
+stays on the 1989 cover.
+
+The rule lives in `scripts/lib/year-check.mjs`. `import-songs.mjs` applies it as
+each song lands, reading MusicBrainz's answers from `data/musicbrainz-years.json`
+rather than over the network — a six-hour sweep already paid for, and MusicBrainz
+does not revise a 1978 release date. Suspects land in the batch review file
+ranked `confirmed`, `check`, `contradicted`.
+
+**Nothing is corrected automatically.** A `confirmed` verdict is a strong
+recommendation, applied by a dated script the way `apply-year-fixes-2026-08-16.mjs`
+applied the first six. Years established that way are pinned in
+`lib/reviewed.mjs` as `VERIFIED_YEARS`, because re-running the generator would
+put every one of them back and nothing in the data would look wrong.
+
+The pool re-check costs roughly one song of import backlog per song it checks —
+`search` and `tracks/{id}` share the daily quota, which a fifteen-request test
+was too small to reveal. It checkpoints every 250 and resumes.
 
 ### Tests
 
@@ -357,7 +392,7 @@ node scripts/audit-years.mjs                           # years against MusicBrai
 npm test
 ```
 
-41 tests, no dependencies, no network. They cover the matcher, the filters, the
+138 tests, no dependencies, no network. They cover the matcher, the filters, the
 sampler — asserted over 20,000 seeded draws rather than single picks — and an
 end-to-end smoke test that loads the real pool and plays a full session through
 `game.js`.

@@ -35,11 +35,18 @@ import { readSongs } from './lib/songs-file.mjs';
 import { byRecording, PAUSE_MS, sleep } from './lib/musicbrainz.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = path.join(ROOT, 'data', 'batch006-year-sample-2026-08-16.json');
 
 const args = process.argv.slice(2);
 const N = args.includes('--n') ? Number(args[args.indexOf('--n') + 1]) : 200;
 const SEED = 20260816;
+
+// The 200-song run is committed evidence for a finding, so a longer run writes
+// somewhere else rather than growing that file underneath it. Seed the new file
+// by copying the old one and the overlap is not asked of MusicBrainz twice -
+// the sample is a prefix of the sweep, same seed, same shuffle.
+const OUT = args.includes('--out')
+  ? path.resolve(ROOT, args[args.indexOf('--out') + 1])
+  : path.join(ROOT, 'data', 'batch006-year-sample-2026-08-16.json');
 
 const rng = (seed) => () => {
   seed |= 0; seed = (seed + 0x6D2B79F5) | 0;

@@ -24,8 +24,23 @@ import { MARKET } from '../src/config.js';
 import { authorise } from './lib/cli-auth.mjs';
 import { pickBest, releaseYear } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
+import { classifyYear, bySeverity } from './lib/year-check.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+/** MusicBrainz's year per song, from the sweep. Loaded in main(). */
+let musicbrainzYears = {};
+
+const NOTES = {
+  confirmed: 'Spotify and MusicBrainz independently agree our year is too late. '
+    + 'This is the pattern that was right six times out of six on 16 August. '
+    + 'Apply it unless the album name says otherwise.',
+  check: 'One source disputes our year and the other cannot corroborate it. '
+    + 'Usually the disputing source is wrong - most often MusicBrainz holding a '
+    + 'CD reissue of a pre-1990 song. Needs a person.',
+  contradicted: 'One source disputes our year and the other backs it. Our year '
+    + 'is probably right; recorded so it is not raised again.',
+};
 
 /** Exit code meaning "the daily quota ran out", not "something went wrong". */
 export const EXIT_RATE_LIMITED = 75;
@@ -137,6 +152,12 @@ async function main() {
 
   const existingPool = songsOf(await readJson(opts.out, { songs: [] }));
   const resolved = new Map(existingPool.map((s) => [keyOf(s), s]));
+
+  // Absent is fine and stays quiet. The reference covers batch 006 only, so an
+  // import of any other batch simply falls back to what the check did before -
+  // Spotify alone, reported as needing a person. A missing file must not be the
+  // difference between a run that works and a run that throws at 3am.
+  musicbrainzYears = (await readJson(path.join(ROOT, 'data', 'musicbrainz-years.json'), null))?.years ?? {};
 
   // Our fields belong to the batch file, not the pool. Re-tagging a song has to
   // reach the pool without re-resolving its URI, which would mean another
@@ -291,18 +312,42 @@ async function main() {
         canonicity: song.canonicity ?? null,
       });
 
-      // Our years are written from memory and will occasionally be wrong.
-      // Spotify's date is later than ours all the time - that is just a
-      // remaster or reissue - but *earlier* than ours should not happen for an
-      // original release, so it is worth a human look.
+      // Our years will occasionally be wrong, and the two ways they are wrong
+      // need telling apart. Spotify's date is later than ours all the time -
+      // that is a remaster - but earlier than ours should not happen for an
+      // original release.
+      //
+      // Spotify alone used to be the whole check, and on 16 August it raised
+      // nine songs of which six were genuinely ours and three were Spotify
+      // finding a compilation or, in one case, a different band's original.
+      // Two thirds is not a good enough rate to act on unread, and reading
+      // every one of them by hand does not survive 8,775 songs.
+      //
+      // So MusicBrainz is consulted too, from the sweep already on disk rather
+      // than over the network. Where both land on the same earlier year the
+      // answer is as good as the six that were checked by hand; where only one
+      // does, it says so and waits for a person.
       const spotifyYear = releaseYear(best.track);
-      if (spotifyYear && spotifyYear < song.year - 1) {
+      const mb = musicbrainzYears[`${song.artist}|${song.title}`.toLowerCase()] ?? null;
+      const verdict = classifyYear({
+        ours: song.year,
+        spotify: spotifyYear ?? null,
+        musicbrainz: mb ? mb[0] : null,
+      });
+
+      if (verdict.verdict !== 'ok') {
         yearSuspects.push({
           artist: song.artist,
           title: song.title,
           our_year: song.year,
-          spotify_earliest_year: spotifyYear,
-          note: 'Spotify dates this earlier than we do. Our year may be wrong.',
+          suggested_year: verdict.year,
+          verdict: verdict.verdict,
+          sources: verdict.sources,
+          spotify_earliest_year: spotifyYear ?? null,
+          musicbrainz_year: mb ? mb[0] : null,
+          musicbrainz_releases: mb ? mb[1] : null,
+          album: best.track.album?.name ?? null,
+          note: NOTES[verdict.verdict],
         });
       }
     } else {
@@ -345,10 +390,27 @@ async function main() {
   console.log(`Wrote ${opts.out}`);
 
   if (yearSuspects.length > 0) {
-    console.log(`\n${yearSuspects.length} song(s) where Spotify dates the track earlier than we do:`);
-    for (const s of yearSuspects) {
-      console.log(`  ${s.artist} - ${s.title}: ours ${s.our_year}, Spotify ${s.spotify_earliest_year}`);
+    yearSuspects.sort(bySeverity);
+    const confirmed = yearSuspects.filter((s) => s.verdict === 'confirmed');
+    const check = yearSuspects.filter((s) => s.verdict === 'check');
+    const contradicted = yearSuspects.filter((s) => s.verdict === 'contradicted');
+
+    console.log(`\n${yearSuspects.length} song(s) with a disputed year: `
+      + `${confirmed.length} confirmed, ${check.length} to check, ${contradicted.length} contradicted`);
+
+    // The confirmed ones are the only lines here that ask for anything, so they
+    // are the only ones printed in full. Burying four actionable songs in forty
+    // is how the last review got read by nobody.
+    if (confirmed.length) {
+      console.log('\n  CONFIRMED by both sources - our year is too late:');
+      for (const s of confirmed) {
+        console.log(`    ${s.our_year} -> ${s.suggested_year}  ${`${s.artist} - ${s.title}`.slice(0, 44).padEnd(46)}`
+          + `album: ${(s.album ?? '-').slice(0, 30)}`);
+      }
+      console.log(`\n  Review them in ${path.relative(ROOT, opts.review)} and apply with a dated script,`);
+      console.log('  the way the six of 16 August were. Nothing is corrected automatically.');
     }
+    if (check.length) console.log(`\n  ${check.length} disputed by one source only - see the review file.`);
   }
 
   if (aborted) {
@@ -369,6 +431,10 @@ async function main() {
       meta: {
         count: review.length,
         note: 'Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year.',
+        year_suspects: 'Ranked worst first. `confirmed` means two independent sources agree our '
+          + 'year is too late and is safe to act on; `check` means one source disputes it and the '
+          + 'other is silent, which is usually the disputing source being wrong; `contradicted` '
+          + 'means the second source backs our year. Nothing here has been applied.',
       },
       songs: review,
       year_suspects: yearSuspects,
