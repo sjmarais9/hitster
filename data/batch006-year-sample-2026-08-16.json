@@ -1,0 +1,1806 @@
+{
+  "seed": 20260816,
+  "n": 200,
+  "results": [
+    {
+      "artist": "Mando Diao",
+      "title": "Dance With Somebody",
+      "our_year": 2009,
+      "mb_year": 2009,
+      "mb_releases": 64,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "David Guetta",
+      "title": "Like I Do",
+      "our_year": 2018,
+      "mb_year": 2018,
+      "mb_releases": 17,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Luke Combs",
+      "title": "Back in the Saddle",
+      "our_year": 2025,
+      "mb_year": 2025,
+      "mb_releases": 3,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Stromae",
+      "title": "Tous les mêmes",
+      "our_year": 2013,
+      "mb_year": 2013,
+      "mb_releases": 40,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "The Script",
+      "title": "Breakeven",
+      "our_year": 2009,
+      "mb_year": 2008,
+      "mb_releases": 55,
+      "gap": 1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The Walker Brothers",
+      "title": "The Sun Ain't Gonna Shine Anymore",
+      "our_year": 1966,
+      "mb_year": 1991,
+      "mb_releases": 6,
+      "gap": -25,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Ben E. King",
+      "title": "Supernatural Thing (Re-Recorded)",
+      "our_year": 1975,
+      "mb_year": 2013,
+      "mb_releases": 1,
+      "gap": -38,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Derek & The Dominos",
+      "title": "Layla",
+      "our_year": 1970,
+      "mb_year": 1970,
+      "mb_releases": 215,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Netzwerk",
+      "title": "Send Me an Angel",
+      "our_year": 1992,
+      "mb_year": 1992,
+      "mb_releases": 3,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Billy Joe Royal",
+      "title": "Hush",
+      "our_year": 1965,
+      "mb_year": 1967,
+      "mb_releases": 3,
+      "gap": -2,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Blonde Redhead",
+      "title": "10 Feet High",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 2,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Mc IG",
+      "title": "Diz Aí Qual é o Plano?",
+      "our_year": 2024,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Jermaine Jackson",
+      "title": "When the Rain Begins to Fall",
+      "our_year": 1984,
+      "mb_year": 1984,
+      "mb_releases": 112,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Burning Spear",
+      "title": "Throw Down Your Arms",
+      "our_year": 1976,
+      "mb_year": 1977,
+      "mb_releases": 7,
+      "gap": -1,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Kelly Key",
+      "title": "Cachorrinho",
+      "our_year": 2001,
+      "mb_year": 2002,
+      "mb_releases": 3,
+      "gap": -1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Squeeze",
+      "title": "Labelled With Love",
+      "our_year": 1981,
+      "mb_year": 1981,
+      "mb_releases": 70,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Huey Lewis and The News",
+      "title": "Heart And Soul",
+      "our_year": 1983,
+      "mb_year": 1983,
+      "mb_releases": 49,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Brandy",
+      "title": "Baby",
+      "our_year": 1994,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "The Proclaimers",
+      "title": "I'm on My Way",
+      "our_year": 1989,
+      "mb_year": 1988,
+      "mb_releases": 36,
+      "gap": 1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Cage The Elephant",
+      "title": "Come A Little Closer",
+      "our_year": 2014,
+      "mb_year": 2013,
+      "mb_releases": 16,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "5 Seconds of Summer",
+      "title": "She Looks So Perfect",
+      "our_year": 2014,
+      "mb_year": 2014,
+      "mb_releases": 76,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Sabrina Carpenter",
+      "title": "Taste",
+      "our_year": 2024,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Limp Bizkit",
+      "title": "9 Teen 90 Nine",
+      "our_year": 2008,
+      "mb_year": 1999,
+      "mb_releases": 18,
+      "gap": 9,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Jon Pardi",
+      "title": "Dirt On My Boots",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 13,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Bad Bunny",
+      "title": "MONACO",
+      "our_year": 2023,
+      "mb_year": 2023,
+      "mb_releases": 2,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "The Doors",
+      "title": "Love Street",
+      "our_year": 1968,
+      "mb_year": 1968,
+      "mb_releases": 83,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Native Nod",
+      "title": "Bread",
+      "our_year": 1993,
+      "mb_year": 1993,
+      "mb_releases": 3,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Kenny Chesney",
+      "title": "Come Over",
+      "our_year": 2012,
+      "mb_year": 2012,
+      "mb_releases": 14,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Iggy Azalea",
+      "title": "Work",
+      "our_year": 2013,
+      "mb_year": 2013,
+      "mb_releases": 26,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "The Gap Band",
+      "title": "You Dropped A Bomb On Me",
+      "our_year": 1982,
+      "mb_year": 2003,
+      "mb_releases": 2,
+      "gap": -21,
+      "decade": "1980s"
+    },
+    {
+      "artist": "K-Ci & JoJo",
+      "title": "Tell Me It's Real",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 19,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Sizzla",
+      "title": "Good Ways",
+      "our_year": 1999,
+      "mb_year": 2002,
+      "mb_releases": 4,
+      "gap": -3,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Quincy Jones",
+      "title": "Tomorrow (A Better You, Better Me) (Album Version)",
+      "our_year": 1989,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Brooks & Dunn",
+      "title": "Cowgirls Don't Cry (feat. Reba McEntire)",
+      "our_year": 2007,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Buju Banton",
+      "title": "What Ya Gonna Do?",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 5,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Jon Pardi",
+      "title": "She Ain't In It",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 9,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "The Last Shadow Puppets",
+      "title": "The Age Of The Understatement",
+      "our_year": 2008,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Doris Troy",
+      "title": "Just One Look",
+      "our_year": 1963,
+      "mb_year": 1988,
+      "mb_releases": 6,
+      "gap": -25,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Technotronic",
+      "title": "Get Up (Before The Night Is Over)",
+      "our_year": 1990,
+      "mb_year": 1990,
+      "mb_releases": 2,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Sara Evans",
+      "title": "Suds in the Bucket",
+      "our_year": 2004,
+      "mb_year": 2003,
+      "mb_releases": 22,
+      "gap": 1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "50 Cent",
+      "title": "Disco Inferno",
+      "our_year": 2004,
+      "mb_year": 2004,
+      "mb_releases": 36,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Bullet For My Valentine",
+      "title": "Hand Of Blood",
+      "our_year": 2005,
+      "mb_year": 2004,
+      "mb_releases": 24,
+      "gap": 1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "George Benson",
+      "title": "20/20",
+      "our_year": 1984,
+      "mb_year": 1985,
+      "mb_releases": 31,
+      "gap": -1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Bros",
+      "title": "When Will I Be Famous?",
+      "our_year": 1987,
+      "mb_year": 1988,
+      "mb_releases": 105,
+      "gap": -1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Saint Motel",
+      "title": "My Type",
+      "our_year": 2013,
+      "mb_year": 2013,
+      "mb_releases": 25,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Billy Currington",
+      "title": "It Don't Hurt Like It Used To",
+      "our_year": 2015,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Kylie Minogue",
+      "title": "The Loco-Motion",
+      "our_year": 1987,
+      "mb_year": 1988,
+      "mb_releases": 199,
+      "gap": -1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Kelly Clarkson",
+      "title": "Breakaway",
+      "our_year": 2003,
+      "mb_year": 2003,
+      "mb_releases": 78,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The Supremes",
+      "title": "Up The Ladder To The Roof (Single Version)",
+      "our_year": 1970,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Built To Spill",
+      "title": "Kicked It in the Sun",
+      "our_year": 1997,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Desire",
+      "title": "Under Your Spell",
+      "our_year": 2009,
+      "mb_year": 2011,
+      "mb_releases": 7,
+      "gap": -2,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Kendrick Lamar",
+      "title": "Rich Spirit",
+      "our_year": 2022,
+      "mb_year": 2022,
+      "mb_releases": 27,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Interpol",
+      "title": "Evil",
+      "our_year": 2004,
+      "mb_year": 2007,
+      "mb_releases": 3,
+      "gap": -3,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Blessid Union Of Souls",
+      "title": "Hey Leonardo (She Likes Me for Me)",
+      "our_year": 1999,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "The Oak Ridge Boys",
+      "title": "American Made",
+      "our_year": 1983,
+      "mb_year": 1983,
+      "mb_releases": 4,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Martin Solveig",
+      "title": "Something Better",
+      "our_year": 2007,
+      "mb_year": 2005,
+      "mb_releases": 11,
+      "gap": 2,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Don Williams",
+      "title": "I Believe In You",
+      "our_year": 1980,
+      "mb_year": 1995,
+      "mb_releases": 5,
+      "gap": -15,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Three 6 Mafia",
+      "title": "Stay Fly (feat. Young Buck & 8Ball & MJG)",
+      "our_year": 2005,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Michael Jackson",
+      "title": "Remember the Time",
+      "our_year": 1991,
+      "mb_year": 1991,
+      "mb_releases": 124,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Jodeci",
+      "title": "Freek'n You",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 13,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Lainey Wilson",
+      "title": "Somewhere Over Laredo",
+      "our_year": 2025,
+      "mb_year": 2024,
+      "mb_releases": 6,
+      "gap": 1,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Sum 41",
+      "title": "Summer",
+      "our_year": 2000,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Toby Keith",
+      "title": "Whiskey Girl",
+      "our_year": 2004,
+      "mb_year": 2003,
+      "mb_releases": 13,
+      "gap": 1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Barenaked Ladies",
+      "title": "One Week",
+      "our_year": 1998,
+      "mb_year": 2004,
+      "mb_releases": 2,
+      "gap": -6,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Zapp",
+      "title": "Computer Love",
+      "our_year": 1985,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1980s"
+    },
+    {
+      "artist": "DJ Japa NK",
+      "title": "SET DO JAPA NK 2.0",
+      "our_year": 2025,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Taio Cruz",
+      "title": "Hangover",
+      "our_year": 2011,
+      "mb_year": 2011,
+      "mb_releases": 6,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Metallica",
+      "title": "The Day That Never Comes",
+      "our_year": 2008,
+      "mb_year": 2008,
+      "mb_releases": 1,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Buju Banton",
+      "title": "Champion",
+      "our_year": 2001,
+      "mb_year": 1995,
+      "mb_releases": 11,
+      "gap": 6,
+      "decade": "2000s"
+    },
+    {
+      "artist": "+44",
+      "title": "Baby Come On",
+      "our_year": 2006,
+      "mb_year": 2006,
+      "mb_releases": 15,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "BOYS LIFE",
+      "title": "Sight Unseen",
+      "our_year": 1999,
+      "mb_year": 1997,
+      "mb_releases": 4,
+      "gap": 2,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Ten Years After",
+      "title": "I'd Love to Change the World",
+      "our_year": 1971,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Angèle",
+      "title": "Démons",
+      "our_year": 2021,
+      "mb_year": 2021,
+      "mb_releases": 19,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Eric Carmen",
+      "title": "All by Myself",
+      "our_year": 1975,
+      "mb_year": 1985,
+      "mb_releases": 140,
+      "gap": -10,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Florence + The Machine",
+      "title": "Dog Days Are Over",
+      "our_year": 2008,
+      "mb_year": 2008,
+      "mb_releases": 107,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The Human League",
+      "title": "Love Action (I Believe In Love)",
+      "our_year": 1981,
+      "mb_year": 1981,
+      "mb_releases": 114,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Justice",
+      "title": "We Are Your Friends (Justice Vs Simian)",
+      "our_year": 2006,
+      "mb_year": 2025,
+      "mb_releases": 1,
+      "gap": -19,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Lee \"Scratch\" Perry",
+      "title": "People Funny Boy",
+      "our_year": 1969,
+      "mb_year": 1988,
+      "mb_releases": 2,
+      "gap": -19,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Run DMC",
+      "title": "Hollis Crew (Krush-Groove 2)",
+      "our_year": 1984,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1980s"
+    },
+    {
+      "artist": "David Vendetta",
+      "title": "Love to love you baby",
+      "our_year": 2006,
+      "mb_year": 2006,
+      "mb_releases": 17,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The 69 Eyes",
+      "title": "Lost Boys",
+      "our_year": 2004,
+      "mb_year": 2004,
+      "mb_releases": 19,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Onze:20",
+      "title": "Te Roubar pra Mim",
+      "our_year": 2014,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Alabama",
+      "title": "Song of the South",
+      "our_year": 1988,
+      "mb_year": 1988,
+      "mb_releases": 34,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Black Box",
+      "title": "Everybody Everybody",
+      "our_year": 1990,
+      "mb_year": 1990,
+      "mb_releases": 3,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Mc Bruninho da Praia",
+      "title": "Giro dos Artistas 3",
+      "our_year": 2023,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Little Anthony & The Imperials",
+      "title": "Goin' Out Of My Head",
+      "our_year": 1965,
+      "mb_year": 1991,
+      "mb_releases": 3,
+      "gap": -26,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Alicia Keys",
+      "title": "Try Sleeping with a Broken Heart",
+      "our_year": 2009,
+      "mb_year": 2009,
+      "mb_releases": 28,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The Drums",
+      "title": "Money",
+      "our_year": 2011,
+      "mb_year": 2011,
+      "mb_releases": 18,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Gojira",
+      "title": "The art of dying",
+      "our_year": 2008,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Christine and the Queens",
+      "title": "Christine",
+      "our_year": 2014,
+      "mb_year": 2014,
+      "mb_releases": 21,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Modern Talking",
+      "title": "Cheri Cheri Lady",
+      "our_year": 1985,
+      "mb_year": 1985,
+      "mb_releases": 158,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Ozzy Osbourne",
+      "title": "S.A.T.O.",
+      "our_year": 1981,
+      "mb_year": 1981,
+      "mb_releases": 21,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "BLACKPINK",
+      "title": "JUMP",
+      "our_year": 2025,
+      "mb_year": 2025,
+      "mb_releases": 1,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Nat Stuckey",
+      "title": "Pop a Top",
+      "our_year": 1966,
+      "mb_year": 1966,
+      "mb_releases": 4,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Linkin Park",
+      "title": "Two Faced",
+      "our_year": 2024,
+      "mb_year": 2024,
+      "mb_releases": 18,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Ice MC",
+      "title": "It's a Rainy Day",
+      "our_year": 1994,
+      "mb_year": 1994,
+      "mb_releases": 12,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Miley Cyrus",
+      "title": "7 Things (Single Version)",
+      "our_year": 2008,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Clint Black",
+      "title": "Killin' Time",
+      "our_year": 1989,
+      "mb_year": 1989,
+      "mb_releases": 23,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "The Black Eyed Peas",
+      "title": "Pump It",
+      "our_year": 2005,
+      "mb_year": 2005,
+      "mb_releases": 112,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Jeremih",
+      "title": "Down On Me",
+      "our_year": 2011,
+      "mb_year": 2010,
+      "mb_releases": 13,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Volbeat",
+      "title": "A Warrior's Call",
+      "our_year": 2009,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Cast",
+      "title": "Alright",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 37,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Gregory Isaacs",
+      "title": "Cool Down The Pace",
+      "our_year": 1982,
+      "mb_year": 1982,
+      "mb_releases": 6,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Red Hot Chili Peppers",
+      "title": "Dosed",
+      "our_year": 2003,
+      "mb_year": 2002,
+      "mb_releases": 25,
+      "gap": 1,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Vex",
+      "title": "Sanctuary",
+      "our_year": 1984,
+      "mb_year": 1984,
+      "mb_releases": 2,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Peter Brown",
+      "title": "Dance with Me",
+      "our_year": 1978,
+      "mb_year": 1978,
+      "mb_releases": 22,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Porter Wagoner",
+      "title": "The Carroll County Accident",
+      "our_year": 1969,
+      "mb_year": 2006,
+      "mb_releases": 5,
+      "gap": -37,
+      "decade": "1960s"
+    },
+    {
+      "artist": "LeVert",
+      "title": "Casanova",
+      "our_year": 1987,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1980s"
+    },
+    {
+      "artist": "My Chemical Romance",
+      "title": "Thank You for the Venom",
+      "our_year": 2004,
+      "mb_year": 2004,
+      "mb_releases": 20,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Built To Spill",
+      "title": "Big Dipper (Album)",
+      "our_year": 1994,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "DJ Paul Elstak",
+      "title": "Rainbow In The Sky (K & A's Radio Blast)",
+      "our_year": 1995,
+      "mb_year": 2019,
+      "mb_releases": 1,
+      "gap": -24,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Patti LaBelle",
+      "title": "Somebody Loves You Baby (You Know Who It Is)",
+      "our_year": 1977,
+      "mb_year": 1991,
+      "mb_releases": 12,
+      "gap": -14,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Manuel Turizo",
+      "title": "La Bachata",
+      "our_year": 2022,
+      "mb_year": 2022,
+      "mb_releases": 5,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Imagine Dragons",
+      "title": "On Top Of The World",
+      "our_year": 2013,
+      "mb_year": 2012,
+      "mb_releases": 115,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "TLC",
+      "title": "Unpretty",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 45,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "The Miracles",
+      "title": "Shop Around",
+      "our_year": 1960,
+      "mb_year": 1960,
+      "mb_releases": 102,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Lady A",
+      "title": "Bartender",
+      "our_year": 2014,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "DJ Paul Elstak",
+      "title": "Life Is Like A Dance",
+      "our_year": 1995,
+      "mb_year": 1994,
+      "mb_releases": 2,
+      "gap": 1,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Janet Jackson",
+      "title": "That's The Way Love Goes",
+      "our_year": 1993,
+      "mb_year": 1993,
+      "mb_releases": 8,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Eurythmics",
+      "title": "Love Is a Stranger",
+      "our_year": 1982,
+      "mb_year": 1983,
+      "mb_releases": 97,
+      "gap": -1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Suzi Quatro",
+      "title": "If You Can't Give Me Love",
+      "our_year": 1978,
+      "mb_year": 1978,
+      "mb_releases": 147,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Alok",
+      "title": "Hear Me Now",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 59,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Keith Urban",
+      "title": "Blue Ain't Your Color",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 14,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Melvins",
+      "title": "Anaconda",
+      "our_year": 1991,
+      "mb_year": 1991,
+      "mb_releases": 6,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Rixton",
+      "title": "Me And My Broken Heart",
+      "our_year": 2014,
+      "mb_year": 2014,
+      "mb_releases": 35,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "DJ Boy",
+      "title": "Giro Loko",
+      "our_year": 2022,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Ed Sheeran",
+      "title": "Galway Girl",
+      "our_year": 2018,
+      "mb_year": 2017,
+      "mb_releases": 72,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "The Script",
+      "title": "The Man Who Can't Be Moved",
+      "our_year": 2008,
+      "mb_year": 2008,
+      "mb_releases": 90,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Montell Jordan",
+      "title": "Get It On Tonite",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 24,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Jay & The Techniques",
+      "title": "Apples, Peaches, Pumpkin Pie",
+      "our_year": 1967,
+      "mb_year": 1967,
+      "mb_releases": 6,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Lady Gaga",
+      "title": "Alejandro",
+      "our_year": 2010,
+      "mb_year": 2009,
+      "mb_releases": 180,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Faith Hill",
+      "title": "Breathe",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 54,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Dillin Hoox",
+      "title": "Lose My Mind",
+      "our_year": 2025,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Tate McRae",
+      "title": "Sports car",
+      "our_year": 2025,
+      "mb_year": 2025,
+      "mb_releases": 31,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Sigala",
+      "title": "Wish You Well",
+      "our_year": 2019,
+      "mb_year": 2019,
+      "mb_releases": 18,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Speelburg",
+      "title": "When You Want Me",
+      "our_year": 2023,
+      "mb_year": 2020,
+      "mb_releases": 2,
+      "gap": 3,
+      "decade": "2020s"
+    },
+    {
+      "artist": "White Lion",
+      "title": "Wait",
+      "our_year": 1987,
+      "mb_year": 1987,
+      "mb_releases": 70,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Lauryn Hill",
+      "title": "To Zion (Album Version)",
+      "our_year": 1998,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Roger Miller",
+      "title": "King Of The Road",
+      "our_year": 1965,
+      "mb_year": 1965,
+      "mb_releases": 305,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Alton Ellis",
+      "title": "Rock Steady",
+      "our_year": 1969,
+      "mb_year": 1976,
+      "mb_releases": 20,
+      "gap": -7,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Shawn Mendes",
+      "title": "Señorita",
+      "our_year": 2019,
+      "mb_year": 2019,
+      "mb_releases": 100,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Jean Knight",
+      "title": "Mr. Big Stuff",
+      "our_year": 1971,
+      "mb_year": 1999,
+      "mb_releases": 2,
+      "gap": -28,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Lionel Richie",
+      "title": "Ballerina Girl",
+      "our_year": 1986,
+      "mb_year": 1985,
+      "mb_releases": 41,
+      "gap": 1,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Teenage Priest",
+      "title": "Innocent",
+      "our_year": 2020,
+      "mb_year": 2020,
+      "mb_releases": 1,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Bauhaus",
+      "title": "She's in Parties",
+      "our_year": 1983,
+      "mb_year": 1983,
+      "mb_releases": 5,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Alok",
+      "title": "All By Myself",
+      "our_year": 2022,
+      "mb_year": 2022,
+      "mb_releases": 19,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "T-Pain",
+      "title": "I'm N Luv (Wit a Stripper) (feat. Mike Jones)",
+      "our_year": 2005,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Chris Young",
+      "title": "Voices",
+      "our_year": 2008,
+      "mb_year": 2008,
+      "mb_releases": 9,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "James Brown",
+      "title": "Mother Popcorn (Pt. 1)",
+      "our_year": 1969,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Travis",
+      "title": "Driftwood",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 40,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Jewel",
+      "title": "Foolish Games",
+      "our_year": 1997,
+      "mb_year": 1994,
+      "mb_releases": 52,
+      "gap": 3,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Daft Punk",
+      "title": "Burnin' / Too Long",
+      "our_year": 2007,
+      "mb_year": 2007,
+      "mb_releases": 15,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Chance The Rapper",
+      "title": "Blessings (feat. Ty Dolla $ign, Anderson .Paak, BJ The Chicago Kid, Raury & Jamila Woods)",
+      "our_year": 2016,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Michael Jackson",
+      "title": "Jam",
+      "our_year": 1992,
+      "mb_year": 1991,
+      "mb_releases": 57,
+      "gap": 1,
+      "decade": "1990s"
+    },
+    {
+      "artist": "*NSYNC",
+      "title": "Bye Bye Bye",
+      "our_year": 2000,
+      "mb_year": 2000,
+      "mb_releases": 170,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "George Michael",
+      "title": "Killer / Papa Was a Rollin' Stone",
+      "our_year": 1993,
+      "mb_year": 1993,
+      "mb_releases": 13,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Mc Romantico",
+      "title": "As Novinha Tão Sensacional",
+      "our_year": 2015,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "George Strait",
+      "title": "Check Yes Or No",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 12,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Green Day",
+      "title": "2000 Light Years Away",
+      "our_year": 1991,
+      "mb_year": 1991,
+      "mb_releases": 25,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "The Motors",
+      "title": "Airport",
+      "our_year": 1978,
+      "mb_year": 1978,
+      "mb_releases": 97,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Jason Aldean",
+      "title": "Any Ol' Barstool",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 12,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Joyce Manor",
+      "title": "Constant Headache",
+      "our_year": 2010,
+      "mb_year": 2011,
+      "mb_releases": 5,
+      "gap": -1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Vicetone",
+      "title": "Astronomia",
+      "our_year": 2016,
+      "mb_year": 2016,
+      "mb_releases": 7,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "The Hated",
+      "title": "Changing Chekov",
+      "our_year": 1988,
+      "mb_year": 2024,
+      "mb_releases": 1,
+      "gap": -36,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Julia Michaels",
+      "title": "What A Time",
+      "our_year": 2019,
+      "mb_year": 2019,
+      "mb_releases": 24,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "twocolors",
+      "title": "Lovefool",
+      "our_year": 2020,
+      "mb_year": 2020,
+      "mb_releases": 38,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Santigold",
+      "title": "L.E.S. Artistes",
+      "our_year": 2001,
+      "mb_year": 2008,
+      "mb_releases": 3,
+      "gap": -7,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Belly",
+      "title": "Super-Connected",
+      "our_year": 1995,
+      "mb_year": 1995,
+      "mb_releases": 22,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Smokey Robinson & The Miracles",
+      "title": "I Second That Emotion (Single Version / Mono)",
+      "our_year": 1967,
+      "mb_year": 2006,
+      "mb_releases": 1,
+      "gap": -39,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Velvet Revolver",
+      "title": "Dirty Little Thing",
+      "our_year": 2004,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Pakito",
+      "title": "Moving on Stereo",
+      "our_year": 2006,
+      "mb_year": 2006,
+      "mb_releases": 4,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "The Statler Brothers",
+      "title": "Flowers on the Wall",
+      "our_year": 1966,
+      "mb_year": 1966,
+      "mb_releases": 137,
+      "gap": 0,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Juliana Hatfield",
+      "title": "Everybody Loves Me But You",
+      "our_year": 1992,
+      "mb_year": 1992,
+      "mb_releases": 10,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Steve Wariner",
+      "title": "You Can Dream Of Me",
+      "our_year": 1982,
+      "mb_year": 1985,
+      "mb_releases": 8,
+      "gap": -3,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Angels and Airwaves",
+      "title": "Everything's Magic",
+      "our_year": 2007,
+      "mb_year": 2007,
+      "mb_releases": 20,
+      "gap": 0,
+      "decade": "2000s"
+    },
+    {
+      "artist": "BLACKPINK",
+      "title": "Pink Venom",
+      "our_year": 2022,
+      "mb_year": 2022,
+      "mb_releases": 63,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Nicki Minaj",
+      "title": "Only",
+      "our_year": 2014,
+      "mb_year": 2014,
+      "mb_releases": 24,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Bowling For Soup",
+      "title": "Almost",
+      "our_year": 1999,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Carrie Underwood",
+      "title": "Undo It",
+      "our_year": 2010,
+      "mb_year": 2009,
+      "mb_releases": 28,
+      "gap": 1,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Dee Dee Sharp",
+      "title": "Ride!",
+      "our_year": 1962,
+      "mb_year": 2005,
+      "mb_releases": 7,
+      "gap": -43,
+      "decade": "1960s"
+    },
+    {
+      "artist": "The Pogues",
+      "title": "I'm a Man You Don't Meet Every Day",
+      "our_year": 1985,
+      "mb_year": 1985,
+      "mb_releases": 27,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Dirty Projectors",
+      "title": "Stillness Is The Move",
+      "our_year": 2009,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Dua Lipa",
+      "title": "Break My Heart",
+      "our_year": 2020,
+      "mb_year": 2020,
+      "mb_releases": 120,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "Dennis Brown",
+      "title": "Let Me Down Easy",
+      "our_year": 1979,
+      "mb_year": 1993,
+      "mb_releases": 5,
+      "gap": -14,
+      "decade": "1970s"
+    },
+    {
+      "artist": "The 13th Floor Elevators",
+      "title": "You're Gonna Miss Me - Original",
+      "our_year": 1966,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Bobby Brown",
+      "title": "On Our Own",
+      "our_year": 1989,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Dee Dee Sharp",
+      "title": "Gravy (For My Mashed Potatoes)",
+      "our_year": 1962,
+      "mb_year": 1992,
+      "mb_releases": 7,
+      "gap": -30,
+      "decade": "1960s"
+    },
+    {
+      "artist": "Tom T. Hall",
+      "title": "Country Is",
+      "our_year": 1974,
+      "mb_year": 1974,
+      "mb_releases": 23,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "JID",
+      "title": "Surround Sound",
+      "our_year": 2022,
+      "mb_year": 2022,
+      "mb_releases": 8,
+      "gap": 0,
+      "decade": "2020s"
+    },
+    {
+      "artist": "USHER",
+      "title": "Caught Up",
+      "our_year": 2004,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2000s"
+    },
+    {
+      "artist": "Hi-Five",
+      "title": "I Can't Wait Another Minute",
+      "our_year": 1991,
+      "mb_year": 1990,
+      "mb_releases": 13,
+      "gap": 1,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Lil Nas X",
+      "title": "Panini",
+      "our_year": 2019,
+      "mb_year": 2019,
+      "mb_releases": 17,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Paloma Faith",
+      "title": "Only Love Can Hurt Like This",
+      "our_year": 2014,
+      "mb_year": null,
+      "mb_releases": 0,
+      "gap": null,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Gouryella",
+      "title": "Gouryella",
+      "our_year": 1999,
+      "mb_year": 1999,
+      "mb_releases": 45,
+      "gap": 0,
+      "decade": "1990s"
+    },
+    {
+      "artist": "Descendents",
+      "title": "Suburban Home",
+      "our_year": 1982,
+      "mb_year": 1982,
+      "mb_releases": 11,
+      "gap": 0,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Chris Brown",
+      "title": "Ayo",
+      "our_year": 2015,
+      "mb_year": 2015,
+      "mb_releases": 21,
+      "gap": 0,
+      "decade": "2010s"
+    },
+    {
+      "artist": "Tammy Wynette",
+      "title": "'Til I Can Make It on My Own",
+      "our_year": 1976,
+      "mb_year": 1976,
+      "mb_releases": 31,
+      "gap": 0,
+      "decade": "1970s"
+    },
+    {
+      "artist": "Madonna",
+      "title": "Open Your Heart",
+      "our_year": 1986,
+      "mb_year": 1990,
+      "mb_releases": 41,
+      "gap": -4,
+      "decade": "1980s"
+    },
+    {
+      "artist": "Prince",
+      "title": "Cream",
+      "our_year": 1991,
+      "mb_year": 1999,
+      "mb_releases": 4,
+      "gap": -8,
+      "decade": "1990s"
+    },
+    {
+      "artist": "John Mayer",
+      "title": "Waiting On the World to Change",
+      "our_year": 2006,
+      "mb_year": 2006,
+      "mb_releases": 69,
+      "gap": 0,
+      "decade": "2000s"
+    }
+  ]
+}
