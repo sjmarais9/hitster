@@ -1,49 +1,70 @@
 {
   "meta": {
-    "count": 4,
+    "count": 6,
     "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
   },
   "year_suspects": [
     {
-      "artist": "Thirty Seconds To Mars",
-      "title": "The Kill",
-      "our_year": 2008,
-      "spotify_earliest_year": 2005,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Leroy Van Dyke",
-      "title": "Walk on By",
-      "our_year": 1961,
-      "spotify_earliest_year": 1956,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "The Youngbloods",
-      "title": "Get Together",
-      "our_year": 1969,
+      "artist": "Luther Ingram",
+      "title": "(If Loving You Is Wrong) I Don't Want to Be Right",
+      "our_year": 1972,
       "spotify_earliest_year": 1967,
       "note": "Spotify dates this earlier than we do. Our year may be wrong."
     },
     {
-      "artist": "Alan Jackson",
-      "title": "Livin' On Love",
-      "our_year": 1994,
-      "spotify_earliest_year": 1992,
+      "artist": "Taylor Swift",
+      "title": "Cruel Summer",
+      "our_year": 2023,
+      "spotify_earliest_year": 2019,
       "note": "Spotify dates this earlier than we do. Our year may be wrong."
     },
     {
-      "artist": "Bow Wow Wow",
-      "title": "I Want Candy",
-      "our_year": 1982,
-      "spotify_earliest_year": 1980,
+      "artist": "Ramones",
+      "title": "I Wanna Be Sedated",
+      "our_year": 1988,
+      "spotify_earliest_year": 1978,
       "note": "Spotify dates this earlier than we do. Our year may be wrong."
     },
     {
-      "artist": "Bobby Freeman",
-      "title": "C'mon and Swim",
-      "our_year": 1964,
-      "spotify_earliest_year": 1958,
+      "artist": "Frankie Knuckles",
+      "title": "Your Love",
+      "our_year": 2003,
+      "spotify_earliest_year": 1987,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    },
+    {
+      "artist": "Dinosaur Jr.",
+      "title": "Just Like Heaven",
+      "our_year": 1989,
+      "spotify_earliest_year": 1987,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    },
+    {
+      "artist": "Måneskin",
+      "title": "Beggin'",
+      "our_year": 2023,
+      "spotify_earliest_year": 2017,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    },
+    {
+      "artist": "Mayhem",
+      "title": "Freezing Moon",
+      "our_year": 1996,
+      "spotify_earliest_year": 1994,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    },
+    {
+      "artist": "Neil Sedaka",
+      "title": "Breaking Up Is Hard to Do",
+      "our_year": 1962,
+      "spotify_earliest_year": 1960,
+      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+    },
+    {
+      "artist": "Bush",
+      "title": "Machinehead",
+      "our_year": 1996,
+      "spotify_earliest_year": 1994,
       "note": "Spotify dates this earlier than we do. Our year may be wrong."
     }
   ],
@@ -51,6 +72,8 @@
     { "artist": "Ke$ha", "title": "TiK ToK", "year": 2009, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:0HPD5WQqrq7wPWR7P7Dw1i","title":"TiK ToK","artists":["Kesha"],"album":"Animal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] },
     { "artist": "Ke$ha", "title": "Die Young", "year": 2012, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7EQGXaVSyEDsCWKmUcfpLk","title":"Die Young","artists":["Kesha"],"album":"Warrior (Expanded Edition)","spotify_release_year":2012,"verdict":"reject"}] },
     { "artist": "Lauryn Hill", "title": "Ex-Factor", "year": 1998, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:2VjXGuPVVxyhMgER3Uz2Fe","title":"Ex-Factor","artists":["Ms. Lauryn Hill"],"album":"The Miseducation of Lauryn Hill","spotify_release_year":1998,"verdict":"probable"}] },
-    { "artist": "Ke$ha", "title": "We R Who We R", "year": 2010, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:3LUWWox8YYykohBbHUrrxd","title":"We R Who We R","artists":["Kesha"],"album":"Cannibal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] }
+    { "artist": "Ke$ha", "title": "We R Who We R", "year": 2010, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:3LUWWox8YYykohBbHUrrxd","title":"We R Who We R","artists":["Kesha"],"album":"Cannibal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] },
+    { "artist": "Quasi", "title": "The Poisoned Well", "year": 1998, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7dohWARxGFHofuq2JIXvVE","title":"The Mighty","artists":["Sting"],"album":"The Mighty Soundtrack","spotify_release_year":2004,"verdict":"reject"}] },
+    { "artist": "Lauryn Hill", "title": "Everything Is Everything", "year": 1999, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:7t86fVeDAd63ThaR0ZkxXS","title":"Everything Is Everything","artists":["Ms. Lauryn Hill"],"album":"The Miseducation of Lauryn Hill","spotify_release_year":1998,"verdict":"probable"}] }
   ]
 }
