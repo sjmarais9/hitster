@@ -23,6 +23,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { readSongs } from './lib/songs-file.mjs';
+import { shouldRefreshCanonicity } from './lib/import-policy.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXIT_RATE_LIMITED = 75;
@@ -152,6 +153,10 @@ if (stillLocked) {
 let hitQuota = false;
 let failed = false;
 
+// Read before a single song is resolved, so "did the pool grow" is a fact about
+// this run rather than about whatever the last one left behind.
+const poolAtStart = (await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] })).songs?.length ?? 0;
+
 for (const file of BATCHES) {
   const todo = await outstanding(file);
 
@@ -189,7 +194,13 @@ for (const file of BATCHES) {
 
 // Keep the pool's canonicity consistent as new songs land, so the sampler is
 // never weighting on scores computed from a smaller corpus.
-if (!hitQuota && !failed) {
+//
+// The condition is whether the pool grew, not whether the run finished tidily.
+// See lib/import-policy.mjs: gating this on `!hitQuota` meant it ran only when
+// nothing had landed, and it never once fired in nineteen importing runs.
+const poolAfterImport = (await readSongs(path.resolve(ROOT, 'data/songs.json'), { songs: [] })).songs?.length ?? 0;
+
+if (shouldRefreshCanonicity({ failed, poolBefore: poolAtStart, poolAfter: poolAfterImport })) {
   console.log('\nRefreshing canonicity across all files...');
   const scored = await new Promise((resolve) => {
     spawn(process.execPath, [path.join(ROOT, 'scripts', 'apply-canonicity.mjs')], {
