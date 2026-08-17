@@ -1,71 +1,204 @@
 {
   "meta": {
-    "count": 6,
-    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
+    "count": 9,
+    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year.",
+    "year_suspects": "Ranked worst first. `confirmed` means two independent sources agree our year is too late and is safe to act on; `check` means one source disputes it and the other is silent, which is usually the disputing source being wrong; `contradicted` means the second source backs our year. Nothing here has been applied."
   },
   "year_suspects": [
     {
-      "artist": "Luther Ingram",
-      "title": "(If Loving You Is Wrong) I Don't Want to Be Right",
-      "our_year": 1972,
-      "spotify_earliest_year": 1967,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+      "artist": "Steve Winwood",
+      "title": "Valerie",
+      "our_year": 1987,
+      "suggested_year": 1982,
+      "verdict": "confirmed",
+      "sources": 2,
+      "spotify_earliest_year": 1982,
+      "musicbrainz_year": 1982,
+      "musicbrainz_releases": 87,
+      "album": "Talking Back To The Night",
+      "note": "Spotify and MusicBrainz independently agree our year is too late. This is the pattern that was right six times out of six on 16 August. Apply it unless the album name says otherwise."
     },
     {
-      "artist": "Taylor Swift",
-      "title": "Cruel Summer",
+      "artist": "Three Days Grace",
+      "title": "Never Too Late",
+      "our_year": 2008,
+      "suggested_year": 2006,
+      "verdict": "confirmed",
+      "sources": 2,
+      "spotify_earliest_year": 2006,
+      "musicbrainz_year": 2006,
+      "musicbrainz_releases": 23,
+      "album": "One-X",
+      "note": "Spotify and MusicBrainz independently agree our year is too late. This is the pattern that was right six times out of six on 16 August. Apply it unless the album name says otherwise."
+    },
+    {
+      "artist": "Darlene Love",
+      "title": "Christmas (Baby Please Come Home)",
       "our_year": 2023,
-      "spotify_earliest_year": 2019,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+      "suggested_year": 1963,
+      "verdict": "confirmed",
+      "sources": 2,
+      "spotify_earliest_year": 1963,
+      "musicbrainz_year": 1963,
+      "musicbrainz_releases": 59,
+      "album": "A Christmas Gift For You From Phil Spector",
+      "note": "Spotify and MusicBrainz independently agree our year is too late. This is the pattern that was right six times out of six on 16 August. Apply it unless the album name says otherwise."
     },
     {
-      "artist": "Ramones",
-      "title": "I Wanna Be Sedated",
+      "artist": "Three Days Grace",
+      "title": "Pain",
+      "our_year": 2008,
+      "suggested_year": 2006,
+      "verdict": "confirmed",
+      "sources": 2,
+      "spotify_earliest_year": 2006,
+      "musicbrainz_year": 2006,
+      "musicbrainz_releases": 24,
+      "album": "One-X",
+      "note": "Spotify and MusicBrainz independently agree our year is too late. This is the pattern that was right six times out of six on 16 August. Apply it unless the album name says otherwise."
+    },
+    {
+      "artist": "Maroon 5",
+      "title": "Sunday Morning",
+      "our_year": 2004,
+      "suggested_year": 2002,
+      "verdict": "confirmed",
+      "sources": 2,
+      "spotify_earliest_year": 2002,
+      "musicbrainz_year": 2002,
+      "musicbrainz_releases": 67,
+      "album": "Songs About Jane: 10th Anniversary Edition",
+      "note": "Spotify and MusicBrainz independently agree our year is too late. This is the pattern that was right six times out of six on 16 August. Apply it unless the album name says otherwise."
+    },
+    {
+      "artist": "Andy Williams",
+      "title": "Can't Take My Eyes Off You",
+      "our_year": 1967,
+      "suggested_year": 1963,
+      "verdict": "check",
+      "sources": 1,
+      "spotify_earliest_year": 1963,
+      "musicbrainz_year": 1998,
+      "musicbrainz_releases": 3,
+      "album": "Can't Get Used To Losing You / Love, Andy",
+      "note": "One source disputes our year and the other cannot corroborate it. Usually the disputing source is wrong - most often MusicBrainz holding a CD reissue of a pre-1990 song. Needs a person."
+    },
+    {
+      "artist": "Eddy Arnold",
+      "title": "Then You Can Tell Me Goodbye",
+      "our_year": 1971,
+      "suggested_year": 1968,
+      "verdict": "check",
+      "sources": 1,
+      "spotify_earliest_year": 2014,
+      "musicbrainz_year": 1968,
+      "musicbrainz_releases": 3,
+      "album": "Complete Original #1 Hits",
+      "note": "One source disputes our year and the other cannot corroborate it. Usually the disputing source is wrong - most often MusicBrainz holding a CD reissue of a pre-1990 song. Needs a person."
+    },
+    {
+      "artist": "Legiao Urbana",
+      "title": "Tempo Perdido",
+      "our_year": 2007,
+      "suggested_year": 1986,
+      "verdict": "check",
+      "sources": 1,
+      "spotify_earliest_year": 1986,
+      "musicbrainz_year": null,
+      "musicbrainz_releases": null,
+      "album": "Dois",
+      "note": "One source disputes our year and the other cannot corroborate it. Usually the disputing source is wrong - most often MusicBrainz holding a CD reissue of a pre-1990 song. Needs a person."
+    },
+    {
+      "artist": "Cutty Ranks",
+      "title": "Limb By Limb",
+      "our_year": 1993,
+      "suggested_year": 1900,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 1900,
+      "musicbrainz_year": 1993,
+      "musicbrainz_releases": 4,
+      "album": "Reggae Anthology: Cutty Ranks - Limb By Limb",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "Zac Brown Band",
+      "title": "Toes",
+      "our_year": 2009,
+      "suggested_year": 2005,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 2008,
+      "musicbrainz_year": 2005,
+      "musicbrainz_releases": 21,
+      "album": "The Foundation",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "Luke Combs",
+      "title": "She Got the Best of Me",
+      "our_year": 2018,
+      "suggested_year": 2016,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 2018,
+      "musicbrainz_year": 2016,
+      "musicbrainz_releases": 9,
+      "album": "This One's for You Too (Deluxe Edition)",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "Shinedown",
+      "title": "Second Chance",
+      "our_year": 2008,
+      "suggested_year": 2000,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 2008,
+      "musicbrainz_year": 2000,
+      "musicbrainz_releases": 31,
+      "album": "The Sound of Madness (Deluxe Edition)",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "The Easybeats",
+      "title": "Friday on My Mind",
+      "our_year": 1967,
+      "suggested_year": 1965,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 1965,
+      "musicbrainz_year": 1967,
+      "musicbrainz_releases": 2,
+      "album": "Easy",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "Static-X",
+      "title": "Push It",
+      "our_year": 2000,
+      "suggested_year": 1998,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 1999,
+      "musicbrainz_year": 1998,
+      "musicbrainz_releases": 33,
+      "album": "Wisconsin Death Trip",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
+    },
+    {
+      "artist": "Aretha Franklin",
+      "title": "Jump To It",
       "our_year": 1988,
-      "spotify_earliest_year": 1978,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Frankie Knuckles",
-      "title": "Your Love",
-      "our_year": 2003,
-      "spotify_earliest_year": 1987,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Dinosaur Jr.",
-      "title": "Just Like Heaven",
-      "our_year": 1989,
-      "spotify_earliest_year": 1987,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Måneskin",
-      "title": "Beggin'",
-      "our_year": 2023,
-      "spotify_earliest_year": 2017,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Mayhem",
-      "title": "Freezing Moon",
-      "our_year": 1996,
-      "spotify_earliest_year": 1994,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Neil Sedaka",
-      "title": "Breaking Up Is Hard to Do",
-      "our_year": 1962,
-      "spotify_earliest_year": 1960,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
-    },
-    {
-      "artist": "Bush",
-      "title": "Machinehead",
-      "our_year": 1996,
-      "spotify_earliest_year": 1994,
-      "note": "Spotify dates this earlier than we do. Our year may be wrong."
+      "suggested_year": 1982,
+      "verdict": "contradicted",
+      "sources": 1,
+      "spotify_earliest_year": 1982,
+      "musicbrainz_year": 1989,
+      "musicbrainz_releases": 54,
+      "album": "Jump to It (Expanded Edition)",
+      "note": "One source disputes our year and the other backs it. Our year is probably right; recorded so it is not raised again."
     }
   ],
   "songs": [
@@ -73,7 +206,10 @@
     { "artist": "Ke$ha", "title": "Die Young", "year": 2012, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7EQGXaVSyEDsCWKmUcfpLk","title":"Die Young","artists":["Kesha"],"album":"Warrior (Expanded Edition)","spotify_release_year":2012,"verdict":"reject"}] },
     { "artist": "Lauryn Hill", "title": "Ex-Factor", "year": 1998, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:2VjXGuPVVxyhMgER3Uz2Fe","title":"Ex-Factor","artists":["Ms. Lauryn Hill"],"album":"The Miseducation of Lauryn Hill","spotify_release_year":1998,"verdict":"probable"}] },
     { "artist": "Ke$ha", "title": "We R Who We R", "year": 2010, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:3LUWWox8YYykohBbHUrrxd","title":"We R Who We R","artists":["Kesha"],"album":"Cannibal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] },
-    { "artist": "Quasi", "title": "The Poisoned Well", "year": 1998, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7dohWARxGFHofuq2JIXvVE","title":"The Mighty","artists":["Sting"],"album":"The Mighty Soundtrack","spotify_release_year":2004,"verdict":"reject"}] },
-    { "artist": "Lauryn Hill", "title": "Everything Is Everything", "year": 1999, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:7t86fVeDAd63ThaR0ZkxXS","title":"Everything Is Everything","artists":["Ms. Lauryn Hill"],"album":"The Miseducation of Lauryn Hill","spotify_release_year":1998,"verdict":"probable"}] }
+    { "artist": "Quasi", "title": "The Poisoned Well", "year": 1998, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:6J3jpwxyjeiCn0KuL6RMOO","title":"Bullet In My Hand","artists":["Redlight King"],"album":"Something For The Pain","spotify_release_year":2011,"verdict":"reject"}] },
+    { "artist": "Lauryn Hill", "title": "Everything Is Everything", "year": 1999, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:7t86fVeDAd63ThaR0ZkxXS","title":"Everything Is Everything","artists":["Ms. Lauryn Hill"],"album":"The Miseducation of Lauryn Hill","spotify_release_year":1998,"verdict":"probable"}] },
+    { "artist": "Young Jeezy", "title": "Soul Survivor", "year": 2005, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:12bZjnzjuJoyRslVC4BmxU","title":"Soul Survivor","artists":["Jeezy","Akon"],"album":"Let's Get It: Thug Motivation 101","spotify_release_year":2005,"verdict":"probable"}] },
+    { "artist": "Bob Seger & The Silver Bullet Band", "title": "Old Time Rock & Roll", "year": 1978, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:5EOoMWIB9iK4ZpcSex9Ec7","title":"Old Time Rock & Roll","artists":["Bob Seger"],"album":"Stranger In Town","spotify_release_year":1978,"verdict":"probable"}] },
+    { "artist": "M", "title": "Pop muzik", "year": 1979, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:6z3HAUZpAyJ0ctsbAwAiw3","title":"Pop Muzik","artists":["M / Robin Scott","Robin Scott"],"album":"Pop Muzik","spotify_release_year":2022,"verdict":"probable"}] }
   ]
 }

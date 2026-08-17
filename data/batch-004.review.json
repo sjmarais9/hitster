@@ -1,7 +1,8 @@
 {
   "meta": {
     "count": 11,
-    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year."
+    "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year.",
+    "year_suspects": "Ranked worst first. `confirmed` means two independent sources agree our year is too late and is safe to act on; `check` means one source disputes it and the other is silent, which is usually the disputing source being wrong; `contradicted` means the second source backs our year. Nothing here has been applied."
   },
   "year_suspects": [],
   "songs": [
