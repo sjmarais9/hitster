@@ -134,6 +134,15 @@ export const VERIFIED_YEARS = {
   'dinosaur jr.|just like heaven': 1989,    // a Cure cover; 1987 is the original
   'neil sedaka|breaking up is hard to do': 1962,
   'luther ingram|(if loving you is wrong) i don\'t want to be right': 1972,
+
+  // --- 17 August, the first five the two-source check confirmed on its own ----
+  // Spotify and MusicBrainz landed on the same year independently, and the
+  // album already in the pool names the record in every case.
+  'steve winwood|valerie': 1982,            // Talking Back To The Night
+  'three days grace|never too late': 2006,  // One-X
+  'three days grace|pain': 2006,            // One-X
+  'darlene love|christmas (baby please come home)': 1963, // A Christmas Gift For You
+  'maroon 5|sunday morning': 2002,          // Songs About Jane
 };
 
 /** The key a song is recorded under. */

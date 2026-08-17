@@ -101,6 +101,17 @@ test('two agreeing sources take the earlier year', () => {
   assert.equal(v.year, 1994);
 });
 
+test('a placeholder date is not a source', () => {
+  // Spotify returns 1900 for "no idea" and marks it no differently from a real
+  // date. Cutty Ranks' Limb By Limb came back 1900 against our 1993.
+  const v = classifyYear({ ours: 1993, spotify: 1900, musicbrainz: 1993 });
+  assert.equal(v.verdict, 'ok', 'a placeholder must not count as disputing');
+
+  // And two placeholders must never read as two sources agreeing.
+  const both = classifyYear({ ours: 1993, spotify: 1900, musicbrainz: 1900 });
+  assert.notEqual(both.verdict, 'confirmed');
+});
+
 test('the thresholds are the ones the rule was fitted with', () => {
   // Both are load-bearing: MARGIN 1 would fire on every pressing date, and
   // TOLERANCE 0 would drop Mayhem, the only confirmed case where the two

@@ -37,6 +37,22 @@ export const MARGIN = 2;
 export const TOLERANCE = 1;
 
 /**
+ * Below this a date is a placeholder rather than a year.
+ *
+ * Spotify returns 1900 when it does not know, and it is not marked as unknown
+ * in any way the response distinguishes - Cutty Ranks' Limb By Limb came back
+ * 1900 on 17 August. Read literally that is a source claiming a 93-year error.
+ * It landed harmlessly then, because MusicBrainz backed our year and the verdict
+ * came out `contradicted`, but a second placeholder on the other side would have
+ * read as two sources agreeing.
+ *
+ * The pool's oldest song is from the 1950s, so nothing real is lost here.
+ */
+export const PLAUSIBLE_FROM = 1940;
+
+const usable = (y) => (typeof y === 'number' && y >= PLAUSIBLE_FROM ? y : null);
+
+/**
  * What the sources say about one song's year.
  *
  * `confirmed` - both sources agree our year is too late. Safe to act on.
@@ -47,7 +63,10 @@ export const TOLERANCE = 1;
  *               Recorded so it can be ranked last rather than re-litigated.
  * `ok`        - nothing disputes it.
  */
-export function classifyYear({ ours, spotify = null, musicbrainz = null }) {
+export function classifyYear({ ours, spotify: rawSpotify = null, musicbrainz: rawMusicbrainz = null }) {
+  const spotify = usable(rawSpotify);
+  const musicbrainz = usable(rawMusicbrainz);
+
   const disputes = (y) => y !== null && y <= ours - MARGIN;
   const backs = (y) => y !== null && Math.abs(y - ours) <= TOLERANCE;
 
