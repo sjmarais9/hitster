@@ -1,0 +1,335 @@
+{
+  "seed": 20260815,
+  "asked": [
+    {
+      "stratum": "suspect",
+      "artist": "Queen",
+      "title": "You're My Best Friend",
+      "year": 1975,
+      "canonicity": 62,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Wire",
+      "title": "I Am the Fly",
+      "year": 1978,
+      "canonicity": 6,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Steely Dan",
+      "title": "Rikki Don't Lose That Number",
+      "year": 1974,
+      "canonicity": 19,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Elton John",
+      "title": "Candle in the Wind",
+      "year": 1973,
+      "canonicity": 47,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "AC/DC",
+      "title": "Girls Got Rhythm",
+      "year": 1979,
+      "canonicity": 17,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Jerry Lee Lewis",
+      "title": "Great Balls of Fire",
+      "year": 1957,
+      "canonicity": 37,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Kansas",
+      "title": "Carry On Wayward Son",
+      "year": 1976,
+      "canonicity": 87,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Neil Young",
+      "title": "Old Man",
+      "year": 1972,
+      "canonicity": 67,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Blue Oyster Cult",
+      "title": "(Don't Fear) The Reaper",
+      "year": 1976,
+      "canonicity": 90,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "The Band",
+      "title": "The Weight",
+      "year": 1968,
+      "canonicity": 61,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Small Faces",
+      "title": "Itchycoo Park",
+      "year": 1967,
+      "canonicity": 24,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Fleetwood Mac",
+      "title": "You Make Loving Fun",
+      "year": 1977,
+      "canonicity": 39,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Dr. Hook",
+      "title": "Sylvia's Mother",
+      "year": 1972,
+      "canonicity": 2,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Johnny Cash",
+      "title": "Folsom Prison Blues",
+      "year": 1955,
+      "canonicity": 88,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "The Beatles",
+      "title": "Here Comes the Sun",
+      "year": 1969,
+      "canonicity": 83,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "even"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Creedence Clearwater Revival",
+      "title": "Up Around the Bend",
+      "year": 1970,
+      "canonicity": 70,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Cat Stevens",
+      "title": "Wild World",
+      "year": 1970,
+      "canonicity": 27,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "The Rolling Stones",
+      "title": "Brown Sugar",
+      "year": 1971,
+      "canonicity": 77,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Pink Floyd",
+      "title": "Hey You",
+      "year": 1979,
+      "canonicity": 49,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "The Clash",
+      "title": "Lost in the Supermarket",
+      "year": 1979,
+      "canonicity": 27,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Blondie",
+      "title": "Dreaming",
+      "year": 1979,
+      "canonicity": 32,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Led Zeppelin",
+      "title": "Black Dog",
+      "year": 1971,
+      "canonicity": 70,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "The Monkees",
+      "title": "Daydream Believer",
+      "year": 1967,
+      "canonicity": 56,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Aerosmith",
+      "title": "Toys in the Attic",
+      "year": 1975,
+      "canonicity": 21,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Sam Cooke",
+      "title": "A Change Is Gonna Come",
+      "year": 1964,
+      "canonicity": 69,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Creedence Clearwater Revival",
+      "title": "Proud Mary",
+      "year": 1969,
+      "canonicity": 75,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Bad Company",
+      "title": "Feel Like Makin' Love",
+      "year": 1975,
+      "canonicity": 24,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "control",
+      "artist": "Led Zeppelin",
+      "title": "Kashmir",
+      "year": 1975,
+      "canonicity": 79,
+      "was": {
+        "familiarity": "familiar",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "Bobby Darin",
+      "title": "Mack the Knife",
+      "year": 1959,
+      "canonicity": 21,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    },
+    {
+      "stratum": "suspect",
+      "artist": "10cc",
+      "title": "I'm Not in Love",
+      "year": 1975,
+      "canonicity": 79,
+      "was": {
+        "familiarity": "deep",
+        "skew": "adults"
+      }
+    }
+  ]
+}
