@@ -476,7 +476,7 @@
     { "artist": "Little Mix", "title": "Sweet Melody", "year": 2020, "decade": "2020s", "genres": ["pop"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 14 },
     { "artist": "Wizkid", "title": "Essence", "year": 2020, "decade": "2020s", "genres": ["afrobeats"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 48 },
     { "artist": "Tems", "title": "Free Mind", "year": 2020, "decade": "2020s", "genres": ["afrobeats","r&b"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 15 },
-    { "artist": "Kabza De Small", "title": "Sponono", "year": 2020, "decade": "2020s", "genres": ["amapiano"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 5 },
+    { "artist": "Kabza De Small", "title": "Sponono", "year": 2020, "decade": "2020s", "genres": ["amapiano"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 4 },
     { "artist": "Olivia Rodrigo", "title": "traitor", "year": 2021, "decade": "2020s", "genres": ["pop"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 76 },
     { "artist": "Doja Cat", "title": "Need to Know", "year": 2021, "decade": "2020s", "genres": ["pop","r&b"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 66 },
     { "artist": "Maneskin", "title": "ZITTI E BUONI", "year": 2021, "decade": "2020s", "genres": ["rock","glam rock"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 2 },
