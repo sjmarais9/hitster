@@ -245,10 +245,25 @@ built for and it already works.
 1. **Spotify Premium.** The Web Playback SDK will not stream without it, and
    there is no way around that inside Spotify.
 2. **A place on this app's allowlist.** The app is in development mode, so only
-   accounts added by hand can log in — everyone else is refused at the consent
-   screen. Add them in the [dashboard](https://developer.spotify.com/dashboard)
-   under **Settings → User Management**, using the email on their Spotify
-   account.
+   accounts added by hand can use it. Add them in the
+   [dashboard](https://developer.spotify.com/dashboard) under **Settings → User
+   Management**, using the email on their Spotify account — not necessarily the
+   address they message you from, and it has to match exactly.
+
+**Spotify does not enforce that allowlist at the consent screen.** This is worth
+knowing before it costs an evening. An unregistered account authorises cleanly
+and receives a working token; it is refused only when it first calls the Web API,
+and refused with a 403 whose body is plain text rather than Spotify's usual JSON
+error — so anything parsing for JSON finds nothing to report.
+
+Nothing before Play touches the Web API. The login is Spotify's own, the deck is
+local, and the pool is a file in this repo. So the refusal surfaced at the first
+tap of Play, in front of everyone, reading `PUT me/player/play failed (403)` and
+nothing else — indistinguishable from a Premium problem, a dead device or a bad
+network, and it took several rounds of guessing to tell apart. `connect()` now
+makes one `GET me` before the SDK loads, which moves the refusal to the start
+screen and names it: *You're not on this app's allowlist, ask the owner to add
+you.*
 
 Development mode caps how many users can be listed. **The dashboard's User
 Management page is the authority on that number**; it has changed more than once

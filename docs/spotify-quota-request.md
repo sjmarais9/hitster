@@ -30,9 +30,13 @@ Development mode is what we have, and it means:
 2. **`popularity` stripped** from every track object, on search and on
    `GET /tracks/{id}` alike.
 3. **`GET /tracks?ids=` returns 403** regardless of how many ids are passed.
-4. **A five-user limit.** Not a problem here: the game runs on the owner's
-   account and the phone is passed around, so only one account ever
-   authenticates.
+4. **A five-user limit.** This one now bites. It is irrelevant to the game the
+   app was built for — one account, one phone, passed around the table — but a
+   friend hosting their own game night has to be added by hand under **Settings
+   → User Management**, and there is room for very few of them. The dashboard is
+   the authority on the current number; it has changed before. Note that Spotify
+   does not enforce the list at the consent screen, so an account left off it
+   logs in successfully and fails later; see **Sharing it** in the README.
 
 Points 2 and 3 come from the November 2024 endpoint restrictions rather than
 from quota, so even a hypothetical extension might not have restored them.
