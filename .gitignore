@@ -31,3 +31,8 @@ data/generation-rejects.json
 
 # Assembled by the deploy workflow.
 _site/
+
+# Screenshots friends send when something breaks. Useful while diagnosing, and
+# of no value afterwards - they are a moment on someone else's phone, not a
+# record of anything the repo needs to keep.
+debug screenshots/
