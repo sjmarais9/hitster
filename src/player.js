@@ -12,8 +12,8 @@
 // Both routes end up calling the same Web API play endpoint with a device_id,
 // so only the device differs.
 
-import { api } from './api.js?v=160df1b9';
-import { getAccessToken } from './auth.js?v=160df1b9';
+import { api } from './api.js?v=af25f86d';
+import { getAccessToken } from './auth.js?v=af25f86d';
 
 const SDK_URL = 'https://sdk.scdn.co/spotify-player.js';
 
@@ -115,11 +115,40 @@ function remoteControl() {
   };
 }
 
+// One GET against the Web API before anything else touches it, for two reasons.
+//
+// It settles Premium honestly. The SDK's `account_error` was carrying that job
+// alone and does not always fire - a free account can be handed a device_id,
+// look connected, and fail only on the first tap of Play, which is the worst
+// possible moment and the least legible error. `product` is not a guess.
+//
+// It also separates two failures that are otherwise identical from a toast: an
+// account the API refuses, and an API this phone cannot reach at all. If this
+// call succeeds and the play call still fails, the problem is the play command
+// - not the token, the network, or the login.
+async function requirePremium() {
+  let me;
+  try {
+    me = await api('me');
+  } catch (err) {
+    err.fatal = true;   // The fallback route is no more reachable than this was.
+    throw err;
+  }
+
+  if (me?.product !== 'premium') {
+    const err = new Error(`Spotify Premium is required (this account is "${me?.product ?? 'unknown'}")`);
+    err.fatal = true;
+    throw err;
+  }
+}
+
 /**
  * Connects the best available route.
  * `onFallback` is called with a reason if the SDK route is unavailable.
  */
 export async function connect({ onFallback }) {
+  await requirePremium();
+
   let route;
   try {
     route = await connectSdk();
@@ -142,10 +171,19 @@ export async function connect({ onFallback }) {
 
     async play(uri) {
       const deviceId = route.deviceId ?? await route.deviceIdFor();
-      await api(`me/player/play?device_id=${deviceId}`, {
-        method: 'PUT',
-        body: { uris: [uri] },
-      });
+      try {
+        await api(`me/player/play?device_id=${deviceId}`, {
+          method: 'PUT',
+          body: { uris: [uri] },
+        });
+      } catch (err) {
+        // Which route produced this is the first thing anyone debugging it asks,
+        // and a screenshot of the toast is usually all they get. The two routes
+        // fail for different reasons - a dead SDK device and an unreachable
+        // phone app look identical without it.
+        err.message = `${err.message} [${route.mode}]`;
+        throw err;
+      }
     },
   };
 }
