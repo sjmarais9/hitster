@@ -12,8 +12,8 @@
 // Both routes end up calling the same Web API play endpoint with a device_id,
 // so only the device differs.
 
-import { api } from './api.js?v=af25f86d';
-import { getAccessToken } from './auth.js?v=af25f86d';
+import { api } from './api.js?v=af9d443f';
+import { getAccessToken } from './auth.js?v=af9d443f';
 
 const SDK_URL = 'https://sdk.scdn.co/spotify-player.js';
 
@@ -122,15 +122,31 @@ function remoteControl() {
 // look connected, and fail only on the first tap of Play, which is the worst
 // possible moment and the least legible error. `product` is not a guess.
 //
-// It also separates two failures that are otherwise identical from a toast: an
-// account the API refuses, and an API this phone cannot reach at all. If this
-// call succeeds and the play call still fails, the problem is the play command
-// - not the token, the network, or the login.
-async function requirePremium() {
+// It also moves the allowlist check to the front door. This app is in
+// development mode, and Spotify does not enforce that at the consent screen: an
+// account that is not registered authorises cleanly, receives a working token,
+// and is refused only when it first calls the Web API. Nothing before Play does,
+// so a friend could log in, tune the deck, sit down with everyone, and discover
+// at the first tap that he was never able to play anything.
+async function checkAccount() {
   let me;
   try {
     me = await api('me');
   } catch (err) {
+    // Spotify's wording is "The user is not registered for this application.
+    // Please check your settings on developer.spotify.com" - accurate, addressed
+    // to the developer, and no use at all to the person holding the phone, who
+    // has no dashboard to check. With the scopes we ask for there is no other
+    // realistic 403 on `me`, so say the thing they can act on.
+    //
+    // It arrives as a plain-text body rather than Spotify's usual JSON error,
+    // which is how it stayed hidden for so long: api.js parsed for JSON, found
+    // none, and fell back to reporting the status by itself.
+    if (err.status === 403) {
+      const refused = new Error("You're not on this app's allowlist, ask the owner to add you.");
+      refused.fatal = true;
+      throw refused;
+    }
     err.fatal = true;   // The fallback route is no more reachable than this was.
     throw err;
   }
@@ -147,7 +163,7 @@ async function requirePremium() {
  * `onFallback` is called with a reason if the SDK route is unavailable.
  */
 export async function connect({ onFallback }) {
-  await requirePremium();
+  await checkAccount();
 
   let route;
   try {
