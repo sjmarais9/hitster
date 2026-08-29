@@ -61,7 +61,7 @@ test('a locally known song outranks a globally known one the family misses', () 
   assert.ok(local > global, `local ${local} should beat global ${global} at TRUST=${TRUST}`);
 });
 
-test('casual favours known songs, encyclopaedic does not', () => {
+test('casual favours known songs, encyclopaedic barely does', () => {
   const deck = [
     song({ title: 'famous', familiarity: 'standard', canonicity: 95 }),
     song({ title: 'obscure', familiarity: 'deep', canonicity: 5 }),
@@ -70,8 +70,14 @@ test('casual favours known songs, encyclopaedic does not', () => {
   const casual = distribution(deck, { level: 'casual', crowd: 0.5 });
   assert.ok(casual.famous > 0.9, `casual should mostly draw the famous song, got ${casual.famous}`);
 
+  // Encyclopaedic was k=0 - perfectly uniform - until the pool grew past the
+  // point where that was playable. It still has to be the loudest rung by a
+  // wide margin, and it still has to reach the obscure song often; what it no
+  // longer claims is that it flips a fair coin.
   const all = distribution(deck, { level: 'everything', crowd: 0.5 });
-  assert.ok(Math.abs(all.famous - 0.5) < 0.05, `everything should be near uniform, got ${all.famous}`);
+  assert.ok(all.obscure > 0.25, `encyclopaedic should still deal deep cuts freely, got ${all.obscure}`);
+  assert.ok(all.famous < casual.famous - 0.15,
+    `encyclopaedic must stay far looser than casual, got ${all.famous} vs ${casual.famous}`);
 });
 
 test('nothing is ever excluded, only made less likely', () => {
@@ -329,7 +335,52 @@ test('the levels are declared quietest first', () => {
   for (let i = 1; i < ks.length; i++) {
     assert.ok(ks[i] < ks[i - 1], `k must fall along the sweep, got ${ks.join(' -> ')}`);
   }
-  assert.equal(ks.at(-1), 0, 'the loudest setting must be perfectly flat');
+  // The loudest rung used to be pinned at exactly 0, which said the app makes no
+  // judgement at all there. On a 9,430-song pool that dealt 56% of the night
+  // below canonicity 60 and stopped being a game anyone finished, so the claim
+  // was traded for a playable one. It still has to be close to flat, or the
+  // sweep has no loud end.
+  assert.ok(ks.at(-1) >= 0 && ks.at(-1) <= 1,
+    `the loudest setting must stay near flat, got ${ks.at(-1)}`);
+});
+
+test('casual deals songs the table can actually place', () => {
+  // The complaint that caused the retune: Casual played harder than "mostly
+  // songs everyone knows" promises. The measure is the share of the draw below
+  // canonicity 60 - roughly where a song stops being one anyone can name - and
+  // it was 12.3%, about one card in eight, or three a night.
+  //
+  // The tag share is not the measure. `deep` sat at 1.4% throughout and looked
+  // fine, because what was actually being dealt was a middle tier that had
+  // drifted: songs still tagged `familiar` whose canonicity had fallen away
+  // underneath them. A test watching the tag would have passed all the way
+  // through the problem.
+  const pool = JSON.parse(readFileSync('data/songs.json', 'utf8')).songs;
+  const measured = pool.filter((s) => s.canonicity !== null && s.canonicity !== undefined);
+
+  const obscureShare = (level) => {
+    const w = weightsFor(pool, { level, crowd: 0.5 });
+    const total = w.reduce((a, b) => a + b, 0);
+    let share = 0;
+    pool.forEach((song, i) => {
+      if (song.canonicity !== null && song.canonicity !== undefined && song.canonicity < 60) {
+        share += w[i] / total;
+      }
+    });
+    return share;
+  };
+
+  assert.ok(measured.length / pool.length > 0.9, 'too few songs measured for this to mean anything');
+
+  const casual = obscureShare('casual');
+  assert.ok(casual < 0.09,
+    `casual draws ${(casual * 100).toFixed(1)}% below canonicity 60; the label promises better`);
+
+  // And the ladder still has to climb, or the knob is decoration.
+  const confident = obscureShare('confident');
+  const everything = obscureShare('everything');
+  assert.ok(confident > casual, `confident ${confident} should reach deeper than casual ${casual}`);
+  assert.ok(everything > confident, `encyclopaedic ${everything} should reach deepest`);
 });
 
 test('each level is a step someone would feel, on the pool that ships', () => {

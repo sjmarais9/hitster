@@ -56,6 +56,7 @@ Resolve a batch of songs to Spotify track URIs.
   --port <number>   loopback port for auth; must be registered as a redirect
                     URI in the Spotify dashboard   (default 3000)
   --limit <number>  only process the first N songs, for a quick trial
+  --min-canonicity <n>  skip candidates scoring below n (default 45)
   --recheck         re-resolve songs that already have a URI
   --dry-run         resolve and report, write nothing
   --help
@@ -68,6 +69,19 @@ function parseArgs(argv) {
     review: 'data/review.json',
     port: 3000,
     limit: Infinity,
+    // The floor below which a song is not worth a quota slot.
+    //
+    // 45 is where familiarityFor stops calling a song `familiar` and starts
+    // calling it `deep`, so this imports what the sampler would go on to treat
+    // as known and declines what it would bury. Picking any other number would
+    // mean maintaining two different opinions about the same boundary.
+    //
+    // The backlog is the argument for having a floor at all. What remains of
+    // batch-006 is 1,445 songs with a median canonicity of 24, and the queue is
+    // sorted best-first, so everything above the floor already landed - weeks of
+    // daily quota would buy nothing but songs the deck is built to avoid
+    // dealing. --min-canonicity 0 restores the old behaviour.
+    minCanonicity: 45,
     recheck: false,
     dryRun: false,
   };
@@ -79,6 +93,7 @@ function parseArgs(argv) {
     else if (arg === '--review') opts.review = argv[++i];
     else if (arg === '--port') opts.port = Number(argv[++i]);
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
+    else if (arg === '--min-canonicity') opts.minCanonicity = Number(argv[++i]);
     else if (arg === '--recheck') opts.recheck = true;
     else if (arg === '--dry-run') opts.dryRun = true;
     else { console.error(`Unknown option: ${arg}\n${HELP}`); process.exit(1); }
@@ -191,13 +206,24 @@ async function main() {
 
   // Count what is outstanding before --limit truncates it, or the summary
   // reports everything as already done whenever a limit is in play.
-  const outstanding = batch.filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
+  const unresolved = batch.filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
+
+  // A song nobody could measure is not thereby obscure, so it is not turned
+  // away: an unmeasured candidate still gets its slot and the tag decides.
+  const belowFloor = unresolved.filter(
+    (song) => song.canonicity != null && song.canonicity < opts.minCanonicity,
+  );
+  const outstanding = unresolved.filter((song) => !belowFloor.includes(song));
   const queue = outstanding.slice(0, opts.limit);
 
-  const alreadyDone = batch.length - outstanding.length;
+  const alreadyDone = batch.length - unresolved.length;
   const deferred = outstanding.length - queue.length;
   console.log(`${batch.length} songs in ${opts.in}`);
   if (alreadyDone > 0) console.log(`${alreadyDone} already resolved, skipping (use --recheck to redo)`);
+  if (belowFloor.length > 0) {
+    console.log(`${belowFloor.length} below canonicity ${opts.minCanonicity}, not worth a quota slot`
+      + ' (--min-canonicity 0 to import them anyway)');
+  }
   if (deferred > 0) console.log(`${deferred} outstanding but held back by --limit`);
   if (queue.length === 0) console.log('Nothing new to resolve.');
   else console.log(`Resolving ${queue.length}...`);

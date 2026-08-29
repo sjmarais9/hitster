@@ -28,7 +28,7 @@ import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs, readSongs } from './lib/songs-file.mjs';
 import {
-  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf,
+  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
 } from './lib/seeds.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -95,6 +95,7 @@ function leansToward(entry, family) {
 
 // Titles that are not the song we want, however well they match.
 const JUNK = /\bkaraoke\b|\bmade popular by\b|\btribute\b|\bin the style of\b|\blive\b(?!\s*(and|to|at last))|\bremix\b|\bedit\b|\bmix\)|\bcover\b|\binstrumental\b|\bbacking track\b|\bremaster(ed)?\b/i;
+
 
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -253,7 +254,10 @@ async function main() {
   }
 
   const candidates = Object.entries(index)
-    .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(e.title) && !known.has(key)
+    .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(cleanTitle(e.title))
+      // Both spellings have to be unheld: the index key carries the decorated
+      // title, and what we would actually write is the clean one.
+      && !known.has(key) && !known.has(`${normalise(e.artist)}|${normalise(cleanTitle(e.title))}`)
       && leansToward(e, GENRE)
       // A recovery pass only wants the songs Deezer can actually date. Without
       // this it would re-ask MusicBrainz about 9,516 candidates to reach the
@@ -306,7 +310,12 @@ async function main() {
     const crowd = crowdDecade(entry);
     if (!crowd) { reject(key, entry, 'noEra'); continue; }
 
-    let year = await yearOf(entry.artist, entry.title);
+    // Every lookup below asks about the song, not the pressing. MusicBrainz has
+    // no release-group for "Karma Chameleon (Remastered 2002)", and asking for
+    // one spends a second of the rate limit to learn nothing.
+    const title = cleanTitle(entry.title);
+
+    let year = await yearOf(entry.artist, title);
     await sleep(PAUSE_MS);
 
     // MusicBrainz has no release-group for a great many songs - it dropped
@@ -318,12 +327,12 @@ async function main() {
     // for recent songs, because before 1990 it returns remaster dates - Johnny
     // B. Goode as 2017.
     if (year === null) {
-      year = await itunesYear(entry.artist, entry.title);
+      year = await itunesYear(entry.artist, title);
       if (year !== null) reasons.viaItunes++;
       await sleep(350);
     }
     if (year === null && RECENT.has(crowd)) {
-      year = await deezerYear(entry.artist, entry.title);
+      year = await deezerYear(entry.artist, title);
       if (year !== null) reasons.viaDeezer++;
       await sleep(220);
     }
@@ -334,9 +343,13 @@ async function main() {
     // decade, or we do not use it.
     if (!agreesWithEra(year, crowd)) { reject(key, entry, 'decadeClash'); continue; }
 
+    // Remembered clean, so a second decorated pressing of the same song in the
+    // index cannot come back as a second card.
+    known.add(`${normalise(entry.artist)}|${normalise(title)}`);
+
     produced.push({
       artist: entry.artist,
-      title: entry.title,
+      title,
       year,
       decade: decadeOf(year),
       genres: genresOf(entry),

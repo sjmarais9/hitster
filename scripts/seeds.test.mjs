@@ -9,7 +9,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf,
+  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
   PLURALITY, SHARED, STANDARD, FAMILIAR, DECADE_YEARS,
 } from './lib/seeds.mjs';
 
@@ -187,4 +187,34 @@ test('every skew seed is a value the sampler knows', () => {
       assert.ok(known.includes(skewFor(year, p)), `${year}/${p}`);
     }
   }
+});
+
+test('a version suffix is stripped, because a remaster is the same song', () => {
+  assert.equal(cleanTitle('Should I Stay or Should I Go (Remastered)'), 'Should I Stay or Should I Go');
+  assert.equal(cleanTitle("Ain't Nobody (Remix)"), "Ain't Nobody");
+  assert.equal(cleanTitle('Karma Chameleon (Remastered 2002)'), 'Karma Chameleon');
+  assert.equal(cleanTitle('Pony (Extended Mix)'), 'Pony');
+  assert.equal(cleanTitle('Bohemian Rhapsody - 2011 Remaster'), 'Bohemian Rhapsody');
+});
+
+test('a parenthetical that is part of the song survives', () => {
+  // The whole risk of stripping: these read like decoration and are not. A
+  // featured artist changes who is on the card, and Gypsy Woman is known by the
+  // half that would have been cut.
+  assert.equal(cleanTitle('Jenny from the Block (feat. Jadakiss)'), 'Jenny from the Block (feat. Jadakiss)');
+  assert.equal(cleanTitle("Gypsy Woman (She's Homeless)"), "Gypsy Woman (She's Homeless)");
+  assert.equal(cleanTitle('Africa'), 'Africa');
+});
+
+test('stripping leaves genuine karaoke and tributes still catchable', () => {
+  // cleanTitle runs before the junk filter, so it must not launder an actual
+  // karaoke recording into something that reads as the real single.
+  for (const junk of ['Karaoke Version of Hey Jude', 'Hey Jude (In the Style of The Beatles)']) {
+    assert.match(cleanTitle(junk), /karaoke|in the style of/i, `${junk} lost its tell`);
+  }
+});
+
+test('cleanTitle is idempotent', () => {
+  const once = cleanTitle('Ain\'t Nobody (Remix)');
+  assert.equal(cleanTitle(once), once);
 });

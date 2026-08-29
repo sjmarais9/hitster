@@ -108,34 +108,52 @@ same weights the draw uses, and a test pins it to what 40,000 draws actually do.
 Worth being precise, because "weighted, not filtered" is easy to state and easy
 to quietly break.
 
-**No familiarity level ever excludes a song, and Encyclopaedic does not even
-disfavour one.** The level sets an exponent `k` applied to each song's score.
-The right-hand column is what it actually costs, measured across the pool:
+**No familiarity level ever excludes a song.** The level sets an exponent `k`
+applied to each song's score. What it costs, measured across the pool:
 
-| Level | `k` | Ratio, best song to worst | Share of the draw tagged `deep` |
+| Level | `k` | Share below canonicity 60 | Share tagged `deep` |
 |---|---|---|---|
-| Casual | 4 | ~1,500:1 | 3.8% — one every 26 cards |
-| Confident | 2 | 39:1 | 14.3% — one every 7 |
-| Devoted | 1 | 6:1 | 25.5% — one in four |
-| **Encyclopaedic** | 0 | **1:1** — perfectly flat | 41.6% — two in five |
+| Casual | 6 | 6.1% — about one card in 16 | 0.4% |
+| Confident | 3 | 15.5% — one in 6 | 4.3% |
+| Devoted | 1.5 | 26.6% — one in 4 | 14.2% |
+| **Encyclopaedic** | 0.5 | 40.5% — two in five | 29.4% |
 
-The right-hand column moves as the pool grows, so it is measured rather than
-promised: `npm test` recomputes it against the songs that actually ship.
+Both columns move as the pool grows, so they are measured rather than promised:
+`npm test` recomputes them against the songs that actually ship.
 
-At Encyclopaedic every song's familiarity weight is `scoreOf ** 0`, which is 1
-however obscure it is, so the draw is shaped only by the crowd slider and the
-two mixers. At Casual the most obscure possible song is about 1,500 times less
-likely than a perfect standard — you would probably never see it in a night, but
-the weight stays positive, which is the whole point. The tags are wrong often
-enough that a mis-tagged song must not vanish from every game forever.
+The **left-hand measure is canonicity, not the tag**, and that distinction is
+the whole reason this table was rewritten. The `deep` share looked healthy at
+1.4% right through a Casual night that played visibly harder than "mostly songs
+everyone knows" claims. What was being dealt was the middle tier: songs still
+tagged `familiar` whose measured canonicity had fallen away underneath them as
+the pool grew. A number watching the tag agreed with itself all the way through.
+
+**The whole ladder was retuned on 29 August 2026**, and every rung moved. The
+old `k` values were fitted when the pool held 1,649 songs, nearly all chosen by
+hand. It now holds 9,430, 85% of them from a playlist index, and the same
+exponent against a corpus that much broader is a different game — Casual had
+drifted to 12.3% below canonicity 60, roughly three cards a night nobody could
+place.
+
+**Encyclopaedic is no longer perfectly flat.** `k=0` said the app makes no
+judgement at all, which was an honest claim on a curated pool and an unplayable
+one at 9,430 songs: it dealt 56% of the night below canonicity 60, four cards in
+seven that nobody can place. That is not a harder game but a different and worse
+one. `k=0.5` still reaches the whole pool and still favours almost nothing, and
+the label now says what it deals rather than making the stronger claim.
+
+At Casual the most obscure possible song is many thousands of times less likely
+than a perfect standard — you would probably never see it in a night, but the
+weight stays positive, which is the whole point. The tags are wrong often enough
+that a mis-tagged song must not vanish from every game forever.
 
 **Devoted was added because the original three were not evenly spaced**, and the
 gap was not in the middle: Casual to Confident was the difference between two
 kinds of rare, while Confident to Encyclopaedic was where a night changed
-character. `k=1` sits in that gap. A test holds every neighbouring pair to at
-least half as much again *on the shipped pool*, so a fifth level cannot be added
-without earning its place — and the guarantee cannot quietly stop being true, as
-an earlier one did while its test went on passing against a deck of its own.
+character. A test holds every neighbouring pair to at least half as much again
+*on the shipped pool*, so a fifth level cannot be added without earning its place
+— and the guarantee cannot quietly stop being true, as an earlier one did while
+its test went on passing against a deck of its own.
 
 The **crowd slider** zeroes the opposite side only at *exactly* 0 or 1. Its step
 is 0.05 and the label reads "Adults only" from 0.05 down, so one notch off the
@@ -331,6 +349,19 @@ Neither source knows South African music. Vulindlela appears on **zero**
 playlists despite eight South African harvest themes. That is why local tags win
 at `TRUST = 0.6`, and no external source will ever fix it.
 
+`TRUST` is worth its 0.6 only for a tag a person actually chose. **batch-006 was
+generated, so its `familiarity` is a function of its canonicity** — the two are
+one signal wearing two hats, and `scoreOf` blends them believing otherwise. That
+is harmless while they agree, and they stopped: canonicity is a percentile over
+the whole corpus, so every import re-ranked it, and 3,400 seeded tags were left
+asserting a popularity their own score no longer supported.
+
+`apply-canonicity.mjs` now re-derives the seeded tags whenever it re-ranks, and
+never touches one the household has ruled on — a seeded song can be reviewed
+later, and at that moment the tag stops being the generator's to move. A test in
+`data.test.mjs` asserts no seeded tag has drifted, because the failure is silent
+by nature: every value involved is a legal one.
+
 ```sh
 node scripts/harvest-playlists.mjs    # build the playlist index (~40 min)
 node scripts/fetch-lastfm.mjs         # listener counts, needs LASTFM_API_KEY
@@ -355,6 +386,28 @@ every 25 songs, so a run stopped by the quota keeps everything and resumes.
 Spotify's daily quota allows roughly 400 songs per lockout cycle, and the cycle
 is longer than a day. A large backlog takes weeks. Extended quota is **not
 available** — see [docs/spotify-quota-request.md](docs/spotify-quota-request.md).
+
+**The import declines anything below canonicity 45** (`--min-canonicity`, and
+`0` restores the old behaviour). 45 is where `familiarityFor` stops calling a
+song `familiar` and starts calling it `deep`, so the import brings in what the
+sampler would go on to treat as known and declines what it would bury.
+
+The floor is there because quota is the scarce thing. What remained of batch-006
+was 1,445 songs with a median canonicity of 24, and the queue is sorted
+best-first — so everything worth having had already landed, and weeks of daily
+quota would have bought nothing but songs the deck is built to avoid dealing.
+1,300 of those are now skipped and 145 still imported.
+
+**More familiar songs come from the generator, not the backlog.** Deezer's
+playlists carry whichever pressing a curator happened to add, so the index holds
+`Should I Stay or Should I Go (Remastered)` rather than the song. The junk filter
+read those as junk — they are not; a remaster of a famous single is the famous
+single — and because it filters before the reject cache, they were never even
+recorded as tried. `cleanTitle` now strips the version suffix before the junk
+test, which takes the available candidate pool from 32 to 1,577: *Space Oddity*,
+*Streets of Philadelphia*, *Ain't Nobody*, *Karma Chameleon*. A parenthetical
+that is part of the song — `(feat. …)`, `Gypsy Woman (She's Homeless)` — is left
+alone, and a genuine karaoke recording is still refused.
 
 Authentication is PKCE over a loopback server rather than Client Credentials,
 specifically so no client secret exists anywhere in this project.

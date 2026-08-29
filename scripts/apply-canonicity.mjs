@@ -26,6 +26,8 @@ import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
 import { percentiles, blend } from './lib/percentiles.mjs';
+import { familiarityFor } from './lib/seeds.mjs';
+import { verdictFor } from './lib/reviewed.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TARGETS = [
@@ -36,6 +38,25 @@ const TARGETS = [
   'data/batch-005.seed.json',
   'data/batch-006.seed.json',
 ];
+
+// The one batch nobody tagged by hand. Its `familiarity` was derived from
+// canonicity by the generator, which makes the two the same signal rather than
+// the two independent ones scoreOf believes it is blending - so when this file
+// re-ranks canonicity, that tag has to move with it or it is left asserting
+// something no longer true of any source.
+//
+// It drifted exactly that way. Twenty-one percent of the seeded tags disagreed
+// with their own canonicity by the time anyone measured, and almost all of the
+// drift ran one way: 797 songs still tagged `standard` and 778 still `familiar`
+// on scores that no longer supported either. The pool had grown from 1,649
+// songs to 9,430 underneath them, every new arrival pushing the percentiles of
+// everything above it, and Casual went on dealing them as though they were
+// songs the table would know.
+//
+// Hand-tagged files are never touched. A person saying Yvonne Chaka Chaka's
+// Umqombothi is familiar here is exactly the knowledge a global playlist count
+// cannot hold, and it disagrees with canonicity on purpose.
+const SEEDED = 'data/batch-006.seed.json';
 
 const readJson = async (file, fallback) => {
   try {
@@ -113,13 +134,41 @@ const scores = new Map(all.map((s) => [s.id, blend([byPlaylists, byListeners], s
 // Nothing is written here. The check below decides whether these scores are fit
 // to keep, and it cannot do that after the files have already been overwritten.
 
+// Which songs carry a generator-derived tag rather than a person's. Identity
+// rather than file, because songs.json holds both kinds side by side once a
+// seeded song has been imported into the pool.
+const seededDoc = docs.find(({ file }) => file === SEEDED);
+const seeded = new Set(
+  (seededDoc?.doc.songs ?? []).map((s) => `${s.artist}|${s.title}`.toLowerCase()),
+);
+
 let changed = 0;
+let retagged = 0;
 for (const { doc } of docs) {
   doc.songs = (doc.songs ?? []).map((song) => {
-    const score = scores.get(`${song.artist}|${song.title}`.toLowerCase()) ?? null;
-    if (song.canonicity === score) return song;
-    changed++;
-    return { ...song, canonicity: score };
+    const id = `${song.artist}|${song.title}`.toLowerCase();
+    const score = scores.get(id) ?? null;
+
+    // Re-derive the seeded tag from the score it was derived from in the first
+    // place. A song nobody could measure keeps whatever tag it has: there is
+    // nothing to re-derive from, and guessing would be worse than stale.
+    //
+    // Never a song the household has ruled on. A seeded song can be reviewed
+    // later - that is what a review is for - and at that moment the tag stops
+    // being the generator's to move. Leaving this out flipped Montell Jordan's
+    // Get It On Tonite from the `deep` the review gave it back to `familiar`,
+    // which is the exact shape of the bug data.test.mjs was written for: a rule
+    // and a person disagreeing, and the rule winning quietly because every
+    // value it wrote was a legal one.
+    const judged = verdictFor(song)?.familiarity;
+    const familiarity = judged ?? (seeded.has(id) && score !== null
+      ? familiarityFor(score, song.genres)
+      : song.familiarity);
+
+    if (song.canonicity === score && song.familiarity === familiarity) return song;
+    if (song.canonicity !== score) changed++;
+    if (song.familiarity !== familiarity) retagged++;
+    return { ...song, familiarity, canonicity: score };
   });
 }
 
@@ -128,6 +177,7 @@ for (const { doc } of docs) {
 const values = [...scores.values()].filter((v) => v !== null).sort((a, b) => a - b);
 console.log(`${all.length} distinct songs, ${values.length} scored`);
 console.log(`${changed} song records ${dryRun ? 'would be' : ''} updated across ${docs.length} files`);
+console.log(`${retagged} seeded familiarity tags ${dryRun ? 'would be' : ''} re-derived from the new scores`);
 console.log(`\ndistribution: min ${values[0]}, median ${values[Math.floor(values.length / 2)]}, max ${values[values.length - 1]}`);
 
 const tiers = { standard: [], familiar: [], deep: [] };

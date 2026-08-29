@@ -19,6 +19,7 @@ import assert from 'node:assert/strict';
 import { statSync } from 'node:fs';
 import { readSongs } from './lib/songs-file.mjs';
 import { verdictFor, verifiedYearFor } from './lib/reviewed.mjs';
+import { familiarityFor } from './lib/seeds.mjs';
 
 const POOL = 'data/songs.json';
 const BATCHES = [
@@ -180,6 +181,43 @@ test('no rule has overwritten a judgement the household made', () => {
     }
   }
   assert.deepEqual(wrong, [], `\n  ${wrong.join('\n  ')}\n`);
+});
+
+test('no seeded tag has drifted away from its own canonicity', () => {
+  // batch-006 was generated, not judged: its `familiarity` is a function of its
+  // canonicity, so the two are one signal wearing two hats. src/scoring.js
+  // blends them believing they are independent, which is harmless only while
+  // they still agree.
+  //
+  // They stopped agreeing. Canonicity is a percentile over the whole corpus, so
+  // every import re-ranked it, and 3,400 seeded tags were left asserting a
+  // popularity their own score no longer supported - 797 still `standard` and
+  // 778 still `familiar` on numbers that had moved underneath them. The effect
+  // reached the table: Casual dealt about one card in eight below canonicity 60,
+  // which is where a song stops being one anyone can place.
+  //
+  // apply-canonicity.mjs now re-derives the seeded tags whenever it re-ranks.
+  // This asserts it actually did, because the failure is silent by nature -
+  // every value involved is a legal one.
+  const seeded = new Set(
+    (batches.find(([f]) => f.includes('batch-006'))?.[1] ?? [])
+      .map((s) => `${s.artist}|${s.title}`.toLowerCase()),
+  );
+
+  const drifted = [];
+  for (const song of corpus) {
+    const id = `${song.artist}|${song.title}`.toLowerCase();
+    if (!seeded.has(id) || song.canonicity === null || song.canonicity === undefined) continue;
+    // A song the household has ruled on is no longer the generator's to move.
+    if (verdictFor(song)?.familiarity) continue;
+    const expected = familiarityFor(song.canonicity, song.genres);
+    if (song.familiarity !== expected) {
+      drifted.push(`${song.artist} - ${song.title}: tagged ${song.familiarity}, `
+        + `canonicity ${song.canonicity} says ${expected}`);
+    }
+  }
+  assert.deepEqual(drifted.slice(0, 10), [],
+    `${drifted.length} seeded tag(s) no longer match their score -- ${drifted.slice(0, 10).join('; ')}`);
 });
 
 test('no lookup has undone a year that was established against a source', () => {

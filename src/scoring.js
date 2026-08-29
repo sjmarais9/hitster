@@ -42,33 +42,37 @@ export function scoreOf(song) {
 // well-known songs. This is the whole of what the UI levels do, and it is the
 // main dial for tuning how a night plays without touching any song data.
 //
-// Four rather than three, because the old spacing was not even. Measured across
-// the pool, as the share of the draw that is tagged `deep`:
+// Retuned on 29 August 2026, on a 9,430-song pool, after a night of Casual
+// played harder than the label promises. The useful measure turned out not to
+// be the `deep` share - a tag - but the share of the draw below canonicity 60,
+// which is roughly where a song stops being one the table can shout at:
 //
-//   k=4  Casual          3.8%    one deep cut every 26 cards
-//   k=2  Confident      14.3%    one every 7
-//   k=1  Devoted        25.5%    one in four
-//   k=0  Encyclopaedic  41.6%    two in five
+//        k     below canon 60     `deep` share
+//   Casual         6.0%               0.4%
+//   Confident     17.3%               4.6%
+//   Devoted       30.7%              16.0%
+//   Encyclo.      46.3%              33.0%
 //
-// Measured on the 1,649 songs playable today, and they move as the pool grows -
-// the earlier figures in this comment were taken on a 7,500-song corpus and
-// were badly out of date by the time anyone read them. scripts/stats.mjs and
-// the level test both recompute rather than quoting.
+// Every rung moved. The old ladder was fitted when the pool held 1,649 songs
+// and nearly all of them had been chosen by hand; it now holds 9,430, of which
+// 85% arrived from a playlist index. The same k against a corpus that much
+// broader is a different game, and Casual had drifted to 12.3% below canon 60 -
+// about one card in eight, or three a night, which is what was actually felt.
 //
-// Casual to Confident is the difference between two kinds of rare, which nobody
-// at a table would feel. Confident to Encyclopaedic was a sevenfold jump - the
-// point where a night changes character - and k=1 is the rung that was missing
-// from it.
-//
-// Declaration order is the order they appear on the knob, quietest first. A
-// test holds them to descending k, so the control cannot end up wired backwards.
+// These figures move as the pool grows. scripts/stats.mjs and the level test
+// both recompute rather than quoting, because the last set of numbers written
+// into this comment was stale within a fortnight.
 export const LEVELS = {
-  casual: { label: 'Casual', hint: 'Mostly songs everyone knows', k: 4 },
-  confident: { label: 'Confident', hint: 'A fair spread', k: 2 },
-  devoted: { label: 'Devoted', hint: 'Album tracks, not just singles', k: 1 },
-  // Not "deep cuts included" - at k=0 nothing is favoured over anything at all,
-  // which is a stronger and stranger claim, and the label should make it.
-  everything: { label: 'Encyclopaedic', hint: 'Every song equally likely', k: 0 },
+  casual: { label: 'Casual', hint: 'Mostly songs everyone knows', k: 6 },
+  confident: { label: 'Confident', hint: 'A fair spread', k: 3 },
+  devoted: { label: 'Devoted', hint: 'Album tracks, not just singles', k: 1.5 },
+  // No longer k=0. Perfectly flat was an honest claim on a curated pool and an
+  // unplayable one here: every song equally likely now means 56% of the night
+  // below canonicity 60, which is not a harder game but a different and worse
+  // one - four in seven cards nobody can place. k=0.5 still reaches the whole
+  // pool and still favours almost nothing, and the label can now say what it
+  // actually deals rather than making the stronger claim.
+  everything: { label: 'Encyclopaedic', hint: 'Deep cuts and forgotten singles', k: 0.5 },
 };
 
 // --- skew --------------------------------------------------------------------

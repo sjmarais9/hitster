@@ -120,3 +120,21 @@ export const skewFor = (year, percentile) => {
   if (year >= 2015) return 'kids';
   return percentile >= SHARED ? 'even' : 'adults';
 };
+
+// A version suffix is decoration on a title, not a different song. Deezer's
+// playlists carry whichever pressing the curator happened to add, so the index
+// holds "Should I Stay or Should I Go (Remastered)" and "Ain't Nobody (Remix)"
+// rather than the songs themselves.
+//
+// JUNK read those as junk, which they are not: a remaster of a famous single is
+// the famous single. 1,651 candidates on five or more playlists were being
+// turned away that way, and because JUNK filters before the reject cache ever
+// sees them, they were never recorded as tried - so every run rediscovered and
+// re-discarded the same songs in silence. What was left to import instead had a
+// median canonicity of 24.
+//
+// Stripped first, then tested. Anything still matching JUNK afterwards is the
+// real thing - an actual karaoke or tribute recording - and is still refused.
+export const VERSION_SUFFIX = /\s*[([][^)\]]*\b(remaster(ed)?|remix|mix|edit|version|mono|stereo|single|radio|club|extended|re-?recorded|deluxe|bonus|\d{4})\b[^)\]]*[)\]]|\s*-\s*(\d{4}\s*)?(remaster(ed)?|remix|mono|stereo|single|radio|club|extended|version)\b.*$/gi;
+
+export const cleanTitle = (title) => String(title).replace(VERSION_SUFFIX, '').trim();
