@@ -10,6 +10,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
+  reconcileYear,
   PLURALITY, SHARED, STANDARD, FAMILIAR, DECADE_YEARS,
 } from './lib/seeds.mjs';
 
@@ -217,4 +218,46 @@ test('stripping leaves genuine karaoke and tributes still catchable', () => {
 test('cleanTitle is idempotent', () => {
   const once = cleanTitle('Ain\'t Nobody (Remix)');
   assert.equal(cleanTitle(once), once);
+});
+
+test('two sources landing on the same year corroborate it', () => {
+  const r = reconcileYear({ musicbrainz: 1978, itunes: 1978 });
+  assert.equal(r.year, 1978);
+  assert.equal(r.corroborated, true);
+});
+
+test('a year apart is a pressing date, and the earlier one wins', () => {
+  // Same rule year-check.mjs applies to the pool: the later of two close dates
+  // is almost always a reissue, so agreement is within TOLERANCE and the
+  // earlier is taken.
+  const r = reconcileYear({ musicbrainz: 1979, itunes: 1978 });
+  assert.equal(r.year, 1978);
+  assert.equal(r.corroborated, true);
+});
+
+test('one source alone is used but not corroborated', () => {
+  const r = reconcileYear({ musicbrainz: 1984, itunes: null });
+  assert.equal(r.year, 1984);
+  assert.equal(r.corroborated, false, 'a single source must still face the era check');
+});
+
+test('sources that disagree corroborate nothing, and MusicBrainz leads', () => {
+  // The failure this protects: MusicBrainz holding a CD reissue while iTunes
+  // has the original, or the reverse. Neither is trusted, so the era check -
+  // weak as it is - is still the thing that decides.
+  const r = reconcileYear({ musicbrainz: 1965, itunes: 1987 });
+  assert.equal(r.year, 1965);
+  assert.equal(r.corroborated, false);
+});
+
+test('no source at all returns nothing rather than a guess', () => {
+  assert.equal(reconcileYear({ musicbrainz: null, itunes: null, deezer: null }), null);
+});
+
+test('a third source can corroborate where the first two did not', () => {
+  // MusicBrainz alone against two that agree with each other: the pair wins,
+  // because two independent catalogues landing together is the whole rule.
+  const r = reconcileYear({ musicbrainz: 1999, itunes: 1978, deezer: 1978 });
+  assert.equal(r.year, 1978);
+  assert.equal(r.corroborated, true);
 });

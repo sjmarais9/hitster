@@ -1,3 +1,4 @@
+import { TOLERANCE } from './year-check.mjs';
 // The judgements the generator makes about a candidate, separated so they can
 // be tested without an API on the other end.
 //
@@ -138,3 +139,50 @@ export const skewFor = (year, percentile) => {
 export const VERSION_SUFFIX = /\s*[([][^)\]]*\b(remaster(ed)?|remix|mix|edit|version|mono|stereo|single|radio|club|extended|re-?recorded|deluxe|bonus|\d{4})\b[^)\]]*[)\]]|\s*-\s*(\d{4}\s*)?(remaster(ed)?|remix|mono|stereo|single|radio|club|extended|version)\b.*$/gi;
 
 export const cleanTitle = (title) => String(title).replace(VERSION_SUFFIX, '').trim();
+
+/**
+ * The year to use, and whether a second source stood behind it.
+ *
+ * The generator has always cross-checked its year against the decade the song's
+ * playlists put it in, and rejected a mismatch. That check exists because a
+ * wrong year is the one error that genuinely breaks this game, and it is worth
+ * keeping - but it is a weak witness, and it was the only one.
+ *
+ * It is weakest exactly where it is asked most. A song that spans eras collects
+ * playlists from all of them: YMCA is a 1978 record living on seventies lists,
+ * eighties lists and party lists, so the plurality that decides its "era" can
+ * land on the wrong decade while the year itself is not in doubt at all. 3,558
+ * candidates were refused that way and 496 of them appear on twenty or more
+ * playlists - Start Me Up, Knockin' On Heaven's Door, Landslide, Sit Down.
+ *
+ * So: ask the date sources whether they agree with each other first. Two
+ * independent catalogues landing on the same year is far stronger evidence than
+ * a playlist plurality, and it is the same rule year-check.mjs already applies
+ * to the pool - agreement within TOLERANCE, and the earlier of the two, because
+ * the later one is usually a reissue.
+ *
+ * A year with no corroboration still faces the era check. This widens what gets
+ * in; it does not lower the bar for a year nobody can second.
+ */
+export function reconcileYear(years) {
+  const found = Object.entries(years)
+    .filter(([, y]) => Number.isInteger(y))
+    .map(([source, y]) => ({ source, year: y }));
+
+  if (found.length === 0) return null;
+  if (found.length === 1) return { year: found[0].year, corroborated: false };
+
+  // Any two within TOLERANCE corroborate each other. Sorted first so the pair
+  // that agrees is found in year order and the earlier one is the one taken.
+  const sorted = [...found].sort((a, b) => a.year - b.year);
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i].year - sorted[i - 1].year <= TOLERANCE) {
+      return { year: sorted[i - 1].year, corroborated: true, sources: [sorted[i - 1].source, sorted[i].source] };
+    }
+  }
+
+  // They disagree. MusicBrainz is the catalogue rather than a store front, so
+  // it leads - but nothing is corroborated, and the era check still has to pass.
+  const preferred = found.find((f) => f.source === 'musicbrainz') ?? found[0];
+  return { year: preferred.year, corroborated: false };
+}

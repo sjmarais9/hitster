@@ -29,6 +29,7 @@ import { normalise } from './lib/match.mjs';
 import { writeSongs, readSongs } from './lib/songs-file.mjs';
 import {
   crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
+  reconcileYear,
 } from './lib/seeds.mjs';
 import { isExcluded } from './lib/excluded.mjs';
 
@@ -46,8 +47,10 @@ const OUT = path.join(ROOT, 'data', 'batch-006.seed.json');
 //
 //   noEra        the index has no clear era for it. Permanent until the
 //                playlist harvest is extended.
-//   decadeClash  two sources disagreed about when it came out. Permanent while
-//                the sources are the same - retrying gets the same answer.
+//   decadeClash  the year disagreed with the decade the playlists imply. No
+//                longer permanent: since a year two catalogues agree on is
+//                accepted without consulting the playlists at all, every one of
+//                these was decided under a rule that no longer exists. Retry.
 //   noYear       nobody could date it. Worth retrying when a NEW year source
 //                exists, which is exactly why the Deezer fallback was added.
 //
@@ -333,7 +336,7 @@ async function main() {
   const percentile = new Map();
   ranked.forEach(([key], i) => percentile.set(key, (i / Math.max(1, ranked.length - 1)) * 100));
 
-  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaItunes: 0, viaDeezer: 0 };
+  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaItunes: 0, viaDeezer: 0, corroborated: 0 };
   let sinceCheckpoint = 0;
 
   /** Remember a failure so no later pass pays for it twice. */
@@ -356,7 +359,7 @@ async function main() {
     await writeFile(REJECTS, JSON.stringify({
       meta: {
         count: Object.keys(rejects).length,
-        note: 'Candidates already tried and failed. noEra and decadeClash are permanent while the sources are unchanged; noYear is worth retrying when a new year source exists, via --retry noYear.',
+        note: 'Candidates already tried and failed. noEra is permanent until the playlist harvest is extended. decadeClash and noYear are both worth retrying when a year source changes - and the rule changed on 29 August 2026, when a year seconded by a second catalogue stopped needing to agree with the playlists as well. --retry decadeClash,noYear.',
       },
       rejected: rejects,
     }, null, 2) + '\n', 'utf8');
@@ -371,33 +374,45 @@ async function main() {
     // one spends a second of the rate limit to learn nothing.
     const title = cleanTitle(entry.title);
 
-    let year = await yearOf(entry.artist, title);
+    const musicbrainz = await yearOf(entry.artist, title);
     await sleep(PAUSE_MS);
 
-    // MusicBrainz has no release-group for a great many songs - it dropped
-    // 5,933 candidates on the first pass, and unevenly: African music was lost
-    // at 96%, reggae and funk at about 80%.
+    // iTunes is now asked for every candidate rather than only when MusicBrainz
+    // draws a blank, because its answer is worth more as a second opinion than
+    // as a fallback. It is accurate across every decade, it is an unrelated
+    // catalogue, and two of those landing on the same year is the strongest
+    // evidence available here - stronger by a distance than the playlist era.
     //
-    // Two fallbacks, tried in order of how far they can be trusted. iTunes
-    // first, because it is accurate across every decade. Deezer last, and only
-    // for recent songs, because before 1990 it returns remaster dates - Johnny
-    // B. Goode as 2017.
-    if (year === null) {
-      year = await itunesYear(entry.artist, title);
-      if (year !== null) reasons.viaItunes++;
-      await sleep(350);
-    }
-    if (year === null && RECENT.has(crowd)) {
-      year = await deezerYear(entry.artist, title);
-      if (year !== null) reasons.viaDeezer++;
-      await sleep(220);
-    }
+    // The cost is one extra request per candidate. Cheap against what it buys:
+    // 3,558 candidates had been refused for disagreeing with their playlists,
+    // 496 of them on twenty or more playlists.
+    const itunes = await itunesYear(entry.artist, title);
+    await sleep(350);
 
-    if (year === null) { reject(key, entry, 'noYear'); continue; }
+    // Deezer stays last and stays restricted to recent songs. Before 1990 it
+    // returns remaster dates - Johnny B. Goode as 2017 - so it is a fallback
+    // for songs the other two could not date, never a corroborating voice.
+    const deezer = (musicbrainz === null && itunes === null && RECENT.has(crowd))
+      ? await deezerYear(entry.artist, title)
+      : null;
+    if (deezer !== null) await sleep(220);
 
-    // The cross-check. Two unrelated sources must place the song in the same
-    // decade, or we do not use it.
-    if (!agreesWithEra(year, crowd)) { reject(key, entry, 'decadeClash'); continue; }
+    const settled = reconcileYear({ musicbrainz, itunes, deezer });
+    if (settled === null) { reject(key, entry, 'noYear'); continue; }
+    const { year, corroborated } = settled;
+
+    if (musicbrainz === null && itunes !== null) reasons.viaItunes++;
+    if (musicbrainz === null && itunes === null && deezer !== null) reasons.viaDeezer++;
+    if (corroborated) reasons.corroborated++;
+
+    // The era check, for a year no second source could stand behind. It is a
+    // weak witness - a song that spans decades collects playlists from all of
+    // them - so it decides only where nothing better is available, which is the
+    // change. It used to decide always, and threw away years that were right.
+    if (!corroborated && !agreesWithEra(year, crowd)) {
+      reject(key, entry, 'decadeClash');
+      continue;
+    }
 
     // Remembered clean, so a second decorated pressing of the same song in the
     // index cannot come back as a second card.
