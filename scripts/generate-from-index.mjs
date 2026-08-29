@@ -65,7 +65,27 @@ const flag = (name, fallback) => {
   return i === -1 ? fallback : Number(args[i + 1]);
 };
 const LIMIT = flag('limit', Infinity);
-const MIN_PLAYLISTS = flag('min-playlists', 5);
+const MIN_PLAYLISTS_DEFAULT = 5;
+
+// Restricts a run to artists the household actually listens to, and drops the
+// playlist threshold to nothing for them.
+//
+// MIN_PLAYLISTS is a proxy for "has anyone heard of this", measured across
+// everybody's playlists. It is the only evidence available for a stranger's
+// band and it is the wrong evidence for this one: being on the family's own
+// playlist is a stronger claim than being on five of anyone else's, and it is a
+// claim no global count can make. Fokofpolisiekar appears on four playlists
+// worldwide and Francois van Coke on four; both are under the bar, and all 96
+// South African tracks in the index were skipped for that reason alone.
+//
+// Still cross-checked for its year like anything else. The bar this lowers is
+// relevance, not correctness.
+const ARTISTS = (() => {
+  const i = args.indexOf('--artists');
+  return i === -1 ? null : args[i + 1];
+})();
+
+const MIN_PLAYLISTS = flag('min-playlists', ARTISTS ? 1 : MIN_PLAYLISTS_DEFAULT);
 
 // Restricts the run to one genre family, for topping up a deliberate lean.
 // The main pass produces a broad spread; a second pass with --genre rock and a
@@ -244,6 +264,14 @@ async function yearOf(artist, title) {
 async function main() {
   const index = (await readJson('data/canonicity.json')).tracks ?? {};
 
+  const allowed = ARTISTS
+    ? new Set((await readJson(ARTISTS)).artists.map((a) => normalise(a)))
+    : null;
+  if (allowed) {
+    console.log(`restricted to ${allowed.size} household artists, `
+      + `playlist threshold ${MIN_PLAYLISTS} rather than ${MIN_PLAYLISTS_DEFAULT}`);
+  }
+
   // Everything we already have, so we do not regenerate it.
   const known = new Set();
   for (const file of ['data/songs.json', 'data/batch-002.seed.json', 'data/batch-003.seed.json',
@@ -281,6 +309,7 @@ async function main() {
 
   const candidates = Object.entries(index)
     .filter(([key, e]) => e.n >= MIN_PLAYLISTS && !JUNK.test(cleanTitle(e.title))
+      && (!allowed || allowed.has(normalise(e.artist)))
       // Both spellings have to be unheld: the index key carries the decorated
       // title, and what we would actually write is the clean one.
       && !known.has(key) && !known.has(`${normalise(e.artist)}|${normalise(cleanTitle(e.title))}`)

@@ -26,6 +26,7 @@ import { pickBest, releaseYear } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
 import { classifyYear, bySeverity } from './lib/year-check.mjs';
 import { isExcluded } from './lib/excluded.mjs';
+import { normalise } from './lib/match.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -58,6 +59,8 @@ Resolve a batch of songs to Spotify track URIs.
                     URI in the Spotify dashboard   (default 3000)
   --limit <number>  only process the first N songs, for a quick trial
   --min-canonicity <n>  skip candidates scoring below n (default 45)
+  --artists <file>  artists exempt from that floor
+                    (default data/library-artists.json)
   --recheck         re-resolve songs that already have a URI
   --dry-run         resolve and report, write nothing
   --help
@@ -83,6 +86,7 @@ function parseArgs(argv) {
     // daily quota would buy nothing but songs the deck is built to avoid
     // dealing. --min-canonicity 0 restores the old behaviour.
     minCanonicity: 45,
+    artists: 'data/library-artists.json',
     recheck: false,
     dryRun: false,
   };
@@ -95,6 +99,7 @@ function parseArgs(argv) {
     else if (arg === '--port') opts.port = Number(argv[++i]);
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
     else if (arg === '--min-canonicity') opts.minCanonicity = Number(argv[++i]);
+    else if (arg === '--artists') opts.artists = argv[++i];
     else if (arg === '--recheck') opts.recheck = true;
     else if (arg === '--dry-run') opts.dryRun = true;
     else { console.error(`Unknown option: ${arg}\n${HELP}`); process.exit(1); }
@@ -214,10 +219,27 @@ async function main() {
     .filter((song) => !isExcluded(song))
     .filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
 
-  // A song nobody could measure is not thereby obscure, so it is not turned
-  // away: an unmeasured candidate still gets its slot and the tag decides.
+  // Artists the household actually listens to are exempt from the floor.
+  //
+  // The floor reads canonicity, which is a percentile over global playlist
+  // curation, and that measure has nothing useful to say about Spoegwolf or Die
+  // Heuwels Fantasties - they score 7 where the floor is 45, not because nobody
+  // knows them but because the world's playlist curators are not in
+  // Stellenbosch. Without this, the one part of the pool that is certain to be
+  // recognised at this table is the part most certain to be refused.
+  //
+  // Only the `local` list, and not every household artist. Canonicity is a fair
+  // measure of whether anyone knows Coldplay's Sparks - it says 20 and it is
+  // right - and exempting the whole playlist let deep album tracks through on
+  // the strength of the band being liked rather than the song being known.
+  const household = await readJson(opts.artists, { local: [] })
+    .then((doc) => new Set((doc.local ?? []).map((a) => normalise(a))))
+    .catch(() => new Set());
+
   const belowFloor = unresolved.filter(
-    (song) => song.canonicity != null && song.canonicity < opts.minCanonicity,
+    (song) => song.canonicity != null
+      && song.canonicity < opts.minCanonicity
+      && !household.has(normalise(song.artist)),
   );
   const outstanding = unresolved.filter((song) => !belowFloor.includes(song));
   const queue = outstanding.slice(0, opts.limit);
