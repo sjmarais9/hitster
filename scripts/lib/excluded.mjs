@@ -81,6 +81,11 @@ export const EXCLUDED_ARTISTS = new Set([
   "Mc Rodolfinho",
   "MC Ryan SP",
   "MC WM",
+  // Latin trap and reggaeton. Enormous globally, and Titi Me Pregunto was
+  // removed by name before it was obvious that eight more of his tracks sat in
+  // the pool on the same footing - NUEVAYoL at canonicity 87, DAKITI, Me Porto
+  // Bonito. Removing them one at a time was going to be a standing chore.
+  "Bad Bunny",
 ].map((a) => a.toLowerCase()));
 
 // One-offs: the artist is not otherwise excluded, but this track is the same
