@@ -398,6 +398,21 @@ best-first — so everything worth having had already landed, and weeks of daily
 quota would have bought nothing but songs the deck is built to avoid dealing.
 1,300 of those are now skipped and 145 still imported.
 
+The **playlist index is 149 themes**, and until 29 August 2026 it was 91
+decade-by-genre ones against ten general. A playlist called "1970s funk" is
+built by someone with something to prove: it reaches for the track you might not
+know, which is right for a genre list and wrong for measuring whether a table
+would shout at a song. Canonicity is a percentile over that index, so the measure
+was quietly answering "how deep is this within its niche". Twenty `FAMOUS`
+themes now balance it — *number one hits*, *songs everyone knows*, *dance floor
+fillers*, *wedding reception*. Tracks on 50+ playlists went from 785 to 1,251.
+
+Note what that did **not** do: it did not raise the local songs. Canonicity is
+relative, so when every count rises together the ranking barely moves - Mandoza's
+Nkalakatha went 42 to 41 across a harvest that found it on 37 playlists. Local
+music is protected by its hand tag at `TRUST = 0.6`, not by measurement, and
+that remains the only thing protecting it.
+
 **More familiar songs come from the generator, not the backlog.** Deezer's
 playlists carry whichever pressing a curator happened to add, so the index holds
 `Should I Stay or Should I Go (Remastered)` rather than the song. The junk filter

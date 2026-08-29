@@ -51,6 +51,28 @@ const GENERAL = [
   'one hit wonders', 'guitar classics', 'summer classics',
 ];
 
+// Themes that are about fame itself rather than about a genre.
+//
+// The grid below is 91 decade-by-genre themes against ten general ones, and a
+// playlist called "1970s funk" is built by someone with something to prove. It
+// reaches for the track you might not know, which is the right instinct for a
+// genre list and the wrong one for measuring whether a table would shout at a
+// song. The index inherited that bias wholesale and canonicity is a percentile
+// over it, so the measure was quietly asking "how deep is this within its
+// niche" when the game wants "would anyone here place it".
+//
+// These correct the balance. The songs they surface are the ones that appear on
+// lists whose entire premise is that everybody already knows them.
+const FAMOUS = [
+  'number one hits', 'chart toppers', 'biggest songs ever',
+  'classic hits radio', 'golden oldies', 'throwback hits',
+  'dance floor fillers', 'wedding reception', 'school disco',
+  'most played songs', 'iconic songs', 'songs everyone knows',
+  'sing in the car', 'crowd pleasers', 'floor fillers',
+  'best of the 80s', 'best of the 90s', 'best of the 2000s',
+  'radio favourites', 'timeless classics',
+];
+
 // South African and African themes, because global playlists systematically
 // under-represent the local canon. This is the same blind spot rule 1 in
 // docs/tagging.md exists to correct for.
@@ -80,6 +102,7 @@ function buildThemes() {
     }
   }
   for (const q of GENERAL) themes.push({ q, decade: null, genre: null });
+  for (const q of FAMOUS) themes.push({ q, decade: null, genre: null });
   for (const q of LOCAL) themes.push({ q, decade: null, genre: 'african' });
   for (const q of OCCASION) themes.push({ q, decade: null, genre: null });
   return themes;

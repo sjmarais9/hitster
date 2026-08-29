@@ -98,6 +98,23 @@ const JUNK = /\bkaraoke\b|\bmade popular by\b|\btribute\b|\bin the style of\b|\b
 
 
 
+// A rejection recorded against a decorated title answered a different question
+// from the one we now ask, so it is not evidence about this candidate.
+//
+// It is the year checks that were misled. MusicBrainz dates the pressing it is
+// given: ask it about "YMCA (Original Version 1978)" or "Funkytown (Single
+// Version)" and the release-group that comes back is the reissue, which then
+// disagrees with the decade the playlists put the song in and is filed as a
+// permanent decadeClash. 255 songs were turned away that way, and they are the
+// most party-shaped material in the index - Get Down On It, Boogie Nights,
+// Ladies Night, Eternal Flame.
+//
+// Only the reasons that involve asking someone about a title. noEra comes from
+// the playlist index alone, which the title never touched, so it stands.
+const TITLE_SENSITIVE = new Set(['decadeClash', 'noYear']);
+
+const staleReject = (r) => TITLE_SENSITIVE.has(r.reason) && cleanTitle(r.title) !== r.title;
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const readJson = async (f) => JSON.parse(await readFile(path.resolve(ROOT, f), 'utf8'));
 
@@ -246,11 +263,19 @@ async function main() {
   } catch {
     // No cache yet; this run builds one.
   }
-  const cachedSkips = Object.entries(rejects)
-    .filter(([, r]) => !RETRY.has(r.reason)).length;
+  // Counted the same way the filter below decides, or the line reports a number
+  // of skips that does not happen: a rejection recorded against a decorated
+  // title is reopened there, and saying otherwise sends whoever reads this
+  // looking for candidates that were in fact retried.
+  const reopened = Object.values(rejects).filter(staleReject).length;
+  const cachedSkips = Object.values(rejects)
+    .filter((r) => !RETRY.has(r.reason) && !staleReject(r)).length;
   if (cachedSkips) {
     console.log(`${cachedSkips} candidates already ruled out, skipping`
       + (RETRY.size ? ` (retrying: ${[...RETRY].join(', ')})` : ''));
+  }
+  if (reopened) {
+    console.log(`${reopened} reopened: rejected on a decorated title, which is not the title we now ask about`);
   }
 
   const candidates = Object.entries(index)
@@ -264,7 +289,7 @@ async function main() {
       // 3,133 worth asking Deezer about.
       && (ERA !== 'recent' || RECENT.has(crowdDecade(e)))
       // Already tried and failed, for a reason nothing has changed about.
-      && !(rejects[key] && !RETRY.has(rejects[key].reason)))
+      && !(rejects[key] && !RETRY.has(rejects[key].reason) && !staleReject(rejects[key])))
     .sort((a, b) => b[1].n - a[1].n)          // most canonical first
     .slice(0, LIMIT === Infinity ? undefined : LIMIT);
 
