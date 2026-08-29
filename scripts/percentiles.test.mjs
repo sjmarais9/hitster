@@ -136,3 +136,27 @@ test('a thinly covered source cannot reorder a well covered one', () => {
   // And a song the thin source never saw keeps the wide source's opinion whole.
   assert.equal(blend([wide, thin], 's30'), Math.round(wide.get('s30')));
 });
+
+test('a grouping can be supplied, and one group ranks everything together', () => {
+  // Playlist reach is ranked this way: how far a song travels is the question,
+  // and the decade it travelled in is not part of it.
+  const songs = [
+    { id: 'a', decade: '1960s', n: 10 },
+    { id: 'b', decade: '1960s', n: 20 },
+    { id: 'c', decade: '2020s', n: 30 },
+    { id: 'd', decade: '2020s', n: 40 },
+  ];
+  const byDecade = percentiles(songs, (s) => s.n);
+  const global = percentiles(songs, (s) => s.n, () => 'all');
+
+  // Grouped by decade, the best of a thin decade scores as highly as the best
+  // of a strong one - which is the whole point when comparing like with like,
+  // and the whole problem when asking whether anyone has heard of it.
+  assert.equal(byDecade.get('b'), 100);
+  assert.equal(byDecade.get('d'), 100);
+
+  // Ranked together, reach decides.
+  assert.equal(global.get('a'), 0);
+  assert.equal(global.get('d'), 100);
+  assert.ok(global.get('b') < global.get('c'));
+});

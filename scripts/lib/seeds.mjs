@@ -186,3 +186,26 @@ export function reconcileYear(years) {
   const preferred = found.find((f) => f.source === 'musicbrainz') ?? found[0];
   return { year: preferred.year, corroborated: false };
 }
+
+/**
+ * Whether a settled year is safe to write, given what the playlists say.
+ *
+ * Three ways in, and only three:
+ *
+ *   corroborated       two catalogues agreed. The playlists are not consulted -
+ *                      not for a decade they disagree with, and not for one
+ *                      they cannot supply.
+ *   one source, era    a single catalogue, checked against the decade the
+ *                      playlists imply. This is the old rule and it still runs.
+ *   nothing else       refused.
+ *
+ * The third case is the one worth stating. A year on one source's word with no
+ * era to check it against is the thing this file has never been willing to
+ * write, and moving the era check later must not quietly start allowing it.
+ */
+export function acceptsYear({ year, corroborated, era }) {
+  if (corroborated) return { ok: true };
+  if (!era) return { ok: false, reason: 'noEra' };
+  if (!agreesWithEra(year, era)) return { ok: false, reason: 'decadeClash' };
+  return { ok: true };
+}

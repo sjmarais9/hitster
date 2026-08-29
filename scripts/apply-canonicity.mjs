@@ -178,7 +178,29 @@ for (const s of all) {
   if (s.playlists === null) s.playlists = 0;
 }
 
-const byPlaylists = percentiles(all, (s) => s.playlists);
+// Playlist reach is ranked across the whole corpus, not within each decade.
+//
+// Within-decade was the original rule, on the reasoning that a 1967 track and a
+// 2015 track face different playlist populations and comparing raw counts would
+// measure the platform rather than the song. Measured, that turns out to be
+// mostly untrue of this index: the songs scoring 85 to 95 sit on 47 to 65
+// playlists in every decade - 1960s 47, 1980s 56, 2000s 65 - so the distortion
+// being guarded against is small.
+//
+// What the rule was doing instead was manufacturing one. The 2020s band is thin,
+// so its 85-to-95 songs sit on 23 playlists, and Casual dealt Don't Go Yet and
+// Moth To A Flame - nineteen playlists each out of 5,802 - as though they were
+// songs everyone knows. Ranked together, reach decides, which is the question
+// actually being asked: not "how does this rate among its contemporaries" but
+// "has anyone here heard it".
+const byPlaylists = percentiles(all, (s) => s.playlists, () => 'all');
+
+// Listener counts stay within decade, and the asymmetry is deliberate. Last.fm's
+// userbase is young, so scrobbles under-count pre-1990 music for a reason that
+// is about the platform and not about the song - which is the distortion the
+// original rule described, in the one source where it genuinely bites. It also
+// covers 1,458 of 11,023 songs, and blend() already refuses to let a thin source
+// reorder a well covered one.
 const byListeners = percentiles(all, (s) => s.listeners);
 
 const scores = new Map(all.map((s) => [s.id, blend([byPlaylists, byListeners], s.id)]));

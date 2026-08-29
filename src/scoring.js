@@ -42,37 +42,50 @@ export function scoreOf(song) {
 // well-known songs. This is the whole of what the UI levels do, and it is the
 // main dial for tuning how a night plays without touching any song data.
 //
-// Retuned on 29 August 2026, on a 9,430-song pool, after a night of Casual
-// played harder than the label promises. The useful measure turned out not to
-// be the `deep` share - a tag - but the share of the draw below canonicity 60,
-// which is roughly where a song stops being one the table can shout at:
+// Refitted on 29 August 2026, twice. First against the pool that had grown from
+// 1,649 songs to 9,430; then again when canonicity changed underneath it.
 //
-//        k     below canon 60     `deep` share
-//   Casual         6.0%               0.4%
-//   Confident     17.3%               4.6%
-//   Devoted       30.7%              16.0%
-//   Encyclo.      46.3%              33.0%
+//        k    share of the draw on   median playlists
+//             fewer than 20 playlists  of a dealt card
+//   Casual    10        3.0%                 52
+//   Confident  7        9.3%                 48
+//   Devoted    5       17.7%                 42
+//   Encyclo.   3       30.0%                 33
 //
-// Every rung moved. The old ladder was fitted when the pool held 1,649 songs
-// and nearly all of them had been chosen by hand; it now holds 9,430, of which
-// 85% arrived from a playlist index. The same k against a corpus that much
-// broader is a different game, and Casual had drifted to 12.3% below canon 60 -
-// about one card in eight, or three a night, which is what was actually felt.
+// The left-hand column replaced the share below canonicity 60, and had to. That
+// number is computed from canonicity, which this refit was changing, so it moved
+// whenever the thing being measured moved and could be made to say anything.
+// Playlist reach is outside the system: how far a dealt card actually travelled,
+// which no change to the scoring can flatter.
+//
+// Casual is the rung that moved on purpose: it played harder than "mostly songs
+// everyone knows" promises, twice. The second time the cause was not k at all
+// but the measure - canonicity had been a within-decade rank, and the thin
+// 2020s band let a song on nineteen playlists score 85. apply-canonicity.mjs
+// ranks playlist reach across the whole corpus now, and the right-hand column
+// is the yardstick that found it: the reach of what actually gets dealt, which
+// no change to canonicity can flatter.
+//
+// The other three moved only to stand still. Ranking globally pushed every
+// score down, and left alone it would have taken Encyclopaedic to 53.6% below
+// canonicity 60 - near the 56% that made k=0 unplayable. Their k values were
+// refitted to the share each had before the basis changed, so the knob feels
+// the way it did and only the top rung is tighter.
 //
 // These figures move as the pool grows. scripts/stats.mjs and the level test
 // both recompute rather than quoting, because the last set of numbers written
 // into this comment was stale within a fortnight.
 export const LEVELS = {
-  casual: { label: 'Casual', hint: 'Mostly songs everyone knows', k: 6 },
-  confident: { label: 'Confident', hint: 'A fair spread', k: 3 },
-  devoted: { label: 'Devoted', hint: 'Album tracks, not just singles', k: 1.5 },
+  casual: { label: 'Casual', hint: 'Mostly songs everyone knows', k: 10 },
+  confident: { label: 'Confident', hint: 'A fair spread', k: 7 },
+  devoted: { label: 'Devoted', hint: 'Album tracks, not just singles', k: 5 },
   // No longer k=0. Perfectly flat was an honest claim on a curated pool and an
   // unplayable one here: every song equally likely now means 56% of the night
   // below canonicity 60, which is not a harder game but a different and worse
   // one - four in seven cards nobody can place. k=0.5 still reaches the whole
   // pool and still favours almost nothing, and the label can now say what it
   // actually deals rather than making the stronger claim.
-  everything: { label: 'Encyclopaedic', hint: 'Deep cuts and forgotten singles', k: 0.5 },
+  everything: { label: 'Encyclopaedic', hint: 'Deep cuts and forgotten singles', k: 3 },
 };
 
 // --- skew --------------------------------------------------------------------

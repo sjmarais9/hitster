@@ -32,9 +32,21 @@ const TARGETS = [
 ];
 
 const dryRun = process.argv.includes('--dry-run');
+
+// Prunes the pool and leaves the batch seeds alone.
+//
+// generate-from-index.mjs checkpoints into batch-006.seed.json every 25 songs,
+// so writing that file underneath a run in progress loses whatever it has
+// accepted since its last save. The pool is not touched by generation and is
+// safe to prune at any time - it is also the only one of the two the phone
+// downloads, so this is the half that changes a game tonight.
+//
+// Run again without the flag once generation has finished: the seeds still need
+// pruning, or their percentiles go on counting songs the pool no longer holds.
+const poolOnly = process.argv.includes('--pool-only');
 let total = 0;
 
-for (const file of TARGETS) {
+for (const file of poolOnly ? TARGETS.slice(0, 1) : TARGETS) {
   const full = path.resolve(ROOT, file);
   const doc = await readSongs(full, null);
   if (!doc) continue;

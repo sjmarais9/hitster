@@ -86,6 +86,21 @@ export const EXCLUDED_ARTISTS = new Set([
   // the pool on the same footing - NUEVAYoL at canonicity 87, DAKITI, Me Porto
   // Bonito. Removing them one at a time was going to be a standing chore.
   "Bad Bunny",
+  // US country radio. These seven survived the cut to the most familiar 5%
+  // precisely because they score well - Boot Scootin' Boogie at 95, Chattahoochee
+  // at 94 - and that is a measure of American radio rather than of this table.
+  // Cutting 788 country songs only took the genre from 10.9% of a Casual night to
+  // 5.4%, because the survivors are the ones the sampler most wants to deal.
+  //
+  // Jolene, Sweet Caroline, I Got You Babe, Shaboozey, Dolly Parton, Johnny Cash,
+  // Jim Reeves and Don Williams all stay. The line is US radio, not the genre.
+  "Brooks & Dunn",
+  "Alan Jackson",
+  "George Strait",
+  "Lonestar",
+  "Tammy Wynette",
+  "Trisha Yearwood",
+  "Toby Keith",
 ].map((a) => a.toLowerCase()));
 
 // One-offs: the artist is not otherwise excluded, but this track is the same

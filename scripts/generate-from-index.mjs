@@ -28,8 +28,8 @@ import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs, readSongs } from './lib/songs-file.mjs';
 import {
-  crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
-  reconcileYear,
+  crowdDecade, genresOf, familiarityFor, skewFor, decadeOf, cleanTitle,
+  reconcileYear, acceptsYear,
 } from './lib/seeds.mjs';
 import { isExcluded } from './lib/excluded.mjs';
 
@@ -45,8 +45,9 @@ const OUT = path.join(ROOT, 'data', 'batch-006.seed.json');
 //
 // The reason matters, because not all rejections are permanent:
 //
-//   noEra        the index has no clear era for it. Permanent until the
-//                playlist harvest is extended.
+//   noEra        the index could not place it in a decade AND no second
+//                catalogue would second its year. Retry when either changes -
+//                a harvest that adds playlists, or a new date source.
 //   decadeClash  the year disagreed with the decade the playlists imply. No
 //                longer permanent: since a year two catalogues agree on is
 //                accepted without consulting the playlists at all, every one of
@@ -359,15 +360,29 @@ async function main() {
     await writeFile(REJECTS, JSON.stringify({
       meta: {
         count: Object.keys(rejects).length,
-        note: 'Candidates already tried and failed. noEra is permanent until the playlist harvest is extended. decadeClash and noYear are both worth retrying when a year source changes - and the rule changed on 29 August 2026, when a year seconded by a second catalogue stopped needing to agree with the playlists as well. --retry decadeClash,noYear.',
+        note: 'Candidates already tried and failed. All three are worth retrying when a year source changes - and the rule changed on 29 August 2026, when a year seconded by a second catalogue stopped needing the playlists to agree, or to have an opinion at all. --retry decadeClash,noYear,noEra.',
       },
       rejected: rejects,
     }, null, 2) + '\n', 'utf8');
   }
 
   for (const [i, [key, entry]] of candidates.entries()) {
+    // May be null, and that is no longer a reason to stop.
+    //
+    // This used to reject immediately, before any year was fetched. That made
+    // sense while the playlist era was the only cross-check there was: a song
+    // it could not place was a song we could not verify. It stopped making
+    // sense the moment a year two catalogues agree on was allowed to skip the
+    // era check, because then the playlists having no opinion is no worse than
+    // their having a wrong one - and the wrong one was already survivable.
+    //
+    // Left in, it held back 2,477 candidates on a test the corroborated ones
+    // would never have had to sit, Start Me Up among them on 72 playlists.
+    //
+    // The cost is real and worth stating: a candidate the era check would have
+    // dismissed for free now spends two requests before anything decides. That
+    // is the trade for asking the catalogues first rather than last.
     const crowd = crowdDecade(entry);
-    if (!crowd) { reject(key, entry, 'noEra'); continue; }
 
     // Every lookup below asks about the song, not the pressing. MusicBrainz has
     // no release-group for "Karma Chameleon (Remastered 2002)", and asking for
@@ -392,7 +407,10 @@ async function main() {
     // Deezer stays last and stays restricted to recent songs. Before 1990 it
     // returns remaster dates - Johnny B. Goode as 2017 - so it is a fallback
     // for songs the other two could not date, never a corroborating voice.
-    const deezer = (musicbrainz === null && itunes === null && RECENT.has(crowd))
+    // Deezer needs to know the song is recent before it can be trusted, and
+    // without an era there is nothing to ask. No era plus nothing from the other
+    // two is a song that stays undated, which is the right answer.
+    const deezer = (musicbrainz === null && itunes === null && crowd && RECENT.has(crowd))
       ? await deezerYear(entry.artist, title)
       : null;
     if (deezer !== null) await sleep(220);
@@ -409,10 +427,12 @@ async function main() {
     // weak witness - a song that spans decades collects playlists from all of
     // them - so it decides only where nothing better is available, which is the
     // change. It used to decide always, and threw away years that were right.
-    if (!corroborated && !agreesWithEra(year, crowd)) {
-      reject(key, entry, 'decadeClash');
-      continue;
-    }
+    //
+    // An uncorroborated year with no era to check against is a year on one
+    // source's word alone, and that is the one thing this file has never been
+    // willing to write. It is refused, as it always was.
+    const verdict = acceptsYear({ year, corroborated, era: crowd });
+    if (!verdict.ok) { reject(key, entry, verdict.reason); continue; }
 
     // Remembered clean, so a second decorated pressing of the same song in the
     // index cannot come back as a second card.
@@ -449,6 +469,9 @@ async function main() {
     console.log(`\nrescued from MusicBrainz's gaps: ${rescued}`);
     console.log(`  by iTunes: ${reasons.viaItunes}   by Deezer: ${reasons.viaDeezer}`);
   }
+  console.log(`
+${reasons.corroborated} year(s) seconded by a second catalogue,`);
+  console.log('  and so accepted without asking the playlists about the decade');
   console.log(`\nWrote ${path.relative(ROOT, OUT)} with ${produced.length} songs`);
 }
 

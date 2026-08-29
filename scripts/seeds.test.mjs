@@ -10,7 +10,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
-  reconcileYear,
+  reconcileYear, acceptsYear,
   PLURALITY, SHARED, STANDARD, FAMILIAR, DECADE_YEARS,
 } from './lib/seeds.mjs';
 
@@ -260,4 +260,27 @@ test('a third source can corroborate where the first two did not', () => {
   const r = reconcileYear({ musicbrainz: 1999, itunes: 1978, deezer: 1978 });
   assert.equal(r.year, 1978);
   assert.equal(r.corroborated, true);
+});
+
+test('a corroborated year does not need the playlists to agree', () => {
+  // YMCA: 1978, on seventies, eighties and party lists. The era plurality can
+  // land anywhere; two catalogues saying 1978 settles it regardless.
+  assert.deepEqual(acceptsYear({ year: 1978, corroborated: true, era: '1980s' }), { ok: true });
+});
+
+test('a corroborated year does not need the playlists to have an opinion', () => {
+  // The case that was rejecting 2,477 candidates before any year was fetched.
+  assert.deepEqual(acceptsYear({ year: 1981, corroborated: true, era: null }), { ok: true });
+});
+
+test('one source alone is still checked against the era', () => {
+  assert.deepEqual(acceptsYear({ year: 1965, corroborated: false, era: '1960s' }), { ok: true });
+  assert.equal(acceptsYear({ year: 1995, corroborated: false, era: '1960s' }).reason, 'decadeClash');
+});
+
+test('one source with no era at all is refused', () => {
+  // The guarantee that must survive moving the era check later: a year on a
+  // single catalogue's word, with nothing to check it against, never lands.
+  assert.equal(acceptsYear({ year: 1995, corroborated: false, era: null }).ok, false);
+  assert.equal(acceptsYear({ year: 1995, corroborated: false, era: null }).reason, 'noEra');
 });

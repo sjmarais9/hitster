@@ -11,19 +11,25 @@
 // below every song that had, and the tiers came out upside down.
 
 /**
- * Percentile of each song within its own decade, 0-100.
+ * Percentile of each song within its group, 0-100. Grouped by decade unless the
+ * caller says otherwise - `() => 'all'` ranks everything together.
+ *
+ * Which grouping is right depends on the source, and the two this project uses
+ * differ. See apply-canonicity.mjs, where playlists are ranked globally and
+ * listener counts by decade, for why.
  *
  * `valueOf` returning null means unmeasured, and those songs are left out of
  * the ranking entirely rather than treated as zero. They come back with no
  * percentile, and the caller decides what to do with a song this source cannot
  * speak for.
  */
-export function percentiles(songs, valueOf) {
+export function percentiles(songs, valueOf, groupOf = (s) => s.decade) {
   const byDecade = new Map();
   for (const s of songs) {
     if (valueOf(s) === null || valueOf(s) === undefined) continue;
-    if (!byDecade.has(s.decade)) byDecade.set(s.decade, []);
-    byDecade.get(s.decade).push(s);
+    const group = groupOf(s);
+    if (!byDecade.has(group)) byDecade.set(group, []);
+    byDecade.get(group).push(s);
   }
 
   const out = new Map();

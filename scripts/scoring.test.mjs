@@ -71,22 +71,40 @@ test('casual favours known songs, encyclopaedic barely does', () => {
   assert.ok(casual.famous > 0.9, `casual should mostly draw the famous song, got ${casual.famous}`);
 
   // Encyclopaedic was k=0 - perfectly uniform - until the pool grew past the
-  // point where that was playable. It still has to be the loudest rung by a
-  // wide margin, and it still has to reach the obscure song often; what it no
-  // longer claims is that it flips a fair coin.
+  // point where that was playable, and its k has moved twice since. An absolute
+  // threshold here would only be re-tuned every time, so the assertion is the
+  // relationship instead: whatever the numbers are, the loud end has to reach
+  // the obscure song by a wide multiple of what the quiet end does.
   const all = distribution(deck, { level: 'everything', crowd: 0.5 });
-  assert.ok(all.obscure > 0.25, `encyclopaedic should still deal deep cuts freely, got ${all.obscure}`);
-  assert.ok(all.famous < casual.famous - 0.15,
-    `encyclopaedic must stay far looser than casual, got ${all.famous} vs ${casual.famous}`);
+  assert.ok(all.obscure > casual.obscure * 10,
+    `encyclopaedic ${all.obscure} should reach the deep cut far more than casual ${casual.obscure}`);
+  assert.ok(all.famous < casual.famous,
+    `encyclopaedic must stay looser than casual, got ${all.famous} vs ${casual.famous}`);
 });
 
 test('nothing is ever excluded, only made less likely', () => {
+  // Asserted on the weight rather than by sampling, and the change is an
+  // admission. This drew 50,000 times and checked the obscure song turned up.
+  // At Casual it no longer does, and the test was right to fail: k=8 makes the
+  // most famous song 2.26 million times likelier than the most obscure possible
+  // one, against 58,000 at k=6. Fifty thousand draws cannot see a one-in-two-
+  // million event, and raising the sample count until it could would be a slower
+  // way of asserting nothing.
+  //
+  // The invariant this file actually needs is that no weight is ever zero -
+  // that the sampler has no hard exclusions in it - and that is exact rather
+  // than statistical. What the old test also carried, and what is now only
+  // true in principle, is the promise in README that a mis-tagged song does not
+  // vanish from every game forever. At Casual it very nearly does. That is the
+  // price of the rung being as tight as it is, and it is worth knowing.
   const deck = [
     song({ title: 'famous', familiarity: 'standard', canonicity: 99 }),
     song({ title: 'obscure', familiarity: 'deep', canonicity: 0 }),
   ];
-  const casual = distribution(deck, { level: 'casual', crowd: 0.5 }, 50000);
-  assert.ok(casual.obscure > 0, 'a weighted sampler must not have hard exclusions');
+  for (const level of Object.keys(LEVELS)) {
+    const w = weightsFor(deck, { level, crowd: 0.5 });
+    assert.ok(w.every((x) => x > 0), `${level} produced a zero weight, which is an exclusion`);
+  }
 });
 
 test('the crowd slider sets the resulting mix, not merely a preference', () => {
@@ -335,13 +353,39 @@ test('the levels are declared quietest first', () => {
   for (let i = 1; i < ks.length; i++) {
     assert.ok(ks[i] < ks[i - 1], `k must fall along the sweep, got ${ks.join(' -> ')}`);
   }
-  // The loudest rung used to be pinned at exactly 0, which said the app makes no
-  // judgement at all there. On a 9,430-song pool that dealt 56% of the night
-  // below canonicity 60 and stopped being a game anyone finished, so the claim
-  // was traded for a playable one. It still has to be close to flat, or the
-  // sweep has no loud end.
-  assert.ok(ks.at(-1) >= 0 && ks.at(-1) <= 1,
-    `the loudest setting must stay near flat, got ${ks.at(-1)}`);
+  // The loudest rung used to be pinned at exactly 0, then at most 1. Both were
+  // assertions about the number rather than about the game, and both went stale
+  // the moment canonicity changed basis - ranking playlist reach globally pushed
+  // every score down, so the k that produces a given night went up, and a bound
+  // on k alone would have failed a change that altered nothing anyone can feel.
+  //
+  // What has to stay true is that the loud end is loud: it reaches well past
+  // what Casual will deal. That is measured on the shipped pool below.
+  assert.ok(ks.at(-1) > 0, 'the loudest setting must still favour something, or the sweep has no end');
+});
+
+test('the loudest setting reaches far past the quietest, on the pool that ships', () => {
+  const pool = JSON.parse(readFileSync('data/songs.json', 'utf8')).songs;
+  const reach = (level) => {
+    const w = weightsFor(pool, { level, crowd: 0.5 });
+    const total = w.reduce((a, b) => a + b, 0);
+    let share = 0;
+    pool.forEach((song, i) => {
+      if (song.canonicity !== null && song.canonicity !== undefined && song.canonicity < 60) {
+        share += w[i] / total;
+      }
+    });
+    return share;
+  };
+  // The ratio carries this, not an absolute figure. Canonicity has changed basis
+  // once and will be re-ranked on every import, so a fixed percentage here dates
+  // immediately - the last one demanded 20% of a number that is now 12% for
+  // reasons that have nothing to do with the knob working. What has to stay true
+  // is the spread between the ends.
+  const loud = reach('everything');
+  const quiet = reach('casual');
+  assert.ok(loud > quiet * 5, `encyclopaedic ${loud} should reach far past casual ${quiet}`);
+  assert.ok(loud > 0.05, `encyclopaedic should still reach obscure songs, got ${(loud * 100).toFixed(1)}%`);
 });
 
 test('casual deals songs the table can actually place', () => {
