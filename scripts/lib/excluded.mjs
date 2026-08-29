@@ -105,6 +105,18 @@ export const EXCLUDED_SONGS = new Set([
   "pk|quando a vontade bater (participa\u00e7\u00e3o especial de mc cabelinho)",
   "jean-jacques goldman|au bout de mes r\u00eaves",
   "iam|l'empire du c\u00f4t\u00e9 obscur",
+
+  // Named at the table, after a first pass left them in as arguable. Each is
+  // globally enormous and none of it lands here: a Spanish World Cup single from
+  // 1998, two Latin tracks, and a Dutch producer's Brazilian sample.
+  //
+  // Song-level on purpose. Ricky Martin, Bad Bunny and The Weeknd all hold songs
+  // this table does know - Livin' la Vida Loca, Blinding Lights, Starboy - so the
+  // artist is not the thing that is wrong.
+  "ricky martin|la copa de la vida (la canci\u00f3n oficial de la copa mundial, francia '98) (spanish version)",
+  "bad bunny|tit\u00ed me pregunt\u00f3",
+  "the weeknd|s\u00e3o paulo",
+  "bakermat|baian\u00e1",
 ].map((s) => s.toLowerCase()));
 
 /** True if this song should never reach the deck. */
