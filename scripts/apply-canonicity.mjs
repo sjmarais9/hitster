@@ -26,7 +26,7 @@ import path from 'node:path';
 import { normalise } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
 import { percentiles, blend } from './lib/percentiles.mjs';
-import { familiarityFor } from './lib/seeds.mjs';
+import { familiarityFor, cleanTitle } from './lib/seeds.mjs';
 import { verdictFor } from './lib/reviewed.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -84,6 +84,60 @@ for (const file of TARGETS) {
   if (doc) docs.push({ file, doc });
 }
 
+// The index is keyed on the exact normalised title, and a song reaches it under
+// whichever pressing a playlist curator happened to add. An exact lookup
+// therefore misses "Another Brick In The Wall, Pt. 2 (2011 Remastered Version)"
+// when we hold Part 2, and scores one of the most played records ever as though
+// no playlist had ever carried it: canonicity 1, against 91 playlists sitting
+// right there in the index. That is not cosmetic - a score that low is what
+// familiarityFor reads to decide a song is a deep cut nobody should be dealt.
+//
+// It is worth being exact about the size of this. Measured across the pool it
+// currently rescues one song. A first look suggested thirty, by confusing a low
+// playlist count with a low percentile - a song on thirty playlists can sit at
+// the 38th percentile quite legitimately if its decade is full of songs on more.
+// The guard is kept because the failure is silent and permanent when it does
+// happen, and because the index grows: every harvest adds pressings.
+//
+// So: exact first, then the same title with its version suffix removed, then a
+// loose form with the abbreviations that actually vary expanded and punctuation
+// dropped. The loose pass is confined to one artist's own tracks and is used
+// only when it finds exactly one candidate, because two different songs
+// collapsing into one score is a worse failure than the one being fixed.
+const looseTitle = (t) => normalise(String(t))
+  .replace(/\bpt\b/g, 'part')
+  .replace(/\bvol\b/g, 'volume')
+  .replace(/\bfeat\b.*$/, '')
+  .replace(/[^a-z0-9 ]/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+// Both sides go through the same pipeline, or the relaxation is one-directional:
+// cleaning our title finds nothing when it is the index that carries the
+// decoration, which is the usual direction.
+const looseKey = (artist, title) => `${normalise(artist)}|${looseTitle(cleanTitle(title))}`;
+
+const looseIndex = new Map();
+for (const entry of Object.values(deezer)) {
+  const k = looseKey(entry.artist, entry.title);
+  if (!looseIndex.has(k)) looseIndex.set(k, []);
+  looseIndex.get(k).push(entry);
+}
+
+let recovered = 0;
+function playlistsFor(song) {
+  const artist = normalise(song.artist);
+  const exact = deezer[`${artist}|${normalise(song.title)}`];
+  if (exact) return exact.n;
+
+  const stripped = deezer[`${artist}|${normalise(cleanTitle(song.title))}`];
+  if (stripped) { recovered++; return stripped.n; }
+
+  const near = looseIndex.get(looseKey(song.artist, song.title)) ?? [];
+  if (near.length === 1) { recovered++; return near[0].n; }
+  return null;
+}
+
 const all = [];
 const byIdentity = new Map();
 for (const { doc } of docs) {
@@ -93,7 +147,7 @@ for (const { doc } of docs) {
       const entry = {
         id,
         decade: song.decade,
-        playlists: deezer[`${normalise(song.artist)}|${normalise(song.title)}`]?.n ?? null,
+        playlists: playlistsFor(song),
         listeners: lastfm[id]?.listeners ?? null,
       };
       byIdentity.set(id, entry);
@@ -176,6 +230,7 @@ for (const { doc } of docs) {
 
 const values = [...scores.values()].filter((v) => v !== null).sort((a, b) => a - b);
 console.log(`${all.length} distinct songs, ${values.length} scored`);
+console.log(`${recovered} matched only after relaxing the title`);
 console.log(`${changed} song records ${dryRun ? 'would be' : ''} updated across ${docs.length} files`);
 console.log(`${retagged} seeded familiarity tags ${dryRun ? 'would be' : ''} re-derived from the new scores`);
 console.log(`\ndistribution: min ${values[0]}, median ${values[Math.floor(values.length / 2)]}, max ${values[values.length - 1]}`);
