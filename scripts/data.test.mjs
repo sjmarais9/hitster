@@ -20,6 +20,7 @@ import { statSync } from 'node:fs';
 import { readSongs } from './lib/songs-file.mjs';
 import { verdictFor, verifiedYearFor } from './lib/reviewed.mjs';
 import { familiarityFor } from './lib/seeds.mjs';
+import { isExcluded } from './lib/excluded.mjs';
 
 const POOL = 'data/songs.json';
 const BATCHES = [
@@ -181,6 +182,21 @@ test('no rule has overwritten a judgement the household made', () => {
     }
   }
   assert.deepEqual(wrong, [], `\n  ${wrong.join('\n  ')}\n`);
+});
+
+test('nothing popular somewhere else has walked back into the pool', () => {
+  // These scored well and were tagged `standard` - Casual dealt Sao Paulo funk
+  // sets about 1.7 times a night, on a canonicity of 86, because the measure is
+  // global curation and this table is not. Nothing about them looks wrong to any
+  // other guard in this file, which is why they need their own.
+  //
+  // The way back in is an import, not an edit: these artists release constantly
+  // and the generator keeps finding them. import-songs.mjs and the generator
+  // both consult the list, and this asserts they did.
+  const back = corpus.filter(isExcluded)
+    .map((s) => `${s.artist} - ${s.title}`);
+  assert.deepEqual(back.slice(0, 8), [],
+    `${back.length} excluded song(s) are back in the data -- ${back.slice(0, 8).join('; ')}`);
 });
 
 test('no seeded tag has drifted away from its own canonicity', () => {

@@ -413,6 +413,26 @@ Nkalakatha went 42 to 41 across a harvest that found it on 37 playlists. Local
 music is protected by its hand tag at `TRUST = 0.6`, not by measurement, and
 that remains the only thing protecting it.
 
+**Some songs are popular somewhere else**, and that is a different problem from
+obscurity. Canonicity measures global curation; this table is in Stellenbosch.
+Deezer's Brazilian playlists are enormous, so a Sao Paulo funk set from 2023
+collects more playlist appearances than most of the eighties — 147 such tracks
+reached the pool at a median canonicity of 86, 78 of them tagged `standard`, and
+Casual dealt one about every 15 cards. Every guard passed them, because nothing
+was broken: the measure answered the question it was asked, which was the wrong
+question.
+
+`scripts/lib/excluded.mjs` lists them, by artist rather than by song because
+these artists release constantly. The import and the generator both consult it,
+and a test asserts none has walked back in. It is a hand-checked list and not a
+rule on purpose: the same query that finds Mc IG also finds MC Hammer, DJ Snake,
+DJ Khaled and DJ Jazzy Jeff, and no pattern tells them apart.
+
+```sh
+node scripts/apply-exclusions.mjs --dry-run   # what would go
+node scripts/apply-exclusions.mjs             # then re-run apply-canonicity
+```
+
 **More familiar songs come from the generator, not the backlog.** Deezer's
 playlists carry whichever pressing a curator happened to add, so the index holds
 `Should I Stay or Should I Go (Remastered)` rather than the song. The junk filter

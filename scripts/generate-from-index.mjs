@@ -30,6 +30,7 @@ import { writeSongs, readSongs } from './lib/songs-file.mjs';
 import {
   crowdDecade, genresOf, agreesWithEra, familiarityFor, skewFor, decadeOf, cleanTitle,
 } from './lib/seeds.mjs';
+import { isExcluded } from './lib/excluded.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'data', 'batch-006.seed.json');
@@ -283,6 +284,7 @@ async function main() {
       // Both spellings have to be unheld: the index key carries the decorated
       // title, and what we would actually write is the clean one.
       && !known.has(key) && !known.has(`${normalise(e.artist)}|${normalise(cleanTitle(e.title))}`)
+      && !isExcluded({ artist: e.artist, title: cleanTitle(e.title) })
       && leansToward(e, GENRE)
       // A recovery pass only wants the songs Deezer can actually date. Without
       // this it would re-ask MusicBrainz about 9,516 candidates to reach the

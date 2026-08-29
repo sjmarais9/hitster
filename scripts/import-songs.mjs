@@ -25,6 +25,7 @@ import { authorise } from './lib/cli-auth.mjs';
 import { pickBest, releaseYear } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
 import { classifyYear, bySeverity } from './lib/year-check.mjs';
+import { isExcluded } from './lib/excluded.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -206,7 +207,12 @@ async function main() {
 
   // Count what is outstanding before --limit truncates it, or the summary
   // reports everything as already done whenever a limit is in play.
-  const unresolved = batch.filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
+  // Popular somewhere else. Refused here rather than in the deck, because a
+  // quota slot spent on one is a slot not spent on a song this table can place.
+  const excluded = batch.filter(isExcluded);
+  const unresolved = batch
+    .filter((song) => !isExcluded(song))
+    .filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
 
   // A song nobody could measure is not thereby obscure, so it is not turned
   // away: an unmeasured candidate still gets its slot and the tag decides.
@@ -220,6 +226,9 @@ async function main() {
   const deferred = outstanding.length - queue.length;
   console.log(`${batch.length} songs in ${opts.in}`);
   if (alreadyDone > 0) console.log(`${alreadyDone} already resolved, skipping (use --recheck to redo)`);
+  if (excluded.length > 0) {
+    console.log(`${excluded.length} on the exclusion list, skipping (see scripts/lib/excluded.mjs)`);
+  }
   if (belowFloor.length > 0) {
     console.log(`${belowFloor.length} below canonicity ${opts.minCanonicity}, not worth a quota slot`
       + ' (--min-canonicity 0 to import them anyway)');

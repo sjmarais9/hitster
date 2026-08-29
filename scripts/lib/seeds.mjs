@@ -60,7 +60,7 @@ export const FAMILIAR = 45;
  * as better known than it is, against 33% of everything else - and every single
  * correction in that genre went downward. Terror Squad's Lean Back and 50 Cent's
  * Ayo Technology both entered as `standard`, which is a US chart position rather
- * than anything a table in Johannesburg would shout at.
+ * than anything a table in Stellenbosch would shout at.
  *
  * Twelve points is the gap the review actually showed, not a guess: it is what
  * moves those songs to where the corrections put them without disturbing the
