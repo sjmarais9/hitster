@@ -481,13 +481,13 @@
     { "artist": "Doja Cat", "title": "Need to Know", "year": 2021, "decade": "2020s", "genres": ["pop","r&b"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 62 },
     { "artist": "Maneskin", "title": "ZITTI E BUONI", "year": 2021, "decade": "2020s", "genres": ["rock","glam rock"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 7 },
     { "artist": "Wolf Alice", "title": "The Last Man on Earth", "year": 2021, "decade": "2020s", "genres": ["alternative rock"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 12 },
-    { "artist": "Sam Fender", "title": "Seventeen Going Under", "year": 2021, "decade": "2020s", "genres": ["indie rock"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 61 },
+    { "artist": "Sam Fender", "title": "Seventeen Going Under", "year": 2021, "decade": "2020s", "genres": ["indie rock"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 62 },
     { "artist": "Adele", "title": "Oh My God", "year": 2021, "decade": "2020s", "genres": ["pop","soul"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 63 },
-    { "artist": "Ed Sheeran", "title": "Bad Habits", "year": 2021, "decade": "2020s", "genres": ["pop","dance pop"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 79 },
+    { "artist": "Ed Sheeran", "title": "Bad Habits", "year": 2021, "decade": "2020s", "genres": ["pop","dance pop"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 78 },
     { "artist": "Uncle Waffles", "title": "Tanzania", "year": 2021, "decade": "2020s", "genres": ["amapiano"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 37 },
     { "artist": "Beyonce", "title": "CUFF IT", "year": 2022, "decade": "2020s", "genres": ["r&b","funk"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 51 },
     { "artist": "Harry Styles", "title": "Music For a Sushi Restaurant", "year": 2022, "decade": "2020s", "genres": ["pop","funk"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 30 },
-    { "artist": "Arctic Monkeys", "title": "There'd Better Be a Mirrorball", "year": 2022, "decade": "2020s", "genres": ["indie rock"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 6 },
+    { "artist": "Arctic Monkeys", "title": "There'd Better Be a Mirrorball", "year": 2022, "decade": "2020s", "genres": ["indie rock"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 7 },
     { "artist": "The 1975", "title": "Part Of The Band", "year": 2022, "decade": "2020s", "genres": ["indie pop","art pop"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 16 },
     { "artist": "Yard Act", "title": "The Overload", "year": 2022, "decade": "2020s", "genres": ["post-punk"], "familiarity": "deep", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 11 },
     { "artist": "Fred again..", "title": "Delilah (pull me out of this)", "year": 2022, "decade": "2020s", "genres": ["electronic","house"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 20 },
@@ -501,7 +501,7 @@
     { "artist": "Olivia Rodrigo", "title": "bad idea right?", "year": 2023, "decade": "2020s", "genres": ["pop rock"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 58 },
     { "artist": "Sabrina Carpenter", "title": "Please Please Please", "year": 2024, "decade": "2020s", "genres": ["pop"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 88 },
     { "artist": "Charli xcx", "title": "Apple", "year": 2024, "decade": "2020s", "genres": ["pop","electropop"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 40 },
-    { "artist": "Fontaines D.C.", "title": "Favourite", "year": 2024, "decade": "2020s", "genres": ["post-punk","indie rock"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 28 },
+    { "artist": "Fontaines D.C.", "title": "Favourite", "year": 2024, "decade": "2020s", "genres": ["post-punk","indie rock"], "familiarity": "deep", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 29 },
     { "artist": "Chappell Roan", "title": "HOT TO GO!", "year": 2024, "decade": "2020s", "genres": ["pop"], "familiarity": "familiar", "skew": "kids", "spotify_uri": null, "market_checked": null, "canonicity": 83 }
   ]
 }
