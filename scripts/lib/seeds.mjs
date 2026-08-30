@@ -164,7 +164,7 @@ export const cleanTitle = (title) => String(title).replace(VERSION_SUFFIX, '').t
  * A year with no corroboration still faces the era check. This widens what gets
  * in; it does not lower the bar for a year nobody can second.
  */
-export function reconcileYear(years) {
+export function reconcileYear(years, era = null) {
   const found = Object.entries(years)
     .filter(([, y]) => Number.isInteger(y))
     .map(([source, y]) => ({ source, year: y }));
@@ -181,8 +181,25 @@ export function reconcileYear(years) {
     }
   }
 
-  // They disagree. MusicBrainz is the catalogue rather than a store front, so
-  // it leads - but nothing is corroborated, and the era check still has to pass.
+  // They disagree, and simply preferring MusicBrainz was wrong for the case that
+  // matters most. Its pre-1990 coverage is CD reissues - year-check.mjs says so
+  // in as many words - so it answers 2018 for Landslide and 2015 for Start Me
+  // Up while iTunes has 1975 and 1981. Taking MusicBrainz there discards the
+  // right answer and then fails the era check with the wrong one.
+  //
+  // The playlists break the tie instead. They are a weak witness on their own,
+  // which is why they are not allowed to confirm a year unaided - but a
+  // catalogue and a few thousand playlist curators independently landing in the
+  // same decade is two signals, and that is the standard everything else here
+  // is held to. If both candidates agree with the era, or neither does, the tie
+  // stands unbroken and the era check downstream decides as before.
+  if (era) {
+    const agreeing = found.filter((f) => agreesWithEra(f.year, era));
+    if (agreeing.length === 1) {
+      return { year: agreeing[0].year, corroborated: true, sources: [agreeing[0].source, 'era'] };
+    }
+  }
+
   const preferred = found.find((f) => f.source === 'musicbrainz') ?? found[0];
   return { year: preferred.year, corroborated: false };
 }

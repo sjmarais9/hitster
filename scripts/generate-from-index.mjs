@@ -238,14 +238,36 @@ async function yearOf(artist, title) {
   const q = `artist:"${artist.replace(/"/g, '')}" AND releasegroup:"${title.replace(/"/g, '')}"`;
   const url = `https://musicbrainz.org/ws/2/release-group?query=${encodeURIComponent(q)}&fmt=json&limit=10`;
 
+  // Retried, and the outcome says which kind of nothing it is.
+  //
+  // This returned null for both "MusicBrainz has no such release-group" and
+  // "MusicBrainz did not answer", and the two could not be told apart by anyone
+  // downstream. Measured, one request in three comes back 503 under the pacing
+  // this script runs at, and the consequences were not small: without a year
+  // from here nothing can corroborate, so the song falls to the playlist-era
+  // check, fails it, and is written into the reject cache as a permanent
+  // decadeClash - a lasting verdict recorded because a server was busy for a
+  // second. James's Sit Down was refused twice that way while answering 1989 to
+  // every hand probe.
   let body;
-  try {
-    const response = await fetch(url, { headers: { 'User-Agent': UA } });
-    if (!response.ok) return null;
-    body = await response.json();
-  } catch {
-    return null;
+  let reachable = false;
+  for (let attempt = 0; attempt < 3 && !reachable; attempt++) {
+    if (attempt > 0) await new Promise((r) => setTimeout(r, 1500 * attempt));
+    try {
+      const response = await fetch(url, { headers: { 'User-Agent': UA } });
+      // 503 is what rate limiting looks like here and is worth waiting out.
+      // A 404 or a 400 is an answer, and repeating the question will not change it.
+      if (!response.ok) {
+        if (response.status === 503 || response.status === 429) continue;
+        return { year: null, reachable: true };
+      }
+      body = await response.json();
+      reachable = true;
+    } catch {
+      // Network, not MusicBrainz. Worth one more try.
+    }
   }
+  if (!reachable) return { year: null, reachable: false };
 
   const wantTitle = normalise(title);
   const wantArtist = normalise(artist);
@@ -262,7 +284,7 @@ async function yearOf(artist, title) {
     .map((g) => Number(String(g['first-release-date'] ?? '').slice(0, 4)))
     .filter((y) => y > 1900 && y < 2030);
 
-  return years.length ? Math.min(...years) : null;
+  return { year: years.length ? Math.min(...years) : null, reachable: true };
 }
 
 async function main() {
@@ -337,7 +359,7 @@ async function main() {
   const percentile = new Map();
   ranked.forEach(([key], i) => percentile.set(key, (i / Math.max(1, ranked.length - 1)) * 100));
 
-  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaItunes: 0, viaDeezer: 0, corroborated: 0 };
+  const reasons = { accepted: 0, noYear: 0, decadeClash: 0, noCrowdDecade: 0, viaItunes: 0, viaDeezer: 0, corroborated: 0, sourceDown: 0 };
   let sinceCheckpoint = 0;
 
   /** Remember a failure so no later pass pays for it twice. */
@@ -389,7 +411,8 @@ async function main() {
     // one spends a second of the rate limit to learn nothing.
     const title = cleanTitle(entry.title);
 
-    const musicbrainz = await yearOf(entry.artist, title);
+    const lookup = await yearOf(entry.artist, title);
+    const musicbrainz = lookup.year;
     await sleep(PAUSE_MS);
 
     // iTunes is now asked for every candidate rather than only when MusicBrainz
@@ -415,7 +438,7 @@ async function main() {
       : null;
     if (deezer !== null) await sleep(220);
 
-    const settled = reconcileYear({ musicbrainz, itunes, deezer });
+    const settled = reconcileYear({ musicbrainz, itunes, deezer }, crowd);
     if (settled === null) { reject(key, entry, 'noYear'); continue; }
     const { year, corroborated } = settled;
 
@@ -432,7 +455,16 @@ async function main() {
     // source's word alone, and that is the one thing this file has never been
     // willing to write. It is refused, as it always was.
     const verdict = acceptsYear({ year, corroborated, era: crowd });
-    if (!verdict.ok) { reject(key, entry, verdict.reason); continue; }
+    if (!verdict.ok) {
+      // A rejection reached with MusicBrainz unreachable is not a verdict about
+      // the song, and must not be cached as one. Without its year nothing can
+      // corroborate, so the song falls to the era check it would never have had
+      // to sit - and a decadeClash written for that reason outlives the outage
+      // that caused it by however long nobody thinks to retry.
+      if (!lookup.reachable) { reasons.sourceDown++; continue; }
+      reject(key, entry, verdict.reason);
+      continue;
+    }
 
     // Remembered clean, so a second decorated pressing of the same song in the
     // index cannot come back as a second card.
@@ -468,6 +500,11 @@ async function main() {
   if (rescued) {
     console.log(`\nrescued from MusicBrainz's gaps: ${rescued}`);
     console.log(`  by iTunes: ${reasons.viaItunes}   by Deezer: ${reasons.viaDeezer}`);
+  }
+  if (reasons.sourceDown) {
+    console.log(`
+${reasons.sourceDown} left undecided because MusicBrainz did not answer;`);
+    console.log('  not cached as rejections, so the next run asks again');
   }
   console.log(`
 ${reasons.corroborated} year(s) seconded by a second catalogue,`);

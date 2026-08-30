@@ -284,3 +284,31 @@ test('one source with no era at all is refused', () => {
   assert.equal(acceptsYear({ year: 1995, corroborated: false, era: null }).ok, false);
   assert.equal(acceptsYear({ year: 1995, corroborated: false, era: null }).reason, 'noEra');
 });
+
+test('the era breaks a tie between catalogues that disagree', () => {
+  // Landslide: MusicBrainz answers 2018 because its pre-1990 coverage is CD
+  // reissues, iTunes answers 1975, and the playlists say 1970s. One of the two
+  // agrees, and that is two independent signals rather than a preference.
+  const r = reconcileYear({ musicbrainz: 2018, itunes: 1975 }, '1970s');
+  assert.equal(r.year, 1975);
+  assert.equal(r.corroborated, true);
+});
+
+test('the era breaks nothing when both candidates fit it', () => {
+  // 1974 and 1976 are both in the 1970s, so the playlists have not chosen. The
+  // tie stands and the era check downstream decides, exactly as before.
+  const r = reconcileYear({ musicbrainz: 1974, itunes: 1976 }, '1970s');
+  assert.equal(r.corroborated, false);
+  assert.equal(r.year, 1974, 'MusicBrainz still leads an unbroken tie');
+});
+
+test('the era breaks nothing when neither candidate fits it', () => {
+  const r = reconcileYear({ musicbrainz: 2018, itunes: 1975 }, '1990s');
+  assert.equal(r.corroborated, false);
+});
+
+test('no era supplied leaves the old behaviour intact', () => {
+  const r = reconcileYear({ musicbrainz: 2018, itunes: 1975 });
+  assert.equal(r.year, 2018);
+  assert.equal(r.corroborated, false);
+});
