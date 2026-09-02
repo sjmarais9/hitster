@@ -4,7 +4,21 @@
     "note": "Needs manual resolution. Add a verified spotify_uri and move the entry into the pool. spotify_release_year is shown for context only and must never become our year.",
     "year_suspects": "Ranked worst first. `confirmed` means two independent sources agree our year is too late and is safe to act on; `check` means one source disputes it and the other is silent, which is usually the disputing source being wrong; `contradicted` means the second source backs our year. Nothing here has been applied."
   },
-  "year_suspects": [],
+  "year_suspects": [
+    {
+      "artist": "Nadia Ali",
+      "title": "Rapture",
+      "our_year": 2010,
+      "suggested_year": 2006,
+      "verdict": "check",
+      "sources": 1,
+      "spotify_earliest_year": 2006,
+      "musicbrainz_year": null,
+      "musicbrainz_releases": null,
+      "album": "Poetica (feat. Nadia Ali)",
+      "note": "One source disputes our year and the other cannot corroborate it. Usually the disputing source is wrong - most often MusicBrainz holding a CD reissue of a pre-1990 song. Needs a person."
+    }
+  ],
   "songs": [
     { "artist": "Ke$ha", "title": "TiK ToK", "year": 2009, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:0HPD5WQqrq7wPWR7P7Dw1i","title":"TiK ToK","artists":["Kesha"],"album":"Animal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] },
     { "artist": "Ke$ha", "title": "Die Young", "year": 2012, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7EQGXaVSyEDsCWKmUcfpLk","title":"Die Young","artists":["Kesha"],"album":"Warrior (Expanded Edition)","spotify_release_year":2012,"verdict":"reject"}] },
@@ -18,7 +32,7 @@
     { "artist": "Mylo", "title": "Doctor Pressure", "year": 2005, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:4v2ZqLM5Dk6LOrejF0gafv","title":"Doctor Pressure (In the Style of Mylo & Miami Sound Machine) [Karaoke Version]","artists":["Ameritz - Karaoke"],"album":"Karaoke - Mylo","spotify_release_year":2012,"verdict":"reject"}] },
     { "artist": "Ke$ha", "title": "Blow", "year": 2010, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:3pYDZTJM2tVBUhIRifWVzI","title":"Blow","artists":["Kesha"],"album":"Cannibal (Expanded Edition)","spotify_release_year":2010,"verdict":"reject"}] },
     { "artist": "Martin Tungevaag", "title": "Wicked Wonderland", "year": 2014, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:4CnbiWjq0i7YPhKNnmt10T","title":"Wicked Wonderland","artists":["Tungevaag"],"album":"Wicked Wonderland","spotify_release_year":2014,"verdict":"probable"}] },
-    { "artist": "C.J. Lewis", "title": "Sweets For My Sweet", "year": 1994, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:48zz2w8ylbnsiku8WhU0xs","title":"Sweets for My Sweet (In the Style of C.J. Lewis) [Karaoke Version]","artists":["Ameritz Top Tracks"],"album":"Karaoke - In the Style of C.J. Lewis","spotify_release_year":2012,"verdict":"reject"}] },
+    { "artist": "C.J. Lewis", "title": "Sweets For My Sweet", "year": 1994, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:2r9Wf3DWOn7bL1PLgSfAAJ","title":"Sweets for My Sweet","artists":["The Searchers"],"album":"Meet The Searchers","spotify_release_year":1963,"verdict":"reject"}] },
     { "artist": "DJ Paul Elstak", "title": "Life Is Like A Dance", "year": 1995, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:1SP7jbVfNIb7HYAe9r9ap2","title":"Life Is Like a Dance","artists":["Paul Elstak"],"album":"May the Forze Be with You","spotify_release_year":1995,"verdict":"probable"}] },
     { "artist": "Machine Gun Kelly", "title": "my ex's best friend", "year": 2020, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7kDUspsoYfLkWnZR7qwHZl","title":"my ex's best friend (with blackbear)","artists":["mgk","blackbear"],"album":"Tickets To My Downfall","spotify_release_year":2020,"verdict":"reject"}] },
     { "artist": "Richard Hell & The Voidoids", "title": "Blank Generation", "year": 1977, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:5OGfBbWmRRkDiZiJbu5WIr","title":"Blank Generation - 2013 Remaster","artists":["Richard Hell"],"album":"Spurts: The Richard Hell Story (2013 Remaster)","spotify_release_year":2005,"verdict":"probable"}] },
@@ -59,7 +73,7 @@
     { "artist": "Ernest Tubb & His Texas Troubadours", "title": "Thanks A Lot (Album Version)", "year": 1964, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:0wA6XnMu8cnG9MSxI8Jilw","title":"I'll Be There","artists":["Ernest Tubb's Texas Troubadours"],"album":"1981 Sessions","spotify_release_year":1981,"verdict":"reject"}] },
     { "artist": "Zapp & Roger", "title": "More Bounce to the Ounce", "year": 1980, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:1LiwqqaafXkNQuWGW3HeId","title":"More Bounce to the Ounce","artists":["Zapp"],"album":"Zapp","spotify_release_year":1980,"verdict":"probable"}] },
     { "artist": "Gloria Estefan and Miami Sound Machine", "title": "Conga", "year": 1985, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:53pZ8y3yMYUNpclGwIufu0","title":"Conga","artists":["Miami Sound Machine","Gloria Estefan"],"album":"Greatest Hits","spotify_release_year":1992,"verdict":"probable"}] },
-    { "artist": "The Sunclub", "title": "Fiesta (De Los Tamborileros)", "year": 1998, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:1DoK3CdipMjplLk5LXUdcp","title":"Mi Gente (feat. Beyoncé)","artists":["J Balvin","Willy William","Beyoncé"],"album":"Mi Gente (feat. Beyoncé)","spotify_release_year":2017,"verdict":"reject"}] },
+    { "artist": "The Sunclub", "title": "Fiesta (De Los Tamborileros)", "year": 1998, "decade": "1990s", "genres": ["dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": null, "market_checked": null, "canonicity": 48, "problem": "lookup failed: GET search?q=The+Sunclub+Fiesta+%28De+Los+Tamborileros%29&type=track&market=ZA&limit... failed: 502 An unexpected error occurred. Please try again later.", "candidates": [] },
     { "artist": "DJ Antoine", "title": "Welcome to St Tropez", "year": 2011, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:3BcsDUO7JsWxBSKTq7MOze","title":"Megamix (Welcome to St. Tropez, Shake 3x, Ma Chérie) - 2012","artists":["DJ Antoine","Mad Mark"],"album":"Megamix (2012)","spotify_release_year":2012,"verdict":"reject"}] },
     { "artist": "Run DMC", "title": "King of Rock", "year": 1985, "problem": "title and artist do not match", "candidates": [{"uri":"spotify:track:7112WRQXlBGe4Os43yw8gV","title":"King of Rock","artists":["Run–D.M.C."],"album":"King Of Rock (Expanded Edition)","spotify_release_year":1985,"verdict":"reject"}] },
     { "artist": "Iggy & the Stooges", "title": "Gimme Danger", "year": 1973, "problem": "partial match (title exact, artist loose)", "candidates": [{"uri":"spotify:track:4jgtwIapMV2IFv9hFKrRCa","title":"Gimme Danger [2023 Remaster] - Bowie Mix","artists":["The Stooges"],"album":"Raw Power (50th Anniversary Legacy Edition)","spotify_release_year":1973,"verdict":"probable"}] },
