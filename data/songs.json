@@ -2,7 +2,7 @@
   "meta": {
     "count": 10138,
     "market": "ZA",
-    "generated": "2026-09-01",
+    "generated": "2026-09-02",
     "note": "Playable pool. year is our value and is the original release year, never Spotify's."
   },
   "songs": [
@@ -7416,7 +7416,7 @@
     { "artist": "Falling in Reverse", "title": "I'm Not A Vampire", "year": 2011, "decade": "2010s", "genres": ["punk","indie"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:7l0Lr7Tl4Gt8hQj4v3rwtf", "album": "The Drug In Me Is You", "market_checked": "ZA", "canonicity": 70 },
     { "artist": "The Vaccines", "title": "Norgaard", "year": 2011, "decade": "2010s", "genres": ["indie","rock"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:07e14r44g2EeOg9PIFsimm", "album": "What Did You Expect from The Vaccines?", "market_checked": "ZA", "canonicity": 64 },
     { "artist": "French Affair", "title": "My Heart Goes Boom (LaDiDaDa)", "year": 2000, "decade": "2000s", "genres": ["dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:31lr1w81JYmvu2xaoy2B6n", "album": "Desire", "market_checked": "ZA", "canonicity": 64 },
-    { "artist": "iiO", "title": "Rapture (feat.Nadia Ali)", "year": 2006, "decade": "2000s", "genres": ["dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:0OSAJEA0ekX6pr2nuiPzX7", "album": "Poetica (feat. Nadia Ali)", "market_checked": "ZA", "canonicity": 66 },
+    { "artist": "Nadia Ali", "title": "Rapture", "year": 2010, "decade": "2010s", "genres": ["dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:0OSAJEA0ekX6pr2nuiPzX7", "album": "Poetica (feat. Nadia Ali)", "market_checked": "ZA", "canonicity": 56 },
     { "artist": "Mondotek", "title": "Alive (PH Electro Mix Radio)", "year": 2008, "decade": "2000s", "genres": ["dance"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:3NdEpBf4VFhx4bcyR6xVG7", "album": "Waka Waka Dance Party 2010, Vol. 2", "market_checked": "ZA", "canonicity": 61 },
     { "artist": "Lauv", "title": "I Like Me Better", "year": 2017, "decade": "2010s", "genres": ["dance","pop"], "familiarity": "familiar", "skew": "kids", "spotify_uri": "spotify:track:1jXfVzMk8cSbvAXMML4Y4f", "album": "I Like Me Better", "market_checked": "ZA", "canonicity": 73 },
     { "artist": "Detonautas", "title": "Quando o sol se for", "year": 2002, "decade": "2000s", "genres": ["reggae"], "familiarity": "familiar", "skew": "adults", "spotify_uri": "spotify:track:6Sk1mETx99njkPH3MIRTn3", "album": "Detonautas (Nova Versão)", "market_checked": "ZA", "canonicity": 61 },
@@ -8294,7 +8294,7 @@
     { "artist": "Chaka Khan", "title": "Ain't Nobody", "year": 1983, "decade": "1980s", "genres": ["soul","r&b"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:2NVpYQqdraEcQwqT7GhUkh", "album": "Epiphany: The Best of Chaka Khan, Vol. 1", "market_checked": "ZA", "canonicity": 97 },
     { "artist": "Pink Floyd", "title": "Another Brick In The Wall, Pt. 2", "year": 1979, "decade": "1970s", "genres": ["rock","pop"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:4gMgiXfqyzZLMhsksGmbQV", "album": "The Wall", "market_checked": "ZA", "canonicity": 97 },
     { "artist": "Culture Beat", "title": "Mr. Vain", "year": 1993, "decade": "1990s", "genres": ["dance","pop"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:2rTYgHxgcndkUrRoU7x0Sv", "album": "Serenity", "market_checked": "ZA", "canonicity": 98 },
-    { "artist": "Jennifer Lopez", "title": "I'm Real", "year": 2001, "decade": "2000s", "genres": ["r&b","hip hop"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:6MLsahMK3VvH9NUwXOktdS", "album": "J.Lo", "market_checked": "ZA", "canonicity": 97 },
+    { "artist": "Ja Rule", "title": "I'm Real", "year": 2001, "decade": "2000s", "genres": ["hip hop"], "familiarity": "deep", "skew": "adults", "spotify_uri": "spotify:track:6MLsahMK3VvH9NUwXOktdS", "album": "J.Lo", "market_checked": "ZA", "canonicity": 48 },
     { "artist": "Jennifer Lopez", "title": "Jenny from the Block (feat. Jadakiss & Styles P.)", "year": 2002, "decade": "2000s", "genres": ["hip hop","r&b"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:7LqjznQwfrax7MjQXmxqdQ", "album": "This Is Me...Then", "market_checked": "ZA", "canonicity": 97 },
     { "artist": "Eric Prydz", "title": "Call On Me", "year": 2004, "decade": "2000s", "genres": ["dance","funk"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:1As4KC3YYpu89aBt7EqL2m", "album": "Call On Me (Remixes)", "market_checked": "ZA", "canonicity": 98 },
     { "artist": "Baby Bash", "title": "Suga Suga", "year": 2003, "decade": "2000s", "genres": ["hip hop","r&b"], "familiarity": "standard", "skew": "even", "spotify_uri": "spotify:track:6Nq5lE0CeOAAAqN4qhkbZU", "album": "Tha Smokin' Nephew", "market_checked": "ZA", "canonicity": 97 },
