@@ -1,8 +1,7 @@
 {
   "meta": {
-    "count": 81,
-    "note": "Songs a run established cannot be matched, so later runs do not spend quota re-asking. Keyed on artist|title|year, so correcting any of those is itself the retry. --retry reopens everything here, for after a change to the matcher. Only permanent reasons are recorded: a lookup that failed on the network is about the moment, not the song.",
-    "seeded": "First entries reconstructed from the review files of runs 2026-08-27 to 2026-09-03, which had already established every one of these."
+    "count": 86,
+    "note": "Songs a run established cannot be matched, so later runs do not spend quota re-asking. Keyed on artist|title|year, so correcting any of those is itself the retry. --retry reopens everything here, for after a change to the matcher. Only permanent reasons are recorded: a lookup that failed on the network is about the moment, not the song."
   },
   "rejected": {
     "lauryn hill|doo wop (that thing)|1998": {
@@ -651,6 +650,46 @@
       "year": 2008,
       "reason": "partial",
       "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "ida corr|let me think about it|2007": {
+      "artist": "Ida Corr",
+      "title": "Let Me Think About It",
+      "year": 2007,
+      "reason": "duplicate",
+      "problem": "the pool already holds this recording under another name",
+      "at": "2026-09-03"
+    },
+    "cherish|do it to it|2006": {
+      "artist": "Cherish",
+      "title": "Do It To It",
+      "year": 2006,
+      "reason": "duplicate",
+      "problem": "the pool already holds this recording under another name",
+      "at": "2026-09-03"
+    },
+    "ashanti|body on me|2008": {
+      "artist": "Ashanti",
+      "title": "Body On Me",
+      "year": 2008,
+      "reason": "duplicate",
+      "problem": "the pool already holds this recording under another name",
+      "at": "2026-09-03"
+    },
+    "iio|rapture (feat.nadia ali)|2006": {
+      "artist": "iiO",
+      "title": "Rapture (feat.Nadia Ali)",
+      "year": 2006,
+      "reason": "duplicate",
+      "problem": "the pool already holds this recording under another name",
+      "at": "2026-09-03"
+    },
+    "jennifer lopez|i'm real|2001": {
+      "artist": "Jennifer Lopez",
+      "title": "I'm Real",
+      "year": 2001,
+      "reason": "duplicate",
+      "problem": "the pool already holds this recording under another name",
       "at": "2026-09-03"
     }
   }

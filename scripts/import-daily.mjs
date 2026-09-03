@@ -28,6 +28,18 @@ import { shouldRefreshCanonicity } from './lib/import-policy.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const EXIT_RATE_LIMITED = 75;
 
+// STATUS_CONTROL_C_EXIT. Windows reports it when a console process is stopped by
+// a control event rather than by finishing, which is how Task Scheduler ends a
+// task and how a Ctrl-C from a person arrives.
+//
+// It says nothing about the data. Eighteen runs died this way over two days,
+// each at a different point - one part-way through batch-004, the next on its
+// first Spotify lookup - because the task carried "stop if the computer ceases
+// to be idle", so coming back to the machine killed whatever was running.
+// Treating it as a failed batch meant one interruption abandoned every batch
+// after it as well.
+const EXIT_INTERRUPTED = 3221225786;   // 0xC000013A
+
 // When a run is locked out, Spotify says for how long. Recording that and
 // refusing to call again before it expires costs nothing under any theory, and
 // matters if calling while locked extends the lockout - which the evidence
@@ -152,6 +164,7 @@ if (stillLocked) {
 
 let hitQuota = false;
 let failed = false;
+let interrupted = false;
 
 // Read before a single song is resolved, so "did the pool grow" is a fact about
 // this run rather than about whatever the last one left behind.
@@ -180,6 +193,16 @@ for (const file of BATCHES) {
     } else {
       console.log(`\nQuota reached. Stopping for today; everything resolved has been saved.`);
     }
+    break;
+  }
+  if (code === EXIT_INTERRUPTED) {
+    // Stopped from outside, not broken. Everything resolved before the stop was
+    // checkpointed, so this run keeps its work and publishes it, and the next
+    // run carries on from there. Not `failed`: that would suppress the
+    // canonicity refresh and report a healthy machine as a sick one.
+    console.error(`${file} was interrupted - the task was stopped, not broken.`);
+    console.error('Everything resolved so far is kept; the next run continues from here.');
+    interrupted = true;
     break;
   }
   if (code !== 0) {
@@ -224,6 +247,13 @@ console.log(`\n=== pool is now ${size} playable songs ===`);
 
 await publish(size);
 await trackProgress(size, await publishedSize());
+
+if (interrupted) {
+  console.log('This run was stopped early. That is not a failure and is reported as');
+  console.log('success, so the task history stays readable. If it keeps happening the');
+  console.log('staleness warning above is what says so, because that watches whether the');
+  console.log('app is actually being fed rather than whether runs finish tidily.');
+}
 
 process.exit(failed ? 1 : hitQuota ? EXIT_RATE_LIMITED : 0);
 

@@ -298,7 +298,27 @@ async function main() {
 
   const review = [];
   const yearSuspects = [];
+  const duplicates = [];
   let matched = 0;
+
+  // Who already owns each recording. buildPool dedupes on URI, so two seed
+  // entries that resolve to one track cannot both become pool rows - and the one
+  // that loses still has no URI under its own key, so it is outstanding again
+  // next run, matches again, and loses again.
+  //
+  // Worse, the dedupe prefers whichever entry the current batch names, so with
+  // both in the same batch the winner alternates and each run re-resolves the
+  // other. Five songs were doing this every hour: Ja Rule's I'm Real against
+  // Jennifer Lopez's, Nadia Ali's Rapture against iiO's, Fedde Le Grand's Let Me
+  // Think About It against Ida Corr's - which is what "Ida Corr vs Fedde Le
+  // Grand" means. They are one recording each, credited two ways.
+  //
+  // Settled here instead: the first identity to claim a URI keeps it, and the
+  // second is recorded as a duplicate so no later run pays for it again.
+  const owner = new Map();
+  for (const [key, song] of resolved) {
+    if (song.spotify_uri) owner.set(song.spotify_uri, key);
+  }
   let aborted = null;
 
   // A circuit breaker for the difference between "this song cannot be matched"
@@ -376,6 +396,14 @@ async function main() {
     consecutiveFailures = 0;
 
     if (best?.verdict === 'confident') {
+      const uri = best.track.uri;
+      const heldBy = owner.get(uri);
+      if (heldBy && heldBy !== keyOf(song)) {
+        console.log('duplicate (the pool holds this recording as another credit)');
+        duplicates.push(song);
+        continue;
+      }
+      owner.set(uri, keyOf(song));
       matched++;
       console.log(`ok`);
       resolved.set(keyOf(song), {
@@ -542,6 +570,16 @@ async function main() {
   // what to re-ask Spotify, not what a person gets to see.
   if (!opts.dryRun) {
     const learned = {};
+    for (const song of duplicates) {
+      learned[keyOf(song)] = {
+        artist: song.artist,
+        title: song.title,
+        year: song.year,
+        reason: 'duplicate',
+        problem: 'the pool already holds this recording under another name',
+        at: new Date().toISOString().slice(0, 10),
+      };
+    }
     for (const entry of review) {
       const code = permanentReason(entry.problem);
       if (code) {
