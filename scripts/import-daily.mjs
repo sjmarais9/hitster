@@ -355,7 +355,14 @@ async function publish(count) {
   // the batch seeds, which apply-canonicity rewrites when it re-scores. Staging
   // only the first two would leave the seeds dirty after every successful run
   // and split one logical change across two commits.
-  const OURS = ['data/songs.json', 'data/*.review.json', 'data/review.json', 'data/*.seed.json'];
+  const OURS = ['data/songs.json', 'data/*.review.json', 'data/review.json', 'data/*.seed.json',
+    // The reject cache, which a run adds to whenever it establishes that a song
+    // cannot be matched. Committed rather than ignored, unlike the generator's:
+    // that one is rebuilt by re-asking MusicBrainz, which costs only time, while
+    // this one is rebuilt by spending Spotify quota, which is the scarce thing
+    // here. Leaving it unstaged would also make the working tree dirty after
+    // every run that learned something.
+    'data/import-rejects.json'];
 
   // The gate. Every bug that has hurt this project reached the pool quietly and
   // was found days later by somebody noticing something odd in the app. This is

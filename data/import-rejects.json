@@ -1,0 +1,657 @@
+{
+  "meta": {
+    "count": 81,
+    "note": "Songs a run established cannot be matched, so later runs do not spend quota re-asking. Keyed on artist|title|year, so correcting any of those is itself the retry. --retry reopens everything here, for after a change to the matcher. Only permanent reasons are recorded: a lookup that failed on the network is about the moment, not the song.",
+    "seeded": "First entries reconstructed from the review files of runs 2026-08-27 to 2026-09-03, which had already established every one of these."
+  },
+  "rejected": {
+    "lauryn hill|doo wop (that thing)|1998": {
+      "artist": "Lauryn Hill",
+      "title": "Doo Wop (That Thing)",
+      "year": 1998,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "elvis costello|pump it up|1978": {
+      "artist": "Elvis Costello",
+      "title": "Pump It Up",
+      "year": 1978,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "ian dury and the blockheads|hit me with your rhythm stick|1978": {
+      "artist": "Ian Dury and The Blockheads",
+      "title": "Hit Me with Your Rhythm Stick",
+      "year": 1978,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "stimela|whispers in the deep|1986": {
+      "artist": "Stimela",
+      "title": "Whispers in the Deep",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "the klf|3 a.m. eternal|1991": {
+      "artist": "The KLF",
+      "title": "3 A.M. Eternal",
+      "year": 1991,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "lucky dube|different colours|1993": {
+      "artist": "Lucky Dube",
+      "title": "Different Colours",
+      "year": 1993,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "tool|ænima|1996": {
+      "artist": "Tool",
+      "title": "Ænima",
+      "year": 1996,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "mdu|mazola|1997": {
+      "artist": "Mdu",
+      "title": "Mazola",
+      "year": 1997,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "at the drive-in|one armed scissor|2000": {
+      "artist": "At the Drive-In",
+      "title": "One Armed Scissor",
+      "year": 2000,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "mafikizolo|ndihamba nawe|2003": {
+      "artist": "Mafikizolo",
+      "title": "Ndihamba Nawe",
+      "year": 2003,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "calvin harris|acceptable in the 80s|2007": {
+      "artist": "Calvin Harris",
+      "title": "Acceptable in the 80s",
+      "year": 2007,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "slaves|the hunter|2015": {
+      "artist": "Slaves",
+      "title": "The Hunter",
+      "year": 2015,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "the jimi hendrix experience|all along the watchtower|1968": {
+      "artist": "The Jimi Hendrix Experience",
+      "title": "All Along the Watchtower",
+      "year": 1968,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "cat stevens|wild world|1970": {
+      "artist": "Cat Stevens",
+      "title": "Wild World",
+      "year": 1970,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "elton john|saturday night's alright for fighting|1973": {
+      "artist": "Elton John",
+      "title": "Saturday Night's Alright for Fighting",
+      "year": 1973,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "hall & oates|rich girl|1976": {
+      "artist": "Hall & Oates",
+      "title": "Rich Girl",
+      "year": 1976,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "ke$ha|tik tok|2009": {
+      "artist": "Ke$ha",
+      "title": "TiK ToK",
+      "year": 2009,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "ke$ha|die young|2012": {
+      "artist": "Ke$ha",
+      "title": "Die Young",
+      "year": 2012,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "lauryn hill|ex-factor|1998": {
+      "artist": "Lauryn Hill",
+      "title": "Ex-Factor",
+      "year": 1998,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "ke$ha|we r who we r|2010": {
+      "artist": "Ke$ha",
+      "title": "We R Who We R",
+      "year": 2010,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "quasi|the poisoned well|1998": {
+      "artist": "Quasi",
+      "title": "The Poisoned Well",
+      "year": 1998,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "lauryn hill|everything is everything|1999": {
+      "artist": "Lauryn Hill",
+      "title": "Everything Is Everything",
+      "year": 1999,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "young jeezy|soul survivor|2005": {
+      "artist": "Young Jeezy",
+      "title": "Soul Survivor",
+      "year": 2005,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "bob seger & the silver bullet band|old time rock & roll|1978": {
+      "artist": "Bob Seger & The Silver Bullet Band",
+      "title": "Old Time Rock & Roll",
+      "year": 1978,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "m|pop muzik|1979": {
+      "artist": "M",
+      "title": "Pop muzik",
+      "year": 1979,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "mylo|doctor pressure|2005": {
+      "artist": "Mylo",
+      "title": "Doctor Pressure",
+      "year": 2005,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "ke$ha|blow|2010": {
+      "artist": "Ke$ha",
+      "title": "Blow",
+      "year": 2010,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "martin tungevaag|wicked wonderland|2014": {
+      "artist": "Martin Tungevaag",
+      "title": "Wicked Wonderland",
+      "year": 2014,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "c.j. lewis|sweets for my sweet|1994": {
+      "artist": "C.J. Lewis",
+      "title": "Sweets For My Sweet",
+      "year": 1994,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "dj paul elstak|life is like a dance|1995": {
+      "artist": "DJ Paul Elstak",
+      "title": "Life Is Like A Dance",
+      "year": 1995,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "machine gun kelly|my ex's best friend|2020": {
+      "artist": "Machine Gun Kelly",
+      "title": "my ex's best friend",
+      "year": 2020,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "richard hell & the voidoids|blank generation|1977": {
+      "artist": "Richard Hell & The Voidoids",
+      "title": "Blank Generation",
+      "year": 1977,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "too short|the ghetto|1990": {
+      "artist": "Too Short",
+      "title": "The Ghetto",
+      "year": 1990,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "bob seger & the silver bullet band|night moves|1976": {
+      "artist": "Bob Seger & The Silver Bullet Band",
+      "title": "Night Moves",
+      "year": 1976,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "nas|i can|2002": {
+      "artist": "Nas",
+      "title": "I Can",
+      "year": 2002,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "c+c music factory|gonna make you sweat (everybody dance now) (feat. freedom williams)|1990": {
+      "artist": "C+C Music Factory",
+      "title": "Gonna Make You Sweat (Everybody Dance Now) (feat. Freedom Williams)",
+      "year": 1990,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "run dmc|walk this way (feat. aerosmith)|1986": {
+      "artist": "Run DMC",
+      "title": "Walk This Way (feat. Aerosmith)",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "soulja boy tell'em|kiss me thru the phone|2008": {
+      "artist": "Soulja Boy Tell'em",
+      "title": "Kiss Me Thru The Phone",
+      "year": 2008,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "soulja boy tell'em|crank that (soulja boy)|2007": {
+      "artist": "Soulja Boy Tell'em",
+      "title": "Crank That (Soulja Boy)",
+      "year": 2007,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "run dmc|it's tricky|1986": {
+      "artist": "Run DMC",
+      "title": "It's Tricky",
+      "year": 1986,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "garnett silk|hello africa|1993": {
+      "artist": "Garnett Silk",
+      "title": "Hello Africa",
+      "year": 1993,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "quasi|it's hard to turn me on|1998": {
+      "artist": "Quasi",
+      "title": "It's Hard to Turn Me On",
+      "year": 1998,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "royal gigolos|california dreamin' (tek-house extended)|2003": {
+      "artist": "Royal Gigolos",
+      "title": "California Dreamin' (Tek-House Extended)",
+      "year": 2003,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "run dmc|sucker m.c.'s (krush-groove 1)|1983": {
+      "artist": "Run DMC",
+      "title": "Sucker M.C.'s (Krush-Groove 1)",
+      "year": 1983,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "sapão|vou desafiar você|2013": {
+      "artist": "Sapão",
+      "title": "Vou Desafiar Você",
+      "year": 2013,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "elvis costello & the attractions|beyond belief|1982": {
+      "artist": "Elvis Costello & The Attractions",
+      "title": "Beyond Belief",
+      "year": 1982,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "yo la tengo|the empty pool|1986": {
+      "artist": "Yo La Tengo",
+      "title": "The Empty Pool",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "marvin gaye|hitch hike (album version / stereo)|1962": {
+      "artist": "Marvin Gaye",
+      "title": "Hitch Hike (Album Version / Stereo)",
+      "year": 1962,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "kc & the sunshine band|that's the way i like it|1975": {
+      "artist": "KC & The Sunshine Band",
+      "title": "That's the way i like it",
+      "year": 1975,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "lauryn hill|can't take my eyes off of you (i love you baby)|1998": {
+      "artist": "Lauryn Hill",
+      "title": "Can't Take My Eyes Off of You (I Love You Baby)",
+      "year": 1998,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "the wailers|get up, stand up|1973": {
+      "artist": "The Wailers",
+      "title": "Get Up, Stand Up",
+      "year": 1973,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "run dmc|christmas in hollis|1987": {
+      "artist": "Run DMC",
+      "title": "Christmas In Hollis",
+      "year": 1987,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "it's a beautiful day|white bird (album version)|1969": {
+      "artist": "It's a Beautiful Day",
+      "title": "White Bird (Album Version)",
+      "year": 1969,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "gladys knight & the pips|i wish it would rain (single version)|1964": {
+      "artist": "Gladys Knight & The Pips",
+      "title": "I Wish It Would Rain (Single Version)",
+      "year": 1964,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "roy ayers|running away (12\" long version)|1977": {
+      "artist": "Roy Ayers",
+      "title": "Running Away (12\" Long Version)",
+      "year": 1977,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "run dmc|peter piper|1986": {
+      "artist": "Run DMC",
+      "title": "Peter Piper",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "run dmc|my adidas|1986": {
+      "artist": "Run DMC",
+      "title": "My Adidas",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "mccarthy|the well of lonliness|1986": {
+      "artist": "McCarthy",
+      "title": "The Well Of Lonliness",
+      "year": 1986,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "c+c music factory|things that make you go hmmmm.... (feat. freedom williams)|1990": {
+      "artist": "C+C Music Factory",
+      "title": "Things That Make You Go Hmmmm.... (feat. Freedom Williams)",
+      "year": 1990,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "urge overkill|positive bleeding (album version)|1993": {
+      "artist": "Urge Overkill",
+      "title": "Positive Bleeding (Album Version)",
+      "year": 1993,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "t.i.|about the money (feat. young thug)|2014": {
+      "artist": "T.I.",
+      "title": "About the Money (feat. Young Thug)",
+      "year": 2014,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "b.b.e.|7 days and one week|1996": {
+      "artist": "B.B.E.",
+      "title": "7 Days And One Week",
+      "year": 1996,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "c+c music factory|here we go, let's rock & roll (feat. freedom williams & zelma davis)|1990": {
+      "artist": "C+C Music Factory",
+      "title": "Here We Go, Let's Rock & Roll (feat. Freedom Williams & Zelma Davis)",
+      "year": 1990,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "just jinger|your song|2001": {
+      "artist": "Just Jinger",
+      "title": "Your Song",
+      "year": 2001,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "felix laband|hopeful|2001": {
+      "artist": "Felix Laband",
+      "title": "Hopeful",
+      "year": 2001,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "shelley fka dram|broccoli (feat. lil yachty)|2016": {
+      "artist": "Shelley FKA DRAM",
+      "title": "Broccoli (feat. Lil Yachty)",
+      "year": 2016,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "ernest tubb & his texas troubadours|thanks a lot (album version)|1964": {
+      "artist": "Ernest Tubb & His Texas Troubadours",
+      "title": "Thanks A Lot (Album Version)",
+      "year": 1964,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "zapp & roger|more bounce to the ounce|1980": {
+      "artist": "Zapp & Roger",
+      "title": "More Bounce to the Ounce",
+      "year": 1980,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "gloria estefan and miami sound machine|conga|1985": {
+      "artist": "Gloria Estefan and Miami Sound Machine",
+      "title": "Conga",
+      "year": 1985,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "the sunclub|fiesta (de los tamborileros)|1998": {
+      "artist": "The Sunclub",
+      "title": "Fiesta (De Los Tamborileros)",
+      "year": 1998,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "dj antoine|welcome to st tropez|2011": {
+      "artist": "DJ Antoine",
+      "title": "Welcome to St Tropez",
+      "year": 2011,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "run dmc|king of rock|1985": {
+      "artist": "Run DMC",
+      "title": "King of Rock",
+      "year": 1985,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "iggy & the stooges|gimme danger|1973": {
+      "artist": "Iggy & the Stooges",
+      "title": "Gimme Danger",
+      "year": 1973,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "co.ro.|because the night|1992": {
+      "artist": "Co.Ro.",
+      "title": "Because the Night",
+      "year": 1992,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "jam & spoon|right in the night 2011 (feat. plavka)|1997": {
+      "artist": "Jam & Spoon",
+      "title": "Right In The Night 2011 (feat. Plavka)",
+      "year": 1997,
+      "reason": "partial",
+      "problem": "partial match (title loose, artist exact)",
+      "at": "2026-09-03"
+    },
+    "gloria estefan and miami sound machine|rhythm is gonna get you|1987": {
+      "artist": "Gloria Estefan and Miami Sound Machine",
+      "title": "Rhythm Is Gonna Get You",
+      "year": 1987,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    },
+    "bryan adams|all for love (from \"the three musketeers\" soundtrack)|1993": {
+      "artist": "Bryan Adams",
+      "title": "All For Love (From \"The Three Musketeers\" Soundtrack)",
+      "year": 1993,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "seether|same damn life|2014": {
+      "artist": "Seether",
+      "title": "Same Damn Life",
+      "year": 2014,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "klaxons|there is no other time|2014": {
+      "artist": "Klaxons",
+      "title": "There is No Other Time",
+      "year": 2014,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "garnett silk|it's growing|1992": {
+      "artist": "Garnett Silk",
+      "title": "It's Growing",
+      "year": 1992,
+      "reason": "noMatch",
+      "problem": "title and artist do not match",
+      "at": "2026-09-03"
+    },
+    "young jeezy|put on|2008": {
+      "artist": "Young Jeezy",
+      "title": "Put On",
+      "year": 2008,
+      "reason": "partial",
+      "problem": "partial match (title exact, artist loose)",
+      "at": "2026-09-03"
+    }
+  }
+}

@@ -27,3 +27,24 @@ export function shouldRefreshCanonicity({ failed, poolBefore, poolAfter }) {
   if (failed) return false;
   return poolAfter > poolBefore;
 }
+
+/**
+ * Whether a review verdict is a fact about the song or about the moment.
+ *
+ * The distinction is the whole point of the reject cache. "Title and artist do
+ * not match" is a fact: Spotify spells her Kesha and the batch says Ke$ha, and
+ * that will be just as true next hour. "Lookup failed" is about the moment -
+ * the network, the token, the quota - and caching it would turn one bad night
+ * into a song permanently absent from the pool.
+ *
+ * Anything unrecognised is treated as transient, so a reason added later has to
+ * be listed here deliberately before it can bury a song.
+ */
+export const PERMANENT = [
+  { code: 'noMatch', test: /^title and artist do not match$|^no search results$/ },
+  { code: 'partial', test: /^partial match/ },
+  { code: 'unplayable', test: /not playable|unavailable in/i },
+];
+
+export const permanentReason = (problem) =>
+  PERMANENT.find((r) => r.test.test(String(problem ?? '')))?.code ?? null;

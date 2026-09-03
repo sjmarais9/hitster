@@ -26,6 +26,7 @@ import { pickBest, releaseYear } from './lib/match.mjs';
 import { writeSongs } from './lib/songs-file.mjs';
 import { classifyYear, bySeverity } from './lib/year-check.mjs';
 import { isExcluded } from './lib/excluded.mjs';
+import { permanentReason } from './lib/import-policy.mjs';
 import { normalise } from './lib/match.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -62,6 +63,7 @@ Resolve a batch of songs to Spotify track URIs.
   --artists <file>  artists exempt from that floor
                     (default data/library-artists.json)
   --recheck         re-resolve songs that already have a URI
+  --retry           re-attempt songs a previous run could not match
   --dry-run         resolve and report, write nothing
   --help
 `;
@@ -87,6 +89,8 @@ function parseArgs(argv) {
     // dealing. --min-canonicity 0 restores the old behaviour.
     minCanonicity: 45,
     artists: 'data/library-artists.json',
+    rejects: 'data/import-rejects.json',
+    retry: false,
     recheck: false,
     dryRun: false,
   };
@@ -100,6 +104,7 @@ function parseArgs(argv) {
     else if (arg === '--limit') opts.limit = Number(argv[++i]);
     else if (arg === '--min-canonicity') opts.minCanonicity = Number(argv[++i]);
     else if (arg === '--artists') opts.artists = argv[++i];
+    else if (arg === '--retry') opts.retry = true;
     else if (arg === '--recheck') opts.recheck = true;
     else if (arg === '--dry-run') opts.dryRun = true;
     else { console.error(`Unknown option: ${arg}\n${HELP}`); process.exit(1); }
@@ -135,6 +140,7 @@ const songsOf = (doc) => (Array.isArray(doc) ? doc : doc.songs ?? []);
 
 /** Identity of a song, independent of whether it has been resolved yet. */
 const keyOf = (song) => `${song.artist}|${song.title}|${song.year}`.toLowerCase();
+
 
 // There is no popularity capture here, deliberately.
 //
@@ -215,8 +221,28 @@ async function main() {
   // Popular somewhere else. Refused here rather than in the deck, because a
   // quota slot spent on one is a slot not spent on a song this table can place.
   const excluded = batch.filter(isExcluded);
+
+  // Songs an earlier run already established cannot be matched.
+  //
+  // Without this the import spends its whole quota re-asking Spotify about the
+  // same failures. Seventy of them stalled the pool for two days at 10,138:
+  // outstanding means "no URI", a song that goes to review never gets one, so
+  // every hourly run queued the identical seventy, failed on all of them, and
+  // committed a pool that had not moved. Thirty-eight were Ke$ha against
+  // Spotify's Kesha, twenty-three were Lauryn Hill against Ms. Lauryn Hill.
+  //
+  // Keyed on artist, title and year together, so correcting any of them is
+  // itself the retry - which is usually what fixing one of these means. --retry
+  // reopens the lot, for after a change to the matcher.
+  const rejects = (await readJson(opts.rejects, { rejected: {} })).rejected ?? {};
+  const rejected = opts.retry || opts.recheck
+    ? []
+    : batch.filter((song) => rejects[keyOf(song)]);
+  const rejectedKeys = new Set(rejected.map(keyOf));
+
   const unresolved = batch
     .filter((song) => !isExcluded(song))
+    .filter((song) => !rejectedKeys.has(keyOf(song)))
     .filter((song) => opts.recheck || !resolved.get(keyOf(song))?.spotify_uri);
 
   // Artists the household actually listens to are exempt from the floor.
@@ -244,12 +270,19 @@ async function main() {
   const outstanding = unresolved.filter((song) => !belowFloor.includes(song));
   const queue = outstanding.slice(0, opts.limit);
 
-  const alreadyDone = batch.length - unresolved.length;
+  // Counted from what is actually resolved, not by subtracting the queue from
+  // the batch. That subtraction silently absorbed every other category: with 485
+  // resolved and 11 unmatchable, batch-004 reported all 496 as already done and
+  // then listed the 11 again on the next line.
+  const alreadyDone = batch.filter((song) => resolved.get(keyOf(song))?.spotify_uri).length;
   const deferred = outstanding.length - queue.length;
   console.log(`${batch.length} songs in ${opts.in}`);
   if (alreadyDone > 0) console.log(`${alreadyDone} already resolved, skipping (use --recheck to redo)`);
   if (excluded.length > 0) {
     console.log(`${excluded.length} on the exclusion list, skipping (see scripts/lib/excluded.mjs)`);
+  }
+  if (rejected.length > 0) {
+    console.log(`${rejected.length} could not be matched by an earlier run, skipping (--retry to try again)`);
   }
   if (belowFloor.length > 0) {
     console.log(`${belowFloor.length} below canonicity ${opts.minCanonicity}, not worth a quota slot`
@@ -497,6 +530,47 @@ async function main() {
       year_suspects: yearSuspects,
     });
     console.log(`Wrote ${opts.review} - ${review.length} unmatched, ${yearSuspects.length} year(s) to check`);
+  }
+
+  // Remember this run's genuine match failures, so the next run spends its
+  // quota on songs that might actually resolve.
+  //
+  // Only the permanent reasons. A song that failed because the network dropped
+  // is not a song that cannot be matched, and burying it here would make one bad
+  // night permanent - which is the same laundering the circuit breaker exists to
+  // stop. The review file still lists everything either way: this cache decides
+  // what to re-ask Spotify, not what a person gets to see.
+  if (!opts.dryRun) {
+    const learned = {};
+    for (const entry of review) {
+      const code = permanentReason(entry.problem);
+      if (code) {
+        learned[keyOf(entry)] = {
+          artist: entry.artist,
+          title: entry.title,
+          year: entry.year,
+          reason: code,
+          problem: entry.problem,
+          at: new Date().toISOString().slice(0, 10),
+        };
+      }
+    }
+    const added = Object.keys(learned).filter((k) => !rejects[k]).length;
+    if (added > 0) {
+      const merged = { ...rejects, ...learned };
+      await writeJson(opts.rejects, {
+        meta: {
+          count: Object.keys(merged).length,
+          note: 'Songs a run established cannot be matched, so later runs do not spend '
+            + 'quota re-asking. Keyed on artist|title|year, so correcting any of those is '
+            + 'itself the retry. --retry reopens everything here, for after a change to the '
+            + 'matcher. Only permanent reasons are recorded: a lookup that failed on the '
+            + 'network is about the moment, not the song.',
+        },
+        rejected: merged,
+      });
+      console.log(`Wrote ${opts.rejects} - ${added} newly unmatchable, ${Object.keys(merged).length} total`);
+    }
   }
 }
 
